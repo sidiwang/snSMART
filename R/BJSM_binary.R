@@ -87,11 +87,11 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 
 
 
-BJSM_binary = function(data, NUM_ARMS, pi_prior.a, pi_prior.b, beta0_prior.a, beta0_prior.b, beta1_prior.a, beta1_prior.c, n_MCMC_chain, BURN.IN,
-                       MCMC_SAMPLE, six = TRUE){
+BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist, beta1_prior.a, beta1_prior.c, n_MCMC_chain, BURN.IN,
+                       MCMC_SAMPLE, ci = 0.95, six = TRUE){
   # NUM_ARMS number of treatment arms
-  # pi_prior.a  alpha parameter of the prior beta distribution for pi_1K
-  # pi_prior.b  beta parameter of the prior beta distribution  for pi_1K
+  # pi_prior.a  alpha parameter of the prior beta distribution for pi_1K, a vector with three values, one for each treatment
+  # pi_prior.b  beta parameter of the prior beta distribution  for pi_1K, a vector with three values, one for each treatment
   # beta0_prior.a alpha parameter of the prior beta distribution for linkage parameter beta0
   # beta0_prior.b beta parameter of the prior beta distribution  for linkage parameter beta0
   # beta1_prior.a scale parameter of the prior pareto distribution for linkage parameter beta1
@@ -99,12 +99,27 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior.a, pi_prior.b, beta0_prior.a, be
   # n_MCMC_chain number of MCMC chains, default to 1. If this is set to a number more than 1
   # BURN.IN number of burn-in iterations for MCMC
   # MCMC_SAMPLE number of iterations for MCMC
+  # ci coverage probability for credible intervals
+  # pi_prior_dist, beta0_prior_dist, beta1_prior_dist are prior distributions for pi, beta0, and beta1, user can choose from gamma, beta, pareto
+  # for gamma, prior.a is r, prior.b is lambda, for beta, prior.a is alpha, prior.b is beta, for pareto, prior.a is alpha, prior.b is c (page 29 of the jags user manual version 3.4.0)
+  # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
+
+  pi_prior_dist = ifelse(pi_prior_dist == "gamma", "dgamma", ifelse(pi_prior_dist == "beta", "dbeta", "dpar"))
+  beta0_prior_dist = ifelse(beta0_prior_dist == "gamma", "dgamma", ifelse(beta0_prior_dist == "beta", "dbeta", "dpar"))
+  beta1_prior_dist = ifelse(beta1_prior_dist == "gamma", "dgamma", ifelse(beta1_prior_dist == "beta", "dbeta", "dpar"))
+
   mydata = data
   mydata$disc <- 2 * mydata$treatment_stageI - (mydata$response_stageI == 0)
 
   if (six == TRUE){
     # If using 6-betas model
-    jag.model.name <- "BJSM_6betas_missing.bug"  # beta1 ~ pareto
+    bugfile  <- readLines("data/BJSM_6betas_missing.bug")
+    bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
+    bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+
+    writeLines(bugfile2, con="data/BJSM_6betas_missing_new.bug")
+    jag.model.name <- "BJSM_6betas_missing_new.bug"
     tryCatch({
       jag <- rjags::jags.model(file.path("data",jag.model.name),
                         data=list(n1 = nrow(mydata),
@@ -134,9 +149,15 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior.a, pi_prior.b, beta0_prior.a, be
     )
 
   } else {
+    bugfile  <- readLines("data/BJSM_2beta_missing.bug")
+    bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
+    bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+
+    writeLines(bugfile2, con="data/BJSM_2beta_missing_new.bug")
 
     # If using 2-betas model
-    jag.model.name <- "BJSM_2beta_missing.bug"  # beta1 ~ pareto
+    jag.model.name <- "BJSM_2beta_missing_new.bug"  # beta1 ~ pareto
     tryCatch({
       jag <- rjags::jags.model(file.path("data",jag.model.name),
                         data=list(n1 = nrow(mydata),
@@ -168,25 +189,62 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior.a, pi_prior.b, beta0_prior.a, be
 
   out_post = posterior_sample[[1]]
 
+
   if (six == TRUE){
+
+    pi_DTR_est = c()
+    pi_AB_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,8]*out_post[,1]
+    pi_AC_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,9]*out_post[,1]
+    pi_BA_tt <- out_post[,8]^2*out_post[,4]+(1-out_post[,8])*out_post[,7]*out_post[,3]
+    pi_BC_tt <- out_post[,8]^2*out_post[,4]+(1-out_post[,8])*out_post[,9]*out_post[,3]
+    pi_CA_tt <- out_post[,9]^2*out_post[,6]+(1-out_post[,9])*out_post[,7]*out_post[,5]
+    pi_CB_tt <- out_post[,9]^2*out_post[,6]+(1-out_post[,9])*out_post[,8]*out_post[,5]
+    pi_DTR_est <- rbind(pi_DTR_est,c(mean(pi_AB_tt),mean(pi_AC_tt),mean(pi_BA_tt),mean(pi_BC_tt),mean(pi_CA_tt),mean(pi_CB_tt)))
+
     result = list("posterior_sample" = out_post,
-                  "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate
+                  "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
                   "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
-                  "ci_pi_A" = bayestestR::ci(out_post[,7], ci = 0.95, method = "HDI"),
-                  "ci_pi_B" = bayestestR::ci(out_post[,8], ci = 0.95, method = "HDI"),
-                  "ci_pi_C" = bayestestR::ci(out_post[,9], ci = 0.95, method = "HDI"),
-                  "beta0_hat" = apply(out_post[,c(1,3,5)],2,mean),
-                  "beta1_hat" = apply(out_post[,c(2,4,6)],2,mean))
+                  "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
+                  "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"),
+                  "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"),
+                  "diff_AB" = apply(out_post[,7] - outpost[,8],2,mean), # estimate of differences between treatments A and B
+                  "diff_BC" = apply(out_post[,8] - outpost[,9],2,mean),
+                  "diff_AC" = apply(out_post[,7] - outpost[,9],2,mean),
+                  "ci_diff_AB" = bayestestR::ci(out_post[,7] - outpost[,8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                  "ci_diff_BC" = bayestestR::ci(out_post[,8] - outpost[,9], ci = ci, method = "HDI"),
+                  "ci_diff_AC" = bayestestR::ci(out_post[,7] - outpost[,9], ci = ci, method = "HDI"),
+                  "beta0_hat" = apply(out_post[,c(1,3,5)],2,mean), # linkage parameter estimates
+                  "beta1_hat" = apply(out_post[,c(2,4,6)],2,mean),  # linkage parameter estimates
+                  "pi_DTR_est" = pi_DTR_est) # DTR estimates
+
+
 
   } else {
+
+    pi_DTR_est = c()
+    pi_AB_tt <- out_post[,3]^2*out_post[,2]+(1-out_post[,3])*out_post[,4]*out_post[,1]
+    pi_AC_tt <- out_post[,3]^2*out_post[,2]+(1-out_post[,3])*out_post[,5]*out_post[,1]
+    pi_BA_tt <- out_post[,4]^2*out_post[,2]+(1-out_post[,4])*out_post[,3]*out_post[,1]
+    pi_BC_tt <- out_post[,4]^2*out_post[,2]+(1-out_post[,4])*out_post[,5]*out_post[,1]
+    pi_CA_tt <- out_post[,5]^2*out_post[,2]+(1-out_post[,5])*out_post[,3]*out_post[,1]
+    pi_CB_tt <- out_post[,5]^2*out_post[,2]+(1-out_post[,5])*out_post[,4]*out_post[,1]
+    pi_DTR_est <- rbind(pi_DTR_est,c(mean(pi_AB_tt),mean(pi_AC_tt),mean(pi_BA_tt),mean(pi_BC_tt),mean(pi_CA_tt),mean(pi_CB_tt)))
+
     result = list("posterior_sample" = out_post,
                   "pi_hat_bjsm" = apply(out_post[,3:5],2,mean),
                   "se_hat_bjsm" = apply(out_post[,3:5],2,sd),
-                  "ci_pi_A" = bayestestR::ci(out_post[,3], ci = 0.95, method = "HDI"),
-                  "ci_pi_B" = bayestestR::ci(out_post[,4], ci = 0.95, method = "HDI"),
-                  "ci_pi_C" = bayestestR::ci(out_post[,5], ci = 0.95, method = "HDI"),
+                  "ci_pi_A" = bayestestR::ci(out_post[,3], ci = ci, method = "HDI"),
+                  "ci_pi_B" = bayestestR::ci(out_post[,4], ci = ci, method = "HDI"),
+                  "ci_pi_C" = bayestestR::ci(out_post[,5], ci = ci, method = "HDI"),
+                  "diff_AB" = apply(out_post[,3] - outpost[,4],2,mean), # estimate of differences between treatments A and B
+                  "diff_BC" = apply(out_post[,4] - outpost[,5],2,mean),
+                  "diff_AC" = apply(out_post[,3] - outpost[,5],2,mean),
+                  "ci_diff_AB" = bayestestR::ci(out_post[,3] - outpost[,4], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                  "ci_diff_BC" = bayestestR::ci(out_post[,4] - outpost[,5], ci = ci, method = "HDI"),
+                  "ci_diff_AC" = bayestestR::ci(out_post[,3] - outpost[,5], ci = ci, method = "HDI"),
                   "beta0_hat" = mean(out_post[,1]),
-                  "beta1_hat" = mean(out_post[,2]))
+                  "beta1_hat" = mean(out_post[,2]),
+                  "pi_DTR_est" = pi_DTR_est) # DTR estimates)
   }
 
 

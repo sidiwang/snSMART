@@ -13,8 +13,8 @@ model{
   }
 
   for (j in 1:num_arms){
-    pi[j]~pi_prior_dist(pi_prior.a[j],pi_prior.b[j])
+    pi[j]~dgamma(pi_prior.a[j],pi_prior.b[j])
   }
-  beta[1]~beta0_prior_dist(beta0_prior.a,beta0_prior.b)
-  beta[2]~beta1_prior_dist(beta1_prior.a,beta1_prior.c)
+  beta[1]~dbeta(beta0_prior.a,beta0_prior.b)
+  beta[2]~dpar(beta1_prior.a,beta1_prior.c)
 }
