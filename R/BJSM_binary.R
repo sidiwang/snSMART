@@ -14,6 +14,36 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
                                        trtAB_II, trtAC_II, trtBA_II, trtBC_II, trtCA_II, trtCB_II,
                                        respAB_II, respAC_II, respBA_II, respBC_II, respCA_II, respCB_II){
 
+  ##### data input #####
+#  trtA_I <- 9    # number of people who receive A in stage 1
+#  trtB_I <- 12    # number of people who receive B in stage 1
+#  trtC_I <- 9    # number of people who receive C in stage 1
+
+#  respA_I <- 3   # number of people who respond to A in stage 1, who receive same trt in stage 2
+#  respB_I <- 3   # number of people who respond to B in stage 1, who receive same trt in stage 2
+#  respC_I <- 5   # number of people who respond to C in stage 1, who receive same trt in stage 2
+
+#  trtAA_II <- 2  # number of 1st stage responders to A who receive A in stage 2
+#  trtBB_II <- 2  # number of 1st stage responders to B who receive B in stage 2
+#  trtCC_II <- 4  # number of 1st stage responders to C who receive C in stage 2
+
+#  respA_II <- 2   # number of 1st stage responders who respond to A again in stage 2
+#  respB_II <- 2   # number of 1st stage responders who respond to B again in stage 2
+#  respC_II <- 4   # number of 1st stage responders who respond to C again in stage 2
+
+#  trtAB_II <- 3   # number of 1st stage non-responders to A who receive B in stage 2
+#  trtAC_II <- 2   # number of 1st stage non-responders to A who receive C in stage 2
+#  trtBA_II <- 3   # number of 1st stage non-responders to B who receive A in stage 2
+#  trtBC_II <- 2   # number of 1st stage non-responders to B who receive C in stage 2
+#  trtCA_II <- 1   # number of 1st stage non-responders to C who receive A in stage 2
+#  trtCB_II <- 2   # number of 1st stage non-responders to C who receive B in stage 2
+
+#  respAB_II <- 3  # number of 1st stage non-responders to A who respond to B in stage 2
+#  respAC_II <- 1  # number of 1st stage non-responders to A who respond to C in stage 2
+#  respBA_II <- 2  # number of 1st stage non-responders to B who respond to A in stage 2
+#  respBC_II <- 2  # number of 1st stage non-responders to B who respond to C in stage 2
+#  respCA_II <- 0  # number of 1st stage non-responders to C who respond to A in stage 2
+#  respCB_II <- 0  # number of 1st stage non-responders to C who respond to B in stage 2
 
   data_A.A.Y <- data.frame(treatment_stageI = rep(1, trtAA_II),
                            response_stageI = rep(1, trtAA_II),
