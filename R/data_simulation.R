@@ -132,4 +132,6 @@ data_simulation <- function(p_IA, p_IB, p_IC, discount_y0, discount_y1, p_1nA_2B
   )
   # responders will be two and non-responders will be one
   data_stageI_stageII=cbind(data_stageI_stageII_tmp,response_status_stageI=1+data_stageI_stageII_tmp$response_stageI)
+
+  return(data_stageI_stageII)
 }
