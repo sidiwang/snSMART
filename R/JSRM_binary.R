@@ -152,8 +152,12 @@ JSRM_binary = function(data, six = TRUE){
     })
   }
 
-  result = list("GEE_output" = mod1, "beta_hat" = beta_hat, "sd_beta_hat" = sd_beta_hat, "pi_hat" = pi_hat, "sd_pi_hat" = sd_pi_hat, "pi_DTR_hat" = pi_DTR_hat,
-                "pi_DTR_se" = pi_DTR_se)
+  result = list("GEE_output" = mod1, # original output of the GEE (geeglm) model
+                "pi_hat" = pi_hat, # estimate of response rate/treatment effect
+                "sd_pi_hat" = sd_pi_hat, # standard error of the response rate
+                "pi_DTR_hat" = pi_DTR_hat, # DTR estimates
+                "pi_DTR_se" = pi_DTR_se) # standard deviation of DTR estimates
+
 
 
   return(result)
