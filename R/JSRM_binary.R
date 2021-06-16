@@ -1,10 +1,23 @@
-#'JSRM_binary
+#' JSRM
 #'
+#' What does this function do?
 #'
+#' @param data data format produced by the `trial_dataset` function
+#' @param six if TRUE, will run the six beta model, if FALSE will run the two
+#' beta model. Default is `six = TRUE`
 #'
+#' @return a `list` containing
+#' \itemize{
+#'   \item{GEE_output}{ - original output of the GEE (geeglm) model}
+#'   \item{pi_hat}{ - estimate of response rate/treatment effect}
+#'   \item{sd_pi_hat}{ - standard error of the response rate}
+#'   \item{pi_DTR_hat}{ - DTR estimates}
+#'   \item{pi_DTR_se}{ - standard deviation of DTR estimates}
+#' }
 #'
-
-# JSRM
+#' @examples
+#' #data
+#' #JSRM_binary = function(data = data, six = TRUE)
 
 JSRM_binary = function(data, six = TRUE){
 

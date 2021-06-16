@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_simulation.R
 \name{data_simulation}
 \alias{data_simulation}
-\title{data_simulation}
+\title{Data Simulation}
 \usage{
 data_simulation(
   p_IA,
@@ -25,9 +25,9 @@ data_simulation(
 
 \item{p_IC}{first stage response rate of C}
 
-\item{discount_y0}{linkage parameters, for nonresponders to treatment k in the first stage who received treatment k' in the second stage, the second stage response rate in the second stage is equal to discount_y0 * pi_IK'}
+\item{discount_y0}{linkage parameters, for nonresponders to treatment k in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{discount_y0 * pi_IK'}}
 
-\item{discount_y1}{linkage parameters, the second stage response rate for first stage responders is equal to discount_y1 * p_Ik}
+\item{discount_y1}{linkage parameters, the second stage response rate for first stage responders is equal to \code{discount_y1 * p_Ik}}
 
 \item{p_1nA_2B}{probability for first stage non-responders to A being randomized to arm B in second stage}
 
@@ -42,7 +42,7 @@ data_simulation(
 \item{n_C}{first stage sample size of C}
 }
 \value{
-
+what is returned?
 }
 \description{
 simulate data for snSMART
