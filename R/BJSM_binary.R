@@ -1,49 +1,58 @@
-#'BJSM_binary
+#' Trial dataset
+#'
+#' Generate trial dataset with or without missing value
+#'
+#' @param trtA_I number of people who receive A in stage 1
+#' @param trtB_I number of people who receive B in stage 1
+#' @param trtC_I number of people who receive C in stage 1
+#' @param respA_I number of people who respond to A in stage 1, who receive same trt in stage 2
+#' @param respB_I number of people who respond to B in stage 1, who receive same trt in stage 2
+#' @param respC_I number of people who respond to C in stage 1, who receive same trt in stage 2
+#' @param trtAA_II number of 1st stage responders to A who receive A in stage 2
+#' @param trtBB_II number of 1st stage responders to B who receive B in stage 2
+#' @param trtCC_II number of 1st stage responders to C who receive C in stage 2
+#' @param respA_II number of 1st stage responders who respond to A again in stage 2
+#' @param respB_II number of 1st stage responders who respond to B again in stage 2
+#' @param respC_II number of 1st stage responders who respond to C again in stage 2
+#' @param trtAB_II number of 1st stage non-responders to A who receive B in stage 2
+#' @param trtAC_II number of 1st stage non-responders to A who receive C in stage 2
+#' @param trtBA_II number of 1st stage non-responders to B who receive A in stage 2
+#' @param trtBC_II number of 1st stage non-responders to B who receive C in stage 2
+#' @param trtCA_II number of 1st stage non-responders to C who receive A in stage 2
+#' @param trtCB_II number of 1st stage non-responders to C who receive B in stage 2
+#' @param respAB_II number of 1st stage non-responders to A who respond to B in stage 2
+#' @param respAC_II number of 1st stage non-responders to A who respond to C in stage 2
+#' @param respBA_II number of 1st stage non-responders to B who respond to A in stage 2
+#' @param respBC_II number of 1st stage non-responders to B who respond to C in stage 2
+#' @param respCA_II number of 1st stage non-responders to C who respond to A in stage 2
+#' @param respCB_II number of 1st stage non-responders to C who respond to B in stage 2
+#'
+#' @return a `matrix` with the following data sets row binded
+#' \itemize{
+#'   \item{data_A.A.Y}{ - }
+#'   \item{data_A.B.Y}{ - }
+#'   \item{data_A.C.Y}{ - }
+#'   \item{data_A}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#'   \item{data_A.A.}{ - }
+#' }
+#'
+#' @examples
 #'
 #'
+#' @export
 #'
-#'
-#'
-#'
-library(rjags)
-library(bayestestR)
 
-# generate trial dataset (with or without missing value)
 trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
-                                       trtAA_II, trtBB_II, trtCC_II, respA_II, respB_II, respC_II,
-                                       trtAB_II, trtAC_II, trtBA_II, trtBC_II, trtCA_II, trtCB_II,
-                                       respAB_II, respAC_II, respBA_II, respBC_II, respCA_II, respCB_II){
-
-  ##### data input #####
-#  trtA_I <- 9    # number of people who receive A in stage 1
-#  trtB_I <- 12    # number of people who receive B in stage 1
-#  trtC_I <- 9    # number of people who receive C in stage 1
-
-#  respA_I <- 3   # number of people who respond to A in stage 1, who receive same trt in stage 2
-#  respB_I <- 3   # number of people who respond to B in stage 1, who receive same trt in stage 2
-#  respC_I <- 5   # number of people who respond to C in stage 1, who receive same trt in stage 2
-
-#  trtAA_II <- 2  # number of 1st stage responders to A who receive A in stage 2
-#  trtBB_II <- 2  # number of 1st stage responders to B who receive B in stage 2
-#  trtCC_II <- 4  # number of 1st stage responders to C who receive C in stage 2
-
-#  respA_II <- 2   # number of 1st stage responders who respond to A again in stage 2
-#  respB_II <- 2   # number of 1st stage responders who respond to B again in stage 2
-#  respC_II <- 4   # number of 1st stage responders who respond to C again in stage 2
-
-#  trtAB_II <- 3   # number of 1st stage non-responders to A who receive B in stage 2
-#  trtAC_II <- 2   # number of 1st stage non-responders to A who receive C in stage 2
-#  trtBA_II <- 3   # number of 1st stage non-responders to B who receive A in stage 2
-#  trtBC_II <- 2   # number of 1st stage non-responders to B who receive C in stage 2
-#  trtCA_II <- 1   # number of 1st stage non-responders to C who receive A in stage 2
-#  trtCB_II <- 2   # number of 1st stage non-responders to C who receive B in stage 2
-
-#  respAB_II <- 3  # number of 1st stage non-responders to A who respond to B in stage 2
-#  respAC_II <- 1  # number of 1st stage non-responders to A who respond to C in stage 2
-#  respBA_II <- 2  # number of 1st stage non-responders to B who respond to A in stage 2
-#  respBC_II <- 2  # number of 1st stage non-responders to B who respond to C in stage 2
-#  respCA_II <- 0  # number of 1st stage non-responders to C who respond to A in stage 2
-#  respCB_II <- 0  # number of 1st stage non-responders to C who respond to B in stage 2
+                          trtAA_II, trtBB_II, trtCC_II, respA_II, respB_II, respC_II,
+                          trtAB_II, trtAC_II, trtBA_II, trtBC_II, trtCA_II, trtCB_II,
+                          respAB_II, respAC_II, respBA_II, respBC_II, respCA_II, respCB_II){
 
   data_A.A.Y <- data.frame(treatment_stageI = rep(1, trtAA_II),
                            response_stageI = rep(1, trtAA_II),
@@ -116,6 +125,36 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 
 
 
+#' BJSM binary
+#'
+#' What does this function do?
+#'
+#' @param data
+#' @param NUM_ARMS number of treatment arms
+#' @param pi_prior.a  alpha parameter of the prior beta distribution for pi_1K, a vector with three values, one for each treatment
+#' @param  pi_prior.b  beta parameter of the prior beta distribution  for pi_1K, a vector with three values, one for each treatment
+#' @param beta0_prior.a alpha parameter of the prior beta distribution for linkage parameter beta0
+#' @param beta0_prior.b beta parameter of the prior beta distribution  for linkage parameter beta0
+#' @param beta1_prior.a scale parameter of the prior pareto distribution for linkage parameter beta1
+#' @param beta1_prior.c shape parameter of the prior pareto distribution for linkage parameter beta1
+#' @param n_MCMC_chain number of MCMC chains, default to 1. If this is set to a number more than 1
+#' @param BURN.IN number of burn-in iterations for MCMC
+#' @param MCMC_SAMPLE number of iterations for MCMC
+#' @param ci coverage probability for credible intervals
+#' @param pi_prior_dist prior distribution for pi, user can choose from gamma, beta, pareto
+#' @param beta0_prior_dist prior distribution for beta0, user can choose from gamma, beta, pareto
+#' @param beta1_prior_dist prior distribution for beta1, user can choose from gamma, beta, pareto
+#' @param six, if TRUE, will run the six beta model, if FALSE will run the two beta model
+#'
+#' @details
+#' For gamma, prior.a is r, prior.b is lambda. For beta, prior.a is alpha, prior.b is beta.
+#' For pareto, prior.a is alpha, prior.b is c (see page 29 of the jags user manual version 3.4.0).
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @export
 
 BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist, beta1_prior.a, beta1_prior.c, n_MCMC_chain, BURN.IN,
                        MCMC_SAMPLE, ci = 0.95, six = TRUE){
@@ -143,12 +182,12 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
 
   if (six == TRUE){
     # If using 6-betas model
-    bugfile  <- readLines("data/BJSM_6betas_missing.bug")
+    bugfile  <- readLines("inst/BJSM_6betas_missing.bug")
     bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con="data/BJSM_6betas_missing_new.bug")
+    writeLines(bugfile2, con="inst/BJSM_6betas_missing_new.bug")
     jag.model.name <- "BJSM_6betas_missing_new.bug"
     tryCatch({
       jag <- rjags::jags.model(file.path("data",jag.model.name),
@@ -179,12 +218,12 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
     )
 
   } else {
-    bugfile  <- readLines("data/BJSM_2beta_missing.bug")
+    bugfile  <- readLines("inst/BJSM_2beta_missing.bug")
     bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con="data/BJSM_2beta_missing_new.bug")
+    writeLines(bugfile2, con="inst/BJSM_2beta_missing_new.bug")
 
     # If using 2-betas model
     jag.model.name <- "BJSM_2beta_missing_new.bug"  # beta1 ~ pareto

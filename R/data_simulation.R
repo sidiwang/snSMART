@@ -1,23 +1,24 @@
-#'data_simulation
+#' Data Simulation
 #'
-#'simulate data for snSMART
-#'@param p_IA first stage response rate of A
-#'@param p_IB first stage response rate of B
-#'@param p_IC first stage response rate of C
-#'@param discount_y0 linkage parameters, for nonresponders to treatment k in the first stage who received treatment k' in the second stage, the second stage response rate in the second stage is equal to discount_y0 * pi_IK'
-#'@param discount_y1 linkage parameters, the second stage response rate for first stage responders is equal to discount_y1 * p_Ik
-#'@param p_1nA_2B probability for first stage non-responders to A being randomized to arm B in second stage
-#'@param p_1nB_2A probability for first stage non-responders to B being randomized to arm A in second stage
-#'@param p_1nC_2A probability for first stage non-responders to C being randomized to arm A in second stage
-#'@param n_A first stage sample size of A
-#'@param n_B first stage sample size of B
-#'@param n_C first stage sample size of C
+#' simulate data for snSMART
 #'
-#'@return
+#' @param p_IA first stage response rate of A
+#' @param p_IB first stage response rate of B
+#' @param p_IC first stage response rate of C
+#' @param discount_y0 linkage parameters, for nonresponders to treatment k in the first stage who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `discount_y0 * pi_IK'`
+#' @param discount_y1 linkage parameters, the second stage response rate for first stage responders is equal to `discount_y1 * p_Ik`
+#' @param p_1nA_2B probability for first stage non-responders to A being randomized to arm B in second stage
+#' @param p_1nB_2A probability for first stage non-responders to B being randomized to arm A in second stage
+#' @param p_1nC_2A probability for first stage non-responders to C being randomized to arm A in second stage
+#' @param n_A first stage sample size of A
+#' @param n_B first stage sample size of B
+#' @param n_C first stage sample size of C
 #'
-#'@examples
+#' @return what is returned?
 #'
-#'@export
+#' @examples
+#'
+#' @export
 #'
 
 data_simulation <- function(p_IA, p_IB, p_IC, discount_y0, discount_y1, p_1nA_2B, p_1nB_2A, p_1nC_2A, n_A, n_B, n_C){
