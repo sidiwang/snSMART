@@ -1,25 +1,31 @@
 #' JSRM
 #'
-#' What does this function do?
+#' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
+#' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results/
 #'
 #' @param data data format produced by the `trial_dataset` function
 #' @param six if TRUE, will run the six beta model, if FALSE will run the two
 #' beta model. Default is `six = TRUE`
+#' @param DTR if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens
 #'
 #' @return a `list` containing
 #' \itemize{
 #'   \item{GEE_output}{ - original output of the GEE (geeglm) model}
 #'   \item{pi_hat}{ - estimate of response rate/treatment effect}
 #'   \item{sd_pi_hat}{ - standard error of the response rate}
-#'   \item{pi_DTR_hat}{ - DTR estimates}
+#'   \item{pi_DTR_hat}{ - expected response rate of dynamic treatment regimens (DTRs)}
 #'   \item{pi_DTR_se}{ - standard deviation of DTR estimates}
 #' }
 #'
 #' @examples
 #' #data
-#' #JSRM_binary = function(data = data, six = TRUE)
-
-JSRM_binary = function(data, six = TRUE){
+#' #JSRM_binary = function(data = data, six = TRUE, DTR = TRUE)
+#'
+#' @references
+#' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
+#' randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+#'
+JSRM_binary = function(data, six = TRUE, DTR = TRUE){
 
   # data, same format as the bjsm_binary.R file trial dataset format
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
@@ -165,12 +171,20 @@ JSRM_binary = function(data, six = TRUE){
     })
   }
 
-  result = list("GEE_output" = mod1, # original output of the GEE (geeglm) model
-                "pi_hat" = pi_hat, # estimate of response rate/treatment effect
-                "sd_pi_hat" = sd_pi_hat, # standard error of the response rate
-                "pi_DTR_hat" = pi_DTR_hat, # DTR estimates
-                "pi_DTR_se" = pi_DTR_se) # standard deviation of DTR estimates
+  if (DTR == TRUE){
+    result = list("GEE_output" = mod1, # original output of the GEE (geeglm) model
+                  "pi_hat" = pi_hat, # estimate of response rate/treatment effect
+                  "sd_pi_hat" = sd_pi_hat, # standard error of the response rate
+                  "pi_DTR_hat" = pi_DTR_hat, # expected response rate of dynamic treatment regimens (DTRs)
+                  "pi_DTR_se" = pi_DTR_se) # standard deviation of DTR estimates
+  }else{
 
+    result = list("GEE_output" = mod1, # original output of the GEE (geeglm) model
+                  "pi_hat" = pi_hat, # estimate of response rate/treatment effect
+                  "sd_pi_hat" = sd_pi_hat) # standard error of the response rate
+
+
+  }
 
 
   return(result)

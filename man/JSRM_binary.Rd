@@ -4,13 +4,15 @@
 \alias{JSRM_binary}
 \title{JSRM}
 \usage{
-JSRM_binary(data, six = TRUE)
+JSRM_binary(data, six = TRUE, DTR = TRUE)
 }
 \arguments{
 \item{data}{data format produced by the \code{trial_dataset} function}
 
 \item{six}{if TRUE, will run the six beta model, if FALSE will run the two
 beta model. Default is \code{six = TRUE}}
+
+\item{DTR}{if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens}
 }
 \value{
 a \code{list} containing
@@ -18,14 +20,20 @@ a \code{list} containing
 \item{GEE_output}{ - original output of the GEE (geeglm) model}
 \item{pi_hat}{ - estimate of response rate/treatment effect}
 \item{sd_pi_hat}{ - standard error of the response rate}
-\item{pi_DTR_hat}{ - DTR estimates}
+\item{pi_DTR_hat}{ - expected response rate of dynamic treatment regimens (DTRs)}
 \item{pi_DTR_se}{ - standard deviation of DTR estimates}
 }
 }
 \description{
-What does this function do?
+A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
+Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results/
 }
 \examples{
 #data
-#JSRM_binary = function(data = data, six = TRUE)
+#JSRM_binary = function(data = data, six = TRUE, DTR = TRUE)
+
+}
+\references{
+Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
+randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
 }

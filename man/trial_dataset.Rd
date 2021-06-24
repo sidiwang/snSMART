@@ -81,26 +81,18 @@ trial_dataset(
 \item{respCB_II}{number of 1st stage non-responders to C who respond to B in stage 2}
 }
 \value{
-a \code{matrix} with the following data sets row binded
-\itemize{
-\item{data_A.A.Y}{ - }
-\item{data_A.B.Y}{ - }
-\item{data_A.C.Y}{ - }
-\item{data_A}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-\item{data_A.A.}{ - }
-}
+a \code{matrix} of the trial dataset input by user
 }
 \description{
 Generate trial dataset with or without missing value
 }
 \examples{
+trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3, respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
+respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2, trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
+respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
 
-
+}
+\references{
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
+Statistics in medicine, 37(26), pp.3723-3732.
 }

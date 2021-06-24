@@ -1,6 +1,6 @@
 #' Data Simulation
 #'
-#' simulate data for snSMART
+#' simulate data for the classic design of snSMART (comparing three treatments)
 #'
 #' @param p_IA first stage response rate of A
 #' @param p_IB first stage response rate of B
@@ -14,9 +14,16 @@
 #' @param n_B first stage sample size of B
 #' @param n_C first stage sample size of C
 #'
-#' @return what is returned?
+#' @return The simulated dataset specified by the user
 #'
 #' @examples
+#' data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4, discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5), p_1nA_2B = 0.5, p_1nB_2A = 0.5,
+#' p_1nC_2A = 0.5, n_A = 30, n_B = 30, n_C = 30)
+#'
+#' @references
+#' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
+#' Statistics in medicine, 37(26), pp.3723-3732.
+
 #'
 #' @export
 #'
