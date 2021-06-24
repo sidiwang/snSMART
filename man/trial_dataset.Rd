@@ -81,7 +81,7 @@ trial_dataset(
 \item{respCB_II}{number of 1st stage non-responders to C who respond to B in stage 2}
 }
 \value{
-a \code{matrix} of the trial dataset input by user
+a \code{matrix} of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 }
 \description{
 Generate trial dataset with or without missing value

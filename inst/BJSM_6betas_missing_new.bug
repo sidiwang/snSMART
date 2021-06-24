@@ -12,7 +12,7 @@ model{
     pi_2[k] <- pi[treatment_stageII[k]] * beta[response_stageI_disc[k]]
   }
   for (j in 1:num_arms){
-    pi[j]~dgamma(pi_prior.a[j],pi_prior.b[j])
+    pi[j]~dbeta(pi_prior.a[j],pi_prior.b[j])
   }
   beta[1]~dbeta(beta0_prior.a,beta0_prior.b)
   beta[2]~dpar(beta1_prior.a,beta1_prior.c)

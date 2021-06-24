@@ -25,6 +25,8 @@ BJSM_binary(
 )
 }
 \arguments{
+\item{data}{trial data generated through function \code{trial_dataset}}
+
 \item{NUM_ARMS}{number of treatment arms}
 
 \item{pi_prior_dist}{prior distribution for pi, user can choose from gamma, beta, pareto}
@@ -51,11 +53,11 @@ BJSM_binary(
 
 \item{MCMC_SAMPLE}{number of iterations for MCMC}
 
-\item{ci}{coverage probability for credible intervals}
+\item{ci}{coverage probability for credible intervals, default = 0.95}
 
-\item{six, }{if TRUE, will run the six beta model, if FALSE will run the two beta model.}
+\item{six, }{if TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE}
 
-\item{DTR, }{if TRUE, will also return the expected response rate of dynamic treatment regimens}
+\item{DTR, }{if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
 }
 \value{
 added comments next to each return variable
@@ -77,7 +79,7 @@ respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2, trtBA_II =
 respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
 
 BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-beta0_prior_dist = "beta", beta0_prior_a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior_c = 1,
+beta0_prior_dist = "beta", beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1,
 n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95, six = TRUE, DTR = TRUE)
 
 }

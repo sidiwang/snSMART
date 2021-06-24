@@ -1,6 +1,6 @@
-#' Data Simulation
+#' Data Simulation (standard snSMART design)
 #'
-#' simulate data for the classic design of snSMART (comparing three treatments)
+#' simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome)
 #'
 #' @param p_IA first stage response rate of A
 #' @param p_IB first stage response rate of B
@@ -14,7 +14,7 @@
 #' @param n_B first stage sample size of B
 #' @param n_C first stage sample size of C
 #'
-#' @return The simulated dataset specified by the user
+#' @return The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
 #'
 #' @examples
 #' data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4, discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5), p_1nA_2B = 0.5, p_1nB_2A = 0.5,

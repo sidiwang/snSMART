@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_simulation.R
 \name{data_simulation}
 \alias{data_simulation}
-\title{Data Simulation}
+\title{Data Simulation (standard snSMART design)}
 \usage{
 data_simulation(
   p_IA,
@@ -42,10 +42,10 @@ data_simulation(
 \item{n_C}{first stage sample size of C}
 }
 \value{
-The simulated dataset specified by the user
+The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
 }
 \description{
-simulate data for the classic design of snSMART (comparing three treatments)
+simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome)
 }
 \examples{
 data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4, discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5), p_1nA_2B = 0.5, p_1nB_2A = 0.5,
