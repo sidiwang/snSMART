@@ -60,8 +60,8 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
       mod1 <- geepack::geeglm(Y~XA+XB+XC+Z1A+Z2A+Z1B+Z2B+Z1C+Z2C-1, family=poisson(link="log"), data=geedata, id=ptid,corstr = "independence")
       beta_hat <- mod1$coefficients[1:3];
       sd_beta_hat <- summary(mod1)$coef[1:3,2];
-      pi_hat <- rbind(pi_hat,exp(beta_hat));
-      sd_pi_hat <- rbind(sd_pi_hat,exp(beta_hat)*sd_beta_hat);
+      pi_hat <- exp(beta_hat);
+      sd_pi_hat <- exp(beta_hat)*sd_beta_hat;
       b_hat <- coef(mod1);
       grad <- exp(rbind(c(2*b_hat[1]+b_hat[4], b_hat[2]+b_hat[5], b_hat[1]+b_hat[2]+b_hat[5]),
                         c(2*b_hat[1]+b_hat[4], b_hat[3]+b_hat[5], b_hat[1]+b_hat[3]+b_hat[5]),
@@ -69,7 +69,7 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
                         c(2*b_hat[2]+b_hat[6], b_hat[3]+b_hat[7], b_hat[2]+b_hat[3]+b_hat[7]),
                         c(2*b_hat[3]+b_hat[8], b_hat[1]+b_hat[9], b_hat[3]+b_hat[1]+b_hat[9]),
                         c(2*b_hat[3]+b_hat[8], b_hat[2]+b_hat[9], b_hat[3]+b_hat[2]+b_hat[9])));
-      pi_DTR_hat <- rbind(pi_DTR_hat, c(1, 1, -1) %*% t(grad))
+      pi_DTR_hat <- c(1, 1, -1) %*% t(grad)
       grad[,3] <- -grad[,3]
       sigma_b <- mod1$geese$vbeta
       L1 <- matrix(c(2, 0, 0, 1, 0, 0, 0, 0, 0,
@@ -107,7 +107,7 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
                      0, 1, 1, 0, 0, 0, 0, 0, 1), nrow=3, ncol=9, byrow=T)
       sigma_g <- L6 %*% sigma_b %*% t(L6)
       seCB <- sqrt(grad[6,] %*% sigma_g %*% grad[6,])
-      pi_DTR_se <- rbind(pi_DTR_se, c(seAB, seAC, seBA, seBC, seCA, seCB))
+      pi_DTR_se <- c(seAB, seAC, seBA, seBC, seCA, seCB)
     })
 
   } else {
@@ -120,8 +120,8 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
       mod1 <- geepack::geeglm(Y~XA+XB+XC+Z1+Z2-1, family=poisson(link="log"), data=geedata, id=ptid,corstr = "independence")
       beta_hat <- mod1$coefficients[1:3];
       sd_beta_hat <- summary(mod1)$coef[1:3,2];
-      pi_hat <- rbind(pi_hat,exp(beta_hat));
-      sd_pi_hat <- rbind(sd_pi_hat,exp(beta_hat)*sd_beta_hat);
+      pi_hat <- exp(beta_hat);
+      sd_pi_hat <- exp(beta_hat)*sd_beta_hat;
       b_hat <- coef(mod1);
       grad <- exp(rbind(c(2*b_hat[1]+b_hat[4], b_hat[2]+b_hat[5], b_hat[1]+b_hat[2]+b_hat[5]),
                         c(2*b_hat[1]+b_hat[4], b_hat[3]+b_hat[5], b_hat[1]+b_hat[3]+b_hat[5]),
@@ -129,7 +129,7 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
                         c(2*b_hat[2]+b_hat[4], b_hat[3]+b_hat[5], b_hat[2]+b_hat[3]+b_hat[5]),
                         c(2*b_hat[3]+b_hat[4], b_hat[1]+b_hat[5], b_hat[3]+b_hat[1]+b_hat[5]),
                         c(2*b_hat[3]+b_hat[4], b_hat[2]+b_hat[5], b_hat[3]+b_hat[2]+b_hat[5])));
-      pi_DTR_hat <- rbind(pi_DTR_hat, c(1, 1, -1) %*% t(grad))
+      pi_DTR_hat <- c(1, 1, -1) %*% t(grad)
       grad[,3] <- -grad[,3]
       sigma_b <- mod1$geese$vbeta
       L1 <- matrix(c(2, 0, 0, 1, 0,
@@ -167,7 +167,7 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
                      0, 1, 1, 0, 1), nrow=3, ncol=5, byrow=T)
       sigma_g <- L6 %*% sigma_b %*% t(L6)
       seCB <- sqrt(grad[6,] %*% sigma_g %*% grad[6,])
-      pi_DTR_se <- rbind(pi_DTR_se, c(seAB, seAC, seBA, seBC, seCA, seCB))
+      pi_DTR_se <- c(seAB, seAC, seBA, seBC, seCA, seCB)
     })
   }
 
