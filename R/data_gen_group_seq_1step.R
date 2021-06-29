@@ -13,6 +13,8 @@
 #' @param n.update number of updates during the study. Default is 1 (number of interim analysis? need to check with Kelley)
 #' @param drop_threshold a number between 0 and 1, if the posteriors probability of a treatment having the smallest response rate is bigger than the `drop_threshold`, this treatment will be dropped at that update. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study
 #' @param NUM_ARMS number of treatment arms
+#' @param trt.days subjects' responses are evaluated `trt.days` days after receiving the treatment, default 180
+#' @param trt.break second stage trt is given `trt.break` day after the evaluation, default 1
 #' @param pi_prior.a parameter a of the prior distribution for pi_1K, a vector with three values, one for each treatment. Please check the `Details` section for more explaination
 #' @param pi_prior.b parameter b of the prior distribution  for pi_1K, a vector with three values, one for each treatment. Please check the `Details` section for more explaination
 #' @param beta0_prior.a parameter a of the prior distribution for linkage parameter beta0
@@ -27,16 +29,18 @@
 #' @param beta1_prior_dist prior distribution for beta1, user can choose from gamma, beta, pareto
 ##'
 #' @return
-#' return the simulated dataset, randomization probabilities before each update (the number of rows equals to the number of updates plus 1), removed arm and the round of the update that removal of treatment arm occurs
+#' return the simulated dataset (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
+#' response for first treatment, treatment arm for second treatment, response for second treatment), randomization probabilities before each update (the number of rows
+#' equals to the number of updates plus 1), removed arm and the round of the update that removal of treatment arm occurs
 #'
 #'
 #' @example
 #' simu1 = data_gen_group_seq_1step(pi_1A = 0.25, pi_1B = 0.45, pi_1C = 0.65, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
-#' rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, NUM_ARMS  = 3, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
+#' rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, NUM_ARMS  = 3, trt.days = 100, trt.break = 2, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
 #' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
 #'
 #' simu2 = data_gen_group_seq_1step(pi_1A = 0.3, pi_1B = 0.3, pi_1C = 0.3, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
-#' rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), NUM_ARMS  = 3, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
+#' rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), NUM_ARMS  = 3, trt.days = 50, trt.break = 6, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
 #' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
 #'
 #' @references
@@ -48,8 +52,8 @@
 
 
 ## Data generation of a group sequential snSMART with a one-step rule
-data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,discount_n2, rate,n.month,n.update=1,drop_threshold=0.5, NUM_ARMS,
-                                     pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist,
+data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,discount_n2, rate,n.month,n.update=1,drop_threshold=0.5, NUM_ARMS, trt.days = 180,
+                                     trt.break = 1, pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist,
                                      beta1_prior.a, beta1_prior.c, MCMC_SAMPLE, BURN.IN, n_MCMC_chain){
 
   pi_prior_dist = ifelse(pi_prior_dist == "gamma", "dgamma", ifelse(pi_prior_dist == "beta", "dbeta", "dpar"))
@@ -86,9 +90,9 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
 
   t <- sapply(1:n.month,function(x) runif(rate,min=(x-1)*30,max=x*30))
   time.1st.trt <- round(t[order(t)],0)
-  time.1st.resp <- time.1st.trt + 180  # subjects' responses are evaluated 180 days after receiving the treatment
-  time.2nd.trt <- time.1st.trt + 181 # second stage trt is given 1 day after the evaluation
-  time.2nd.resp <- time.2nd.trt + 180
+  time.1st.resp <- time.1st.trt + trt.days  # subjects' responses are evaluated trt.days days after receiving the treatment, default 180
+  time.2nd.trt <- time.1st.trt + trt.days + trt.break # second stage trt is given trt.break day after the evaluation, default 1
+  time.2nd.resp <- time.2nd.trt + trt.days
   patient_entry <- data.frame(time.1st.trt = time.1st.trt,
                               time.1st.resp = time.1st.resp,
                               time.2nd.trt = time.2nd.trt,
@@ -138,7 +142,7 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
 
     error_ind <- 0
     tryCatch({
-      jags <- jags.model(file.path(file_path,jags.model.name.update),
+      jags <- rjags::jags.model(file.path(file_path,jags.model.name.update),
                          data=list(n1 = nrow(patient_entry[patient_entry$time.1st.resp<=time.update[k+1],]),
                                    n2 = nrow(patient_entry[patient_entry$time.2nd.resp<=time.update[k+1],]),
                                    num_arms = NUM_ARMS,
@@ -155,7 +159,7 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
                                    beta1_prior.a = beta1_prior.a,
                                    beta1_prior.c = beta1_prior.c),
                          n.chains=n_MCMC_chain,n.adapt = BURN.IN)
-      posterior_sample <- coda.samples(jags,
+      posterior_sample <- rjags::coda.samples(jags,
                                        c('pi','beta'),
                                        MCMC_SAMPLE)
     },
