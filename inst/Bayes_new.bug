@@ -1,0 +1,20 @@
+model{
+  for (i in 1:n){   # n is total sample size
+  # likelihood
+    Y1[i]~dbern(pi_1[i])
+    Y2[i]~dbern(pi_2[i])
+  # explaining
+    pi_1[i] <- pi[treatment_stageI[i]]
+    pi_2[i] <- pi[treatment_stageII[i]] * beta[response_stageI_disc[i]]
+  }
+
+  for (j in 1:num_arms){
+    pi[j]~dbeta(pi_prior.a[j],pi_prior.b[j])
+  }
+  beta[1]~dbeta(beta0_prior.a,beta0_prior.b)
+  beta[2]~dpar(beta1_prior.a,beta1_prior.c)
+  beta[3]~dbeta(beta0_prior.a,beta0_prior.b)
+  beta[4]~dpar(beta1_prior.a,beta1_prior.c)
+  beta[5]~dbeta(beta0_prior.a,beta0_prior.b)
+  beta[6]~dpar(beta1_prior.a,beta1_prior.c)
+}

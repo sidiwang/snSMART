@@ -1,6 +1,7 @@
 #' Data generation of a group sequential snSMART with a one-step rule
 #'
 #' generate data for the Group Sequential snSMART, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome)
+#' Use BJSM to conduct interim and final analysis
 #'
 #' @param pi_1A first stage response rate of A
 #' @param pi_1B first stage response rate of B
@@ -23,25 +24,31 @@
 #' @param beta1_prior.c parameter b of the prior distribution for linkage parameter beta1
 #' @param n_MCMC_chain number of MCMC chains, default to 1. If this is set to a number more than 1
 #' @param BURN.IN number of burn-in iterations for MCMC
+#' @param ci coverage probability for credible intervals, default = 0.95
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param pi_prior_dist prior distribution for pi, user can choose from gamma, beta, pareto
 #' @param beta0_prior_dist prior distribution for beta0, user can choose from gamma, beta, pareto
 #' @param beta1_prior_dist prior distribution for beta1, user can choose from gamma, beta, pareto
-##'
+#' @param DTR, if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE
+
+#'
 #' @return
 #' return the simulated dataset (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
 #' response for first treatment, treatment arm for second treatment, response for second treatment), randomization probabilities before each update (the number of rows
-#' equals to the number of updates plus 1), removed arm and the round of the update that removal of treatment arm occurs
+#' equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; End of trial analysis outcome: (comments added next
+#' to the return function, similar to BJSM_binary)
 #'
 #'
 #' @example
 #' simu1 = data_gen_group_seq_1step(pi_1A = 0.25, pi_1B = 0.45, pi_1C = 0.65, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
 #' rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, NUM_ARMS  = 3, trt.days = 100, trt.break = 2, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
-#' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
+#' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,
+#' ci = 0.95, DTR = TRUE)
 #'
 #' simu2 = data_gen_group_seq_1step(pi_1A = 0.3, pi_1B = 0.3, pi_1C = 0.3, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
 #' rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), NUM_ARMS  = 3, trt.days = 50, trt.break = 6, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
-#' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
+#' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,
+#' ci = 0.95, DTR = TRUE)
 #'
 #' @references
 #' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group sequential small n sequential multiple‐assignment randomized trial. Journal of the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
@@ -54,7 +61,7 @@
 ## Data generation of a group sequential snSMART with a one-step rule
 data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,discount_n2, rate,n.month,n.update=1,drop_threshold=0.5, NUM_ARMS, trt.days = 180,
                                      trt.break = 1, pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist,
-                                     beta1_prior.a, beta1_prior.c, MCMC_SAMPLE, BURN.IN, n_MCMC_chain){
+                                     beta1_prior.a, beta1_prior.c, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
 
   pi_prior_dist = ifelse(pi_prior_dist == "gamma", "dgamma", ifelse(pi_prior_dist == "beta", "dbeta", "dpar"))
   beta0_prior_dist = ifelse(beta0_prior_dist == "gamma", "dgamma", ifelse(beta0_prior_dist == "beta", "dbeta", "dpar"))
@@ -143,25 +150,25 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
     error_ind <- 0
     tryCatch({
       jags <- rjags::jags.model(file.path(file_path,jags.model.name.update),
-                         data=list(n1 = nrow(patient_entry[patient_entry$time.1st.resp<=time.update[k+1],]),
-                                   n2 = nrow(patient_entry[patient_entry$time.2nd.resp<=time.update[k+1],]),
-                                   num_arms = NUM_ARMS,
-                                   Y1 = patient_entry$resp.1st[patient_entry$time.1st.resp<=time.update[k+1]],
-                                   Y2 = patient_entry$resp.2nd[patient_entry$time.2nd.resp<=time.update[k+1]],
-                                   treatment_stageI = patient_entry$trt.1st[patient_entry$time.1st.resp<=time.update[k+1]],
-                                   treatment_stageII = patient_entry$trt.2nd[patient_entry$time.2nd.resp<=time.update[k+1]],
-                                   response_stageI_disc = patient_entry$disc[patient_entry$time.2nd.resp<=time.update[k+1]],
-                                   #prior
-                                   pi_prior.a = pi_prior.a,
-                                   pi_prior.b = pi_prior.b,
-                                   beta0_prior.a = beta0_prior.a,
-                                   beta0_prior.b = beta0_prior.b,
-                                   beta1_prior.a = beta1_prior.a,
-                                   beta1_prior.c = beta1_prior.c),
-                         n.chains=n_MCMC_chain,n.adapt = BURN.IN)
+                                data=list(n1 = nrow(patient_entry[patient_entry$time.1st.resp<=time.update[k+1],]),
+                                          n2 = nrow(patient_entry[patient_entry$time.2nd.resp<=time.update[k+1],]),
+                                          num_arms = NUM_ARMS,
+                                          Y1 = patient_entry$resp.1st[patient_entry$time.1st.resp<=time.update[k+1]],
+                                          Y2 = patient_entry$resp.2nd[patient_entry$time.2nd.resp<=time.update[k+1]],
+                                          treatment_stageI = patient_entry$trt.1st[patient_entry$time.1st.resp<=time.update[k+1]],
+                                          treatment_stageII = patient_entry$trt.2nd[patient_entry$time.2nd.resp<=time.update[k+1]],
+                                          response_stageI_disc = patient_entry$disc[patient_entry$time.2nd.resp<=time.update[k+1]],
+                                          #prior
+                                          pi_prior.a = pi_prior.a,
+                                          pi_prior.b = pi_prior.b,
+                                          beta0_prior.a = beta0_prior.a,
+                                          beta0_prior.b = beta0_prior.b,
+                                          beta1_prior.a = beta1_prior.a,
+                                          beta1_prior.c = beta1_prior.c),
+                                n.chains=n_MCMC_chain,n.adapt = BURN.IN)
       posterior_sample <- rjags::coda.samples(jags,
-                                       c('pi','beta'),
-                                       MCMC_SAMPLE)
+                                              c('pi','beta'),
+                                              MCMC_SAMPLE)
     },
     warning = function(war){
       warning_count <- warning_count + 1
@@ -225,7 +232,109 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
 
   colnames(rand.prob) = c("trtA", "trtB", "trtC")
 
-  return(list("simulated.data" = patient_entry[,-9], "randomization.probabilities" = rand.prob, "dropped.arm" = dropped_arm, "dropped.round" = dropped_round))
-  # return the dataset, randomization probabilities, removed arm and the round of the update that removal of treatment arm occurs
+  outcome = list("simulated.data" = patient_entry[,-9], "randomization.probabilities" = rand.prob, "dropped.arm" = dropped_arm, "dropped.round" = dropped_round)
+
+  mydata <- outcome[[1]]
+  mydata$trt.2nd <- unlist(mydata$trt.2nd)
+  stage1_count <- table(mydata$trt.1st)
+  stage2_count <- table(mydata$trt.2nd)
+  rand_prob_output <- outcome[[2]]
+  dropped_arm <- outcome[[3]]
+  dropped_look <- outcome[[4]]
+  mydata$disc <- 2 * mydata$trt.1st - (mydata$resp.1st == 0)
+
+  bugfile  <- readLines("inst/Bayes.bug")
+  bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
+  bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
+  bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+
+  writeLines(bugfile2, con="inst/Bayes_new.bug")
+
+  jags.model.name <- 'Bayes_new.bug'
+  error_ind <- 0
+  tryCatch({
+    jags <- rjags::jags.model(file.path(file_path,jags.model.name),
+                       data=list(n = nrow(mydata),
+                                 num_arms = NUM_ARMS,
+                                 Y1 = mydata$resp.1st,
+                                 Y2 = mydata$resp.2nd,
+                                 treatment_stageI = mydata$trt.1st,
+                                 treatment_stageII = mydata$trt.2nd,
+                                 response_stageI_disc = mydata$disc,
+                                 #prior
+                                 pi_prior.a = pi_prior.a,
+                                 pi_prior.b = pi_prior.b,
+                                 beta0_prior.a = beta0_prior.a,
+                                 beta0_prior.b = beta0_prior.b,
+                                 beta1_prior.a = beta1_prior.a,
+                                 beta1_prior.c = beta1_prior.c),
+                       n.chains=n_MCMC_chain,n.adapt = BURN.IN)
+    posterior_sample <- rjags::coda.samples(jags,
+                                     c('pi','beta'),
+                                     MCMC_SAMPLE)
+  },
+  warning = function(war){
+    warning_count <- warning_count + 1
+    err_war_message <- rbind(paste("The warning ", warning_count, " is: ", war))
+  },
+  error = function(err){
+    error_count <- error_count + 1
+    err_war_message <- rbind(paste("The error ", error_count, " is: ", err))
+    error_ind <- 1
+  }
+  )
+  out_post <- posterior_sample[[1]]
+
+  pi_DTR_est = c()
+  pi_AB_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,8]*out_post[,1]
+  pi_AC_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,9]*out_post[,1]
+  pi_BA_tt <- out_post[,8]^2*out_post[,4]+(1-out_post[,8])*out_post[,7]*out_post[,3]
+  pi_BC_tt <- out_post[,8]^2*out_post[,4]+(1-out_post[,8])*out_post[,9]*out_post[,3]
+  pi_CA_tt <- out_post[,9]^2*out_post[,6]+(1-out_post[,9])*out_post[,7]*out_post[,5]
+  pi_CB_tt <- out_post[,9]^2*out_post[,6]+(1-out_post[,9])*out_post[,8]*out_post[,5]
+  pi_DTR_est <- rbind(pi_DTR_est,c(mean(pi_AB_tt),mean(pi_AC_tt),mean(pi_BA_tt),mean(pi_BC_tt),mean(pi_CA_tt),mean(pi_CB_tt)))
+
+  if (DTR == TRUE){
+
+    final = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+                  "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
+                  "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
+                  "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
+                  "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
+                  "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
+                  "diff_AB" = mean(out_post[,7] - out_post[,8]), # estimate of differences between treatments A and B
+                  "diff_BC" = mean(out_post[,8] - out_post[,9]), # estimate of differences between treatments B and C
+                  "diff_AC" = mean(out_post[,7] - out_post[,9]), # estimate of differences between treatments A and C
+                  "ci_diff_AB" = bayestestR::ci(out_post[,7] - out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                  "ci_diff_BC" = bayestestR::ci(out_post[,8] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
+                  "ci_diff_AC" = bayestestR::ci(out_post[,7] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
+                  "beta0_hat" = apply(out_post[,c(1,3,5)],2,mean), # linkage parameter beta0 estimates
+                  "beta1_hat" = apply(out_post[,c(2,4,6)],2,mean),  # linkage parameter beta1 estimates
+                  "ci_beta0_hat" = HDInterval::hdi(out_post[,c(1,3,5)], ci), # linkage parameter beta0 credible interval
+                  "ci_beta1_hat" = HDInterval::hdi(out_post[,c(2,4,6)], ci), # linkage parameter beta1 credible interval
+                  "pi_DTR_est" = pi_DTR_est) # expected response rate of dynamic treatment regimens (DTRs)
+    return(append(outcome, final))
+  }else{
+    final = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+                  "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
+                  "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
+                  "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
+                  "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
+                  "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
+                  "diff_AB" = mean(out_post[,7] - out_post[,8]), # estimate of differences between treatments A and B
+                  "diff_BC" = mean(out_post[,8] - out_post[,9]), # estimate of differences between treatments B and C
+                  "diff_AC" = mean(out_post[,7] - out_post[,9]), # estimate of differences between treatments A and C
+                  "ci_diff_AB" = bayestestR::ci(out_post[,7] - out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                  "ci_diff_BC" = bayestestR::ci(out_post[,8] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
+                  "ci_diff_AC" = bayestestR::ci(out_post[,7] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
+                  "beta0_hat" = apply(out_post[,c(1,3,5)],2,mean), # linkage parameter beta0 estimates
+                  "beta1_hat" = apply(out_post[,c(2,4,6)],2,mean),  # linkage parameter beta1 estimates
+                  "ci_beta0_hat" = HDInterval::hdi(out_post[,c(1,3,5)], ci), # linkage parameter beta0 credible interval
+                  "ci_beta1_hat" = HDInterval::hdi(out_post[,c(2,4,6)], ci)) # linkage parameter beta1 credible interval
+    #    "pi_DTR_est" = pi_DTR_est) # expected response rate of dynamic treatment regimens (DTRs)
+    return(append(outcome, final))
+  }
+
+
 }
 
