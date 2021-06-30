@@ -10,6 +10,7 @@
 #' data generation function add final analysis (below functions should add to both data_gen_group_seq_1step.R and .....2step.R)
 #' find a way to write functions on this page as a pure real trial analysis function
 #'
+#' @param
 #'
 #'
 #'
