@@ -30,7 +30,7 @@
 #' nc<-100
 #' n<-c(na,nb,nc)
 
-#' trialData = continuous_trialDataGen(treatInfo, treatCors, n)
+#' trialData = c_trialDataGen(treatInfo, treatCors, n)
 #'
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
@@ -41,7 +41,7 @@
 
 library(tidyr)
 
-continuous_trialDataGen = function(treatInfo, treatCors, n,
+c_trialDataGen = function(treatInfo, treatCors, n,
                         stay.ethical = NULL, switch.safety = NULL,
                         wideForm = TRUE){
 

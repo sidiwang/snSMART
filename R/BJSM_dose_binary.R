@@ -134,7 +134,6 @@ trial_dataset_dose <- function(trtP_I, trtL_I, trtH_I, respP_I, respL_I, respH_I
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param pi_prior_dist prior distribution for pi (response rate) of placebo, user can choose from gamma, beta, pareto
 #' @param beta_prior_dist prior distribution for beta, user can choose from gamma, beta, pareto
-#' @param DTR, if TRUE, will also return the expected response rate of dynamic treatment regimens
 #'
 #' @details
 #' For gamma distribution, prior.a is the shape parameter r, prior.b is the rate parameter lambda. For beta distribution, prior.a is the shape parameter a, prior.b is the shape parameter b.

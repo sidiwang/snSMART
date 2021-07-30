@@ -37,7 +37,7 @@
 #' nc<-100
 #' n<-c(na,nb,nc)
 
-#' k = continuous_trialSim(treatInfo, treatCors, stay.ethical, switch.safety, n, 100)
+#' k = c_trialSim(treatInfo, treatCors, stay.ethical, switch.safety, n, 100)
 #'
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
@@ -47,10 +47,10 @@
 
 
 
-continuous_trialSim = function(treatInfo, treatCors, stay.ethical = NULL, switch.safety=NULL, n, nsim){
+c_trialSim = function(treatInfo, treatCors, stay.ethical = NULL, switch.safety=NULL, n, nsim){
   x<-c()
     for(i in 1:nsim){
-    trialData = continuous_trialDataGen(treatInfo, treatCors, stay.ethical = 100, switch.safety=0, n, wideForm = T)
+    trialData = c_trialDataGen(treatInfo, treatCors, stay.ethical = 100, switch.safety=0, n, wideForm = T)
     stage1EFF = mean(trialData$stage1outcome)
     stage2EFF = mean(trialData$stage2outcome)
 

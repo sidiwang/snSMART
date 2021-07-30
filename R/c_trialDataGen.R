@@ -30,7 +30,7 @@
 #' nc<-100
 #' n<-c(na,nb,nc)
 
-#' trialData = trialDataGen(treatInfo, treatCors, n)
+#' trialData = c_trialDataGen(treatInfo, treatCors, n, wideForm = FALSE)
 #'
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
@@ -41,7 +41,7 @@
 
 library(tidyr)
 
-trialDataGen = function(treatInfo, treatCors, n,
+c_trialDataGen = function(treatInfo, treatCors, n,
                         stay.ethical = NULL, switch.safety = NULL,
                         wideForm = TRUE){
 
@@ -79,7 +79,7 @@ trialDataGen = function(treatInfo, treatCors, n,
   #realization of trt2 for each patient
   trt2<-ifelse(stay==1, trt1, rerand)
 
-  stage2outcomeDistn = condMVN(mean=c(treatInfo[trt1[1],1],treatInfo[trt2[1],1]+treatInfo[trt1[1],trt2[1]+2]),
+  stage2outcomeDistn = condMVNorm::condMVN(mean=c(treatInfo[trt1[1],1],treatInfo[trt2[1],1]+treatInfo[trt1[1],trt2[1]+2]),
                                sigma = matrix(c(treatInfo[trt1[1],2],
                                                 treatCors[trt1[1], trt2[1]],
                                                 treatCors[trt1[1], trt2[1]],
@@ -90,7 +90,7 @@ trialDataGen = function(treatInfo, treatCors, n,
                                X.given = stage1outcome[1])
   stage2outcome = rnorm(1, stage2outcomeDistn$condMean,stage2outcomeDistn$condVar)
   for(i in 2:sum(n)){
-    stage2outcomeDistn = condMVN(mean=c(treatInfo[trt1[i],1],treatInfo[trt2[i],1]+treatInfo[trt1[i],trt2[i]+2]),
+    stage2outcomeDistn = condMVNorm::condMVN(mean=c(treatInfo[trt1[i],1],treatInfo[trt2[i],1]+treatInfo[trt1[i],trt2[i]+2]),
                                  sigma = matrix(c(treatInfo[trt1[i],2],
                                                   treatCors[trt1[i], trt2[i]],
                                                   treatCors[trt1[i], trt2[i]],
