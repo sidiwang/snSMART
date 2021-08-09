@@ -18,16 +18,11 @@
 #' section 2.2.1 of the paper listed under `reference` provides a detailed description of the assumptions of the model.
 #'
 #' @return
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
-#' +++++++++++++++++++++++++++++++++++++++++ add here
+#' posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
+#' mean_estimate: BJSM estimate of each parameter 1> alpha1 - lingering effect of the first treatment; 2> alpha3 - if the patient stays on the same treatment, alpha3 is the cumulative effect of stage 1 that occurs on the treatment longer term
+#' 3> betaj - betaj parameters are the expected effect of treat j, j = A, B, C, in the first stage; 4> rho is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
+#' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix.
+#'
 #'
 #' @examples
 #' treat.a<-c(70, 15, c(0,0,0))
@@ -48,7 +43,7 @@
 #' trialData = c_trialDataGen(treatInfo, treatCors, n)
 #'
 #'
-#' BJSM_result = BJSM_binary(data = trialData, NUM_ARMS = 3, beta_prior.mean = c(50, 50, 50), beta_prior.sd = c(50, 50, 50), alpha3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95,
+#' BJSM_result = BJSM_c(data = trialData, NUM_ARMS = 3, beta_prior.mean = c(50, 50, 50), beta_prior.sd = c(50, 50, 50), alpha3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95,
 #' n.digits = 5)
 #'
 #' @references
