@@ -239,18 +239,18 @@ sample_size <- function(piA, piB, piC, beta1, beta0, coverage, power, muA, muB, 
     },
     error = function(c) {
       # error_round_tmp_pair1=cbind(i,beta1,beta0,CIL_I)
-      # error_round_pair1<<-rbind(error_round_pair1,error_round_tmp_pair1)
+      # error_round_pair1=rbind(error_round_pair1,error_round_tmp_pair1)
       # next
     },
     warning = function(c) {
       # warn_round_tmp_pair1=cbind(i,beta1,beta0,CIL_I)
-      # warn_round_pair1<<-rbind(warn_round_pair1,warn_round_tmp_pair1)
+      # warn_round_pair1=rbind(warn_round_pair1,warn_round_tmp_pair1)
       # print(i)
       # print(CIL_I)
       # next
     },
-    finally = {# posterior_sample_burn<<-window(posterior_sample,start=BURNING, end=MCMC_SAMPLE)
-      # posterior_sample_cmb<<-do.call(rbind, posterior_sample_burn)
+    finally = {# posterior_sample_burn=window(posterior_sample,start=BURNING, end=MCMC_SAMPLE)
+      # posterior_sample_cmb=do.call(rbind, posterior_sample_burn)
     }
     )
     # print(CIL_I)

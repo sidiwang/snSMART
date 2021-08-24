@@ -86,15 +86,15 @@ data_gen_group_seq_2step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
   file_path <- 'inst'
   jags.model.name.update <- 'Bayes_AR_new.bug'
 
-  pi_2A_y <<- pi_1A * discount_y[1]        # Second stage response rate of responders to A
-  pi_2B.A_n <<- pi_1A * discount_n1[2]     # Second stage response rate of non-responders to B who receive A in the second stage
-  pi_2C.A_n <<- pi_1A * discount_n1[3]     # Second stage response rate of non-responders to C who receive A in the second stage
-  pi_2B_y <<- pi_1B * discount_y[2]        # Second stage response rate of responders to B
-  pi_2A.B_n <<- pi_1B * discount_n1[1]     # Second stage response rate of non-responders to A who receive B in the second stage
-  pi_2C.B_n <<- pi_1B * discount_n2[3]     # Second stage response rate of non-responders to C who receive B in the second stage
-  pi_2C_y <<- pi_1C * discount_y[3]        # Second stage response rate of responders to C
-  pi_2A.C_n <<- pi_1C * discount_n2[1]     # Second stage response rate of non-responders to A who receive C in the second stage
-  pi_2B.C_n <<- pi_1C * discount_n2[2]     # Second stage response rate of non-responders to B who receive C in the second stage
+  pi_2A_y = pi_1A * discount_y[1]        # Second stage response rate of responders to A
+  pi_2B.A_n = pi_1A * discount_n1[2]     # Second stage response rate of non-responders to B who receive A in the second stage
+  pi_2C.A_n = pi_1A * discount_n1[3]     # Second stage response rate of non-responders to C who receive A in the second stage
+  pi_2B_y = pi_1B * discount_y[2]        # Second stage response rate of responders to B
+  pi_2A.B_n = pi_1B * discount_n1[1]     # Second stage response rate of non-responders to A who receive B in the second stage
+  pi_2C.B_n = pi_1B * discount_n2[3]     # Second stage response rate of non-responders to C who receive B in the second stage
+  pi_2C_y = pi_1C * discount_y[3]        # Second stage response rate of responders to C
+  pi_2A.C_n = pi_1C * discount_n2[1]     # Second stage response rate of non-responders to A who receive C in the second stage
+  pi_2B.C_n = pi_1C * discount_n2[2]     # Second stage response rate of non-responders to B who receive C in the second stage
 
   N <- n.month * rate  # total number of subjects
 

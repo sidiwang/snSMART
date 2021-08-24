@@ -151,7 +151,23 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' second stage response probabilities through linkage parameters.
 #'
 #' @return
-#' added comments next to each return variable
+#' posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
+#' pi_hat_bjsm: estimate of response rate/treatment effect
+#' se_hat_bjsm: standard error of the response rate
+#' ci_pi_A: x% credible intervals for A
+#' ci_pi_B: x% credible intervals for B
+#' ci_pi_C: x% credible intervals for C
+#' diff_AB: estimate of differences between treatments A and B
+#' diff_BC: estimate of differences between treatments B and C
+#' diff_AC: estimate of differences between treatments A and C
+#' ci_diff_AB: x% credible intervals for the differences between A and B
+#' ci_diff_BC: x% credible intervals for the differences between B and C
+#' ci_diff_AC: x% credible intervals for the differences between A and C
+#' beta0_hat: linkage parameter beta0 estimates
+#' beta1_hat: linkage parameter beta1 estimates
+#' ci_beta0_hat: linkage parameter beta0 credible interval
+#' ci_beta1_hat: linkage parameter beta1 credible interval
+#' pi_DTR_est: expected response rate of dynamic treatment regimens (DTRs)
 #'
 #' @examples
 #' mydata = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,

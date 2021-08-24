@@ -145,7 +145,20 @@ trial_dataset_dose <- function(trtP_I, trtL_I, trtH_I, respP_I, respL_I, respH_I
 #' second stage response probabilities through linkage parameters.
 #'
 #' @return
-#' added comments next to each return variable
+#' posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
+#' pi_hat_bjsm: estimate of response rate/treatment effect
+#' se_hat_bjsm: standard error of the response rate
+#' ci_pi_P: x% credible intervals for A
+#' ci_pi_L: x% credible intervals for B
+#' ci_pi_H: x% credible intervals for C
+#' diff_PL: estimate of differences between treatments A and B
+#' diff_LH: estimate of differences between treatments B and C
+#' diff_PH: estimate of differences between treatments A and C
+#' ci_diff_PL: x% credible intervals for the differences between A and B
+#' ci_diff_LH: x% credible intervals for the differences between B and C
+#' ci_diff_PH: x% credible intervals for the differences between A and C
+#' beta_hat: linkage parameter beta estimates
+#' ci_beta_hat: linkage parameter beta estimates
 #'
 #' @examples
 #' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
@@ -206,16 +219,16 @@ BJSM_binary_dose = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.
                                             MCMC_SAMPLE)
   },
   error = function(c) {rbind(error_round,i)
-    posterior_sample_burn<<-window(posterior_sample,start=BURN.IN, end=MCMC_SAMPLE)
-    posterior_sample_cmb<<-do.call(rbind, posterior_sample_burn)
-    error_round<<-rbind(error_round,i)
-    error_count<<-error_count+1
+    posterior_sample_burn=window(posterior_sample,start=BURN.IN, end=MCMC_SAMPLE)
+    posterior_sample_cmb=do.call(rbind, posterior_sample_burn)
+    error_round=rbind(error_round,i)
+    error_count=error_count+1
   },
-  warning = function(c) {warn_round<<-rbind(warn_round,i)
-  warn_count<<-warn_count+1},
+  warning = function(c) {warn_round=rbind(warn_round,i)
+  warn_count=warn_count+1},
   finally = {
-    posterior_sample_burn<<-window(posterior_sample,start=BURN.IN, end=MCMC_SAMPLE)
-    posterior_sample_cmb<<-do.call(rbind, posterior_sample_burn)
+    posterior_sample_burn=window(posterior_sample,start=BURN.IN, end=MCMC_SAMPLE)
+    posterior_sample_cmb=do.call(rbind, posterior_sample_burn)
   }
   )
 
