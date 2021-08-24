@@ -5,7 +5,7 @@ Version: 0.1.0
 Authors@R: c(
     person(given = "Sidi", family = "Wang", role = c("aut"), email = "sidiwang@umich.edu"),
     person(given = "Kelley", family = "Kidwell", role = c("aut"), email = "kidwell@umich.edu"),
-    person(given = "Michael", family = "Kleinsasser", role = c("aut"), email = "mkleinsa@umich.edu"))
+    person(given = "Michael", family = "Kleinsasser", role = c("cre"), email = "mkleinsa@umich.edu"))
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
@@ -15,7 +15,14 @@ Depends:
 Imports: 
     bayestestR,
     geepack,
-    rjags
+    rjags,
+    HDInterval,
+    truncdist,
+    condMVNorm,
+    pracma,
+    cubature,
+    rmutil,
+    magrittr
 Suggests:
     coda
 SystemRequirements: JAGS 4.x.y

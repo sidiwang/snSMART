@@ -81,10 +81,16 @@ The simulated dataset with five columns: response_stageI, treatment_stageI, resp
 simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome)
 }
 \examples{
-data = data_simulation_dose(p_IP = 0.15, p_IL = 0.15, p_IH = 0.15, RESPONSE_RATE_DISCOUNT_P_Y_0 = 0.9, RESPONSE_RATE_DISCOUNT_P_Y_1 = 1.3, RESPONSE_RATE_DISCOUNT_L_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_L_Y_1 = 1.2,
-RESPONSE_RATE_DISCOUNT_H_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_H_Y_1 = 1.2, RAND_PROB_POS_P_TRT_H = 0.5, RAND_PROB_POS_P_TRT_L = 0.5, RAND_PROB_NEG_P_TRT_L = 0.5,
-RAND_PROB_NEG_P_TRT_H = 0.5, RAND_PROB_POS_L_TRT_L = 0.5, RAND_PROB_POS_L_TRT_H = 0.5, RAND_PROB_NEG_L_TRT_L = 0.5, RAND_PROB_NEG_L_TRT_H = 0.5,
-RAND_PROB_POS_H_TRT_L = 0.5, RAND_PROB_POS_H_TRT_H = 0.5, n_P = 30, n_L = 30, n_H = 30)
+data = data_simulation_dose(p_IP = 0.15, p_IL = 0.15, p_IH = 0.15,
+    RESPONSE_RATE_DISCOUNT_P_Y_0 = 0.9, RESPONSE_RATE_DISCOUNT_P_Y_1 = 1.3,
+    RESPONSE_RATE_DISCOUNT_L_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_L_Y_1 = 1.2,
+    RESPONSE_RATE_DISCOUNT_H_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_H_Y_1 = 1.2,
+    RAND_PROB_POS_P_TRT_H = 0.5, RAND_PROB_POS_P_TRT_L = 0.5,
+    RAND_PROB_NEG_P_TRT_L = 0.5, RAND_PROB_NEG_P_TRT_H = 0.5,
+    RAND_PROB_POS_L_TRT_L = 0.5, RAND_PROB_POS_L_TRT_H = 0.5,
+    RAND_PROB_NEG_L_TRT_L = 0.5, RAND_PROB_NEG_L_TRT_H = 0.5,
+    RAND_PROB_POS_H_TRT_L = 0.5, RAND_PROB_POS_H_TRT_H = 0.5, n_P = 30,
+    n_L = 30, n_H = 30)
 
 }
 \references{

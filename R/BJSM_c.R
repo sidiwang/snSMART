@@ -43,8 +43,9 @@
 #' trialData = c_trialDataGen(treatInfo, treatCors, n)
 #'
 #'
-#' BJSM_result = BJSM_c(data = trialData, NUM_ARMS = 3, beta_prior.mean = c(50, 50, 50), beta_prior.sd = c(50, 50, 50), alpha3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95,
-#' n.digits = 5)
+#' BJSM_result = BJSM_c(data = trialData, NUM_ARMS = 3, beta_prior.mean = c(50, 50, 50),
+#'     beta_prior.sd = c(50, 50, 50), alpha3_prior.sd = 20, n_MCMC_chain = 1,
+#'     n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5)
 #'
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,

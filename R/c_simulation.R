@@ -39,7 +39,7 @@
 #' @export
 #'
 
-library(tidyr)
+#library(tidyr)
 
 c_trialDataGen = function(treatInfo, treatCors, n,
                         stay.ethical = NULL, switch.safety = NULL,

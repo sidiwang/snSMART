@@ -35,11 +35,13 @@
 
 #'
 #' @examples
-#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5, respL_I = 10, respH_I = 15,
-#' trtPL_II = 3, trtPH_II = 2, trtLL_II = 5, trtLH_II = 5, trtHL_II = 8, trtHH_II = 7,
-#' respPL_II = 1, respPH_II = 2, respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
-#' trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
-#' respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7, respNHH_II = 10)
+#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
+#'      respL_I = 10, respH_I = 15,trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
+#'      trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
+#'      respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6, trtNPL_II = 10,
+#'      trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
+#'      respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7,
+#'      respNHH_II = 10)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
@@ -146,14 +148,18 @@ trial_dataset_dose <- function(trtP_I, trtL_I, trtH_I, respP_I, respL_I, respH_I
 #' added comments next to each return variable
 #'
 #' @examples
-#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5, respL_I = 10, respH_I = 15,
-#' trtPL_II = 3, trtPH_II = 2, trtLL_II = 5, trtLH_II = 5, trtHL_II = 8, trtHH_II = 7,
-#' respPL_II = 1, respPH_II = 2, respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
-#' trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
-#' respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7, respNHH_II = 10)
+#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
+#'     respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
+#'     trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
+#'     respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
+#'     trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10,
+#'     trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
+#'     respNLL_II = 7, respNHH_II = 10)
 #'
-#' BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a = 3, pi_prior.b = 17, beta_prior_dist = "gamma", normal.mean = 0.2, normal.var = 100,
-#' beta_prior.a = 2, beta_prior.b = 2, n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+#' BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
+#'     pi_prior.a = 3, pi_prior.b = 17, beta_prior_dist = "gamma",
+#'     normal.mean = 0.2, normal.var = 100, beta_prior.a = 2, beta_prior.b = 2,
+#'     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
@@ -171,8 +177,8 @@ BJSM_binary_dose = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.
   mydata$response_status_stageI = mydata$response_stageI + 1
 
   bugfile  <- readLines("inst/BJSM_dose.bug")
-  bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
-  bugfile2  <- gsub(pattern = "beta_prior_dist", replace = beta_prior_dist, x = bugfile)
+  bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
+  bugfile2  <- gsub(pattern = "beta_prior_dist", replacement = beta_prior_dist, x = bugfile)
 
   writeLines(bugfile2, con="inst/BJSM_dose_new.bug")
   jag.model.name <- "BJSM_dose_new.bug"

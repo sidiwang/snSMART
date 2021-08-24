@@ -14,11 +14,13 @@
 #'
 #' @examples
 #' #data
-#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5, respL_I = 10, respH_I = 15,
-#' trtPL_II = 3, trtPH_II = 2, trtLL_II = 5, trtLH_II = 5, trtHL_II = 8, trtHH_II = 7,
-#' respPL_II = 1, respPH_II = 2, respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
-#' trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
-#' respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7, respNHH_II = 10)
+#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
+#'     respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
+#'     trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
+#'     respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
+#'     trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10,
+#'     trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
+#'     respNLL_II = 7, respNHH_II = 10)
 #'
 #' #JSRM_result = JSRM_dose_binary(data = mydata)
 #'
