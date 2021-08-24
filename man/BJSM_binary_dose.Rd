@@ -49,8 +49,6 @@ BJSM_binary_dose(
 \item{MCMC_SAMPLE}{number of iterations for MCMC}
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
-
-\item{DTR, }{if TRUE, will also return the expected response rate of dynamic treatment regimens}
 }
 \value{
 added comments next to each return variable
@@ -67,14 +65,18 @@ The individual response rate is regarded as a permanent feature of the treatment
 second stage response probabilities through linkage parameters.
 }
 \examples{
-mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5, respL_I = 10, respH_I = 15,
-trtPL_II = 3, trtPH_II = 2, trtLL_II = 5, trtLH_II = 5, trtHL_II = 8, trtHH_II = 7,
-respPL_II = 1, respPH_II = 2, respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
-trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
-respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7, respNHH_II = 10)
+mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
+    respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
+    trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
+    respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
+    trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10,
+    trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
+    respNLL_II = 7, respNHH_II = 10)
 
-BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a = 3, pi_prior.b = 17, beta_prior_dist = "gamma", normal.mean = 0.2, normal.var = 100,
-beta_prior.a = 2, beta_prior.b = 2, n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
+    pi_prior.a = 3, pi_prior.b = 17, beta_prior_dist = "gamma",
+    normal.mean = 0.2, normal.var = 100, beta_prior.a = 2, beta_prior.b = 2,
+    n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 
 }
 \references{

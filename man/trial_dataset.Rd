@@ -87,9 +87,11 @@ a \code{matrix} of the trial dataset with 4 columns: treatment_stageI, response_
 Generate trial dataset with or without missing value
 }
 \examples{
-trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3, respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2, trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
+    respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
+    respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
+    trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
+    respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
 
 }
 \references{

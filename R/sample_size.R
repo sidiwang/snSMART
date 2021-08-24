@@ -115,7 +115,7 @@ sample_size <- function(piA, piB, piC, beta1, beta0, coverage, power, muA, muB, 
   # beta0_sample=rep(1,LINKAGE_SAMPLE)
   # plot(hist(beta0))
   # load functions
-  require(rmutil)
+  #require(rmutil)
   CIL_MAX=(piA-piB)*magic_Z
   beta1_sample=round(mean(truncdist::rtrunc(99999, spec="pareto",a=1,b=1/max(c(piA,piB,piC)),1,pareto_beta)),3)
   beta0_sample=rep(beta0_mean,1)

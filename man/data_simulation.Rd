@@ -48,8 +48,10 @@ The simulated dataset with five columns: response_stageI, treatment_stageI, resp
 simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome)
 }
 \examples{
-data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4, discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5), p_1nA_2B = 0.5, p_1nB_2A = 0.5,
-p_1nC_2A = 0.5, n_A = 30, n_B = 30, n_C = 30)
+data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4,
+    discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5),
+    p_1nA_2B = 0.5, p_1nB_2A = 0.5, p_1nC_2A = 0.5, n_A = 30, n_B = 30,
+    n_C = 30)
 
 }
 \references{

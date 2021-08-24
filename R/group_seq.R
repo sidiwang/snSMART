@@ -83,9 +83,9 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
     patient_entry$disc <- 2 * patient_entry$trt.1st - (patient_entry$resp.1st == 0)
 
     bugfile  <- readLines("inst/Bayes_AR.bug")
-    bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
-    bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
-    bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
+    bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
     writeLines(bugfile2, con="inst/Bayes_AR_new.bug")
 
@@ -195,9 +195,9 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
     mydata$disc <- 2 * mydata$trt.1st - (mydata$resp.1st == 0)
 
     bugfile  <- readLines("inst/Bayes.bug")
-    bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
-    bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
-    bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
+    bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
     writeLines(bugfile2, con="inst/Bayes_new.bug")
 

@@ -74,13 +74,18 @@ The individual response rate is regarded as a permanent feature of the treatment
 second stage response probabilities through linkage parameters.
 }
 \examples{
-mydata = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3, respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2, trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+mydata = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
+    respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
+    respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
+    trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
+    respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
 
-BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-beta0_prior_dist = "beta", beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1,
-n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95, six = TRUE, DTR = TRUE)
+BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
+    pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+    beta0_prior_dist = "beta", beta0_prior.a = 1.6, beta0_prior.b = 0.4,
+    beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1,
+    n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+    six = TRUE, DTR = TRUE)
 
 }
 \references{

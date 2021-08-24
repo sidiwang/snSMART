@@ -31,9 +31,11 @@
 
 #'
 #' @examples
-#' trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3, respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-#' respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2, trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-#' respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+#' trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
+#'     respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
+#'     respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
+#'     trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
+#'     respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -152,13 +154,18 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' added comments next to each return variable
 #'
 #' @examples
-#' mydata = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3, respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-#' respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2, trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-#' respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+#' mydata = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
+#'     respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
+#'     respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
+#'     trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
+#'     respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
 #'
-#' BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-#' beta0_prior_dist = "beta", beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1,
-#' n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95, six = TRUE, DTR = TRUE)
+#' BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
+#'     pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+#'     beta0_prior_dist = "beta", beta0_prior.a = 1.6, beta0_prior.b = 0.4,
+#'     beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1,
+#'     n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+#'     six = TRUE, DTR = TRUE)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -196,9 +203,9 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
   if (six == TRUE){
     # If using 6-betas model
     bugfile  <- readLines("inst/BJSM_6betas_missing.bug")
-    bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
-    bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
-    bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
+    bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
     writeLines(bugfile2, con="inst/BJSM_6betas_missing_new.bug")
     jag.model.name <- "BJSM_6betas_missing_new.bug"
@@ -232,9 +239,9 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
 
   } else {
     bugfile  <- readLines("inst/BJSM_2beta_missing.bug")
-    bugfile  <- gsub(pattern = "pi_prior_dist", replace = pi_prior_dist, x = bugfile)
-    bugfile  <- gsub(pattern = "beta0_prior_dist", replace = beta0_prior_dist, x = bugfile)
-    bugfile2  <- gsub(pattern = "beta1_prior_dist", replace = beta1_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
+    bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
+    bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
     writeLines(bugfile2, con="inst/BJSM_2beta_missing_new.bug")
 
@@ -287,7 +294,7 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
 
       result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
-                    "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
+                    "se_hat_bjsm" = apply(out_post[,7:9],2,stats::sd),     # standard error of the response rate
                     "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
                     "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
                     "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
@@ -305,7 +312,7 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
     }else{
       result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
-                    "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
+                    "se_hat_bjsm" = apply(out_post[,7:9],2,stats::sd),     # standard error of the response rate
                     "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
                     "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
                     "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
@@ -335,7 +342,7 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
     if (DTR == TRUE){
       result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[,3:5],2,mean), # estimate of treatment response rate
-                    "se_hat_bjsm" = apply(out_post[,3:5],2,sd), # estimated standard error of the response rate
+                    "se_hat_bjsm" = apply(out_post[,3:5],2,stats::sd), # estimated standard error of the response rate
                     "ci_pi_A" = bayestestR::ci(out_post[,3], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment A
                     "ci_pi_B" = bayestestR::ci(out_post[,4], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment B
                     "ci_pi_C" = bayestestR::ci(out_post[,5], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment C
@@ -353,7 +360,7 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
     }else{
       result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[,3:5],2,mean), # estimate of treatment response rate
-                    "se_hat_bjsm" = apply(out_post[,3:5],2,sd), # estimated standard error of the response rate
+                    "se_hat_bjsm" = apply(out_post[,3:5],2,stats::sd), # estimated standard error of the response rate
                     "ci_pi_A" = bayestestR::ci(out_post[,3], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment A
                     "ci_pi_B" = bayestestR::ci(out_post[,4], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment B
                     "ci_pi_C" = bayestestR::ci(out_post[,5], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment C

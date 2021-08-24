@@ -17,8 +17,10 @@
 #' @return The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
 #'
 #' @examples
-#' data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4, discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5), p_1nA_2B = 0.5, p_1nB_2A = 0.5,
-#' p_1nC_2A = 0.5, n_A = 30, n_B = 30, n_C = 30)
+#' data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4,
+#'     discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5),
+#'     p_1nA_2B = 0.5, p_1nB_2A = 0.5, p_1nC_2A = 0.5, n_A = 30, n_B = 30,
+#'     n_C = 30)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
