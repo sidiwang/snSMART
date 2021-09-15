@@ -1,6 +1,6 @@
 #' Data generation of a group sequential snSMART with a one-step rule
 #'
-#' generate data for the Group Sequential snSMART, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome)
+#' generate data for the Group Sequential snSMART with a one-step rule, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome)
 #' Use BJSM to conduct interim and final analysis
 #'
 #' @param pi_1A first stage response rate of A
@@ -35,11 +35,28 @@
 #' @return
 #' return the simulated dataset (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
 #' response for first treatment, treatment arm for second treatment, response for second treatment), randomization probabilities before each update (the number of rows
-#' equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; End of trial analysis outcome: (comments added next
-#' to the return function, similar to BJSM_binary)
+#' equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; End of trial analysis outcome:
+#' \itemize{
+#' posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
+#' pi_hat_bjsm: estimate of response rate/treatment effect
+#' se_hat_bjsm: standard error of the response rate
+#' ci_pi_A: x% credible intervals for A
+#' ci_pi_B: x% credible intervals for B
+#' ci_pi_C: x% credible intervals for C
+#' diff_AB: estimate of differences between treatments A and B
+#' diff_BC: estimate of differences between treatments B and C
+#' diff_AC: estimate of differences between treatments A and C
+#' ci_diff_AB: x% credible intervals for the differences between A and B
+#' ci_diff_BC: x% credible intervals for the differences between B and C
+#' ci_diff_AC: x% credible intervals for the differences between A and C
+#' beta0_hat: linkage parameter beta0 estimates
+#' beta1_hat: linkage parameter beta1 estimates
+#' ci_beta0_hat: linkage parameter beta0 credible interval
+#' ci_beta1_hat: linkage parameter beta1 credible interval
+#' pi_DTR_est: expected response rate of dynamic treatment regimens (DTRs)
+#' }
 #'
-#'
-#' @example
+#' @examples
 #' simu1 = data_gen_group_seq_1step(pi_1A = 0.25, pi_1B = 0.45, pi_1C = 0.65, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
 #' rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, NUM_ARMS  = 3, trt.days = 100, trt.break = 2, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
 #' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,

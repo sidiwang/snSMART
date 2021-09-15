@@ -32,8 +32,8 @@
 #' @details
 #' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small are corresponding to `\tau_l` and `\phi_l` respectively {need to check with Kelley})
 
-#' @example
-#' mydata = readRDS("data/patient_entry.rds")
+#' @examples
+#' mydata = patient_entry
 #'
 #' result1 = group_seq(data = mydata, rule.type = 1, interim = TRUE, drop_threshold=0.5, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
 #' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000,
@@ -43,15 +43,17 @@
 #' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000,
 #' n_MCMC_chain = 1)
 #'
-#' mydata = readRDS("data/patient_entry_full.rds")
+#' mydata = patient_entry_full
 #' result3 = group_seq(data = mydata, rule.type = 2, interim = FALSE, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
 #' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000,
 #' n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
 #' @return
+#' \itemize{
 #' if `interim = TRUE`, this function returns either 0 - no arm is dropped, or A/B/C - arm A/B/C is dropped
 #' if `interim = FALSE`, this function returns (comments added to the code, similar to BJSM_binary.R)
-
+#' }
+#'
 #' @references
 #' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group sequential small n sequential multiple‐assignment randomized trial. Journal of the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
 #'

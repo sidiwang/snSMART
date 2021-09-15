@@ -51,7 +51,20 @@ BJSM_binary_dose(
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 }
 \value{
-added comments next to each return variable
+posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
+pi_hat_bjsm: estimate of response rate/treatment effect
+se_hat_bjsm: standard error of the response rate
+ci_pi_P: x\% credible intervals for A
+ci_pi_L: x\% credible intervals for B
+ci_pi_H: x\% credible intervals for C
+diff_PL: estimate of differences between treatments A and B
+diff_LH: estimate of differences between treatments B and C
+diff_PH: estimate of differences between treatments A and C
+ci_diff_PL: x\% credible intervals for the differences between A and B
+ci_diff_LH: x\% credible intervals for the differences between B and C
+ci_diff_PH: x\% credible intervals for the differences between A and C
+beta_hat: linkage parameter beta estimates
+ci_beta_hat: linkage parameter beta estimates
 }
 \description{
 BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each treatment based on trial dataset

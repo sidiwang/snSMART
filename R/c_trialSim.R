@@ -12,7 +12,9 @@
 #' @param stay.ethical numerical value, if stage 1 outcome is bigger than `stay.ethical` value, patient has probability of 1 of staying on the same treatment in stage 2
 #' @param switch.safety numerical value, if stage 1 outcome is smaller than `switch.safety` value, patient has probability of 0 of staying on the same treatment in stage 2
 
-#' @return switch.safety: input by user; stay.ethical: input by user; stage1Eff: average simulated stage 1 treatment effect; stage2EFF: average simulated stage 2 treatment effect
+#' @return
+#' \itemize{
+#' switch.safety: input by user; stay.ethical: input by user; stage1Eff: average simulated stage 1 treatment effect; stage2EFF: average simulated stage 2 treatment effect
 #' stage2best: percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial;
 #' stage2worst: percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial;
 #' improve: percentage of patients received an improved treatment outcome in stage 2;
@@ -20,6 +22,7 @@
 #' stayedSame: percentage of patients received the same treatment in stage 2 after randomization;
 #' gotBetter: percentage of patients that received more effective treatments in stage 2;
 #' gotWorse: percentage of patients that received less effective treatments in stage 2;
+#' }
 #'
 #' @examples
 #' treat.a<-c(70, 15, c(0,0,0))
