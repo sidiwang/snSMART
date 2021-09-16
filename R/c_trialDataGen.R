@@ -1,18 +1,18 @@
 #' Data Simulation (continuous snSMART design)
 #'
-#' simulate data for snSMART with continuous outcome (non-responders re-randomized)
+#' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes)
 #'
-#' @param treatInfo Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, sd of treatment effects, c(priming effect on trt A,  trt B, trt C)), see example for detail
+#' @param treatInfo Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, standard deviation of treatment effects, \code{c(priming effect on trt A,  trt B, trt C))}, see example for detail
 #' @param treatCors Treatment correlations matrix. Format example:
-#' \[\[ (A,A) (A,B) (A,C)
-#'    (B,A) (B,B) (B,C)
-#'    (C,A) (C,B) (C,C) \]\], (A,B) denotes the treatment correlation between first stage treatment A and second stage treatment B
-#' @param n vector of number of patients on each treatment e.g. n <- c(100, 100, 100)
+#' \code{[[ (A,A) (A,B) (A,C) ],
+#'    [ (B,A) (B,B) (B,C) ],
+#'    [ (C,A) (C,B) (C,C) ]]}, \code{(A,B)} denotes the treatment correlation between first stage treatment A and second stage treatment B
+#' @param n vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}
 #' @param stay.ethical numerical value, if stage 1 outcome is bigger than `stay.ethical` value, patient has probability of 1 of staying on the same treatment in stage 2
 #' @param switch.safety numerical value, if stage 1 outcome is smaller than `switch.safety` value, patient has probability of 0 of staying on the same treatment in stage 2
 #' @param wideForm whether to output the simulated dataset in wide form
-
-#' @return The simulated dataset with 7 variables: patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome
+#'
+#' @return The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
 #'
 #' @examples
 #' treat.a<-c(70, 15, c(0,0,0))
@@ -24,12 +24,12 @@
 #'
 #' switch.safety<-NULL
 #' stay.ethical<- NULL
-
+#'
 #' na<-100
 #' nb<-100
 #' nc<-100
 #' n<-c(na,nb,nc)
-
+#'
 #' trialData = c_trialDataGen(treatInfo, treatCors, n, wideForm = FALSE)
 #'
 #' @references
@@ -39,7 +39,6 @@
 #' @export
 #'
 
-library(tidyr)
 
 c_trialDataGen = function(treatInfo, treatCors, n,
                         stay.ethical = NULL, switch.safety = NULL,

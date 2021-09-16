@@ -22,7 +22,9 @@ Imports:
     pracma,
     cubature,
     rmutil,
-    magrittr
+    magrittr,
+    tidyr,
+    EnvStats
 Suggests:
     coda
 SystemRequirements: JAGS 4.x.y

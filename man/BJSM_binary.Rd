@@ -29,25 +29,25 @@ BJSM_binary(
 
 \item{NUM_ARMS}{number of treatment arms}
 
-\item{pi_prior_dist}{prior distribution for pi, user can choose from gamma, beta, pareto}
+\item{pi_prior_dist}{prior distribution for \code{pi}, user can choose from "gamma", "beta", "pareto"}
 
-\item{pi_prior.a}{parameter a of the prior distribution for pi_1K, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
+\item{pi_prior.a}{parameter \code{a} of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
 
-\item{pi_prior.b}{parameter b of the prior distribution  for pi_1K, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
+\item{pi_prior.b}{parameter \code{b} of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
 
-\item{beta0_prior_dist}{prior distribution for beta0, user can choose from gamma, beta, pareto}
+\item{beta0_prior_dist}{prior distribution for \code{beta0}, user can choose from "gamma", "beta", "pareto"}
 
-\item{beta0_prior.a}{parameter a of the prior distribution for linkage parameter beta0}
+\item{beta0_prior.a}{parameter \code{a} of the prior distribution for linkage parameter \code{beta0}. Please check the \code{Details} section for more explaination}
 
-\item{beta0_prior.b}{parameter b of the prior distribution  for linkage parameter beta0}
+\item{beta0_prior.b}{parameter \code{b} of the prior distribution  for linkage parameter \code{beta0}. Please check the \code{Details} section for more explaination}
 
-\item{beta1_prior_dist}{prior distribution for beta1, user can choose from gamma, beta, pareto}
+\item{beta1_prior_dist}{prior distribution for \code{beta1}, user can choose from "gamma", "beta", "pareto"}
 
-\item{beta1_prior.a}{parameter a of the prior distribution for linkage parameter beta1}
+\item{beta1_prior.a}{parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explaination}
 
-\item{beta1_prior.c}{parameter b of the prior distribution for linkage parameter beta1}
+\item{beta1_prior.c}{parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explaination}
 
-\item{n_MCMC_chain}{number of MCMC chains, default to 1. If this is set to a number more than 1}
+\item{n_MCMC_chain}{number of MCMC chains, default to 1.}
 
 \item{BURN.IN}{number of burn-in iterations for MCMC}
 
@@ -55,36 +55,54 @@ BJSM_binary(
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
-\item{six, }{if TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE}
+\item{six, }{TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE}
 
-\item{DTR, }{if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
+\item{DTR, }{TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
 }
 \value{
-posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
-pi_hat_bjsm: estimate of response rate/treatment effect
-se_hat_bjsm: standard error of the response rate
-ci_pi_A: x\% credible intervals for A
-ci_pi_B: x\% credible intervals for B
-ci_pi_C: x\% credible intervals for C
-diff_AB: estimate of differences between treatments A and B
-diff_BC: estimate of differences between treatments B and C
-diff_AC: estimate of differences between treatments A and C
-ci_diff_AB: x\% credible intervals for the differences between A and B
-ci_diff_BC: x\% credible intervals for the differences between B and C
-ci_diff_AC: x\% credible intervals for the differences between A and C
-beta0_hat: linkage parameter beta0 estimates
-beta1_hat: linkage parameter beta1 estimates
-ci_beta0_hat: linkage parameter beta0 credible interval
-ci_beta1_hat: linkage parameter beta1 credible interval
-pi_DTR_est: expected response rate of dynamic treatment regimens (DTRs)
+\itemize{
+\strong{\code{posterior_sample}}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
+
+\strong{\code{pi_hat_bjsm}}: estimate of response rate/treatment effect \cr
+
+\strong{\code{se_hat_bjsm}}: standard error of the response rate \cr
+
+\strong{\code{ci_pi_A}}: x\% credible intervals for A \cr
+
+\strong{\code{ci_pi_B}}: x\% credible intervals for B \cr
+
+\strong{\code{ci_pi_C}}: x\% credible intervals for C \cr
+
+\strong{\code{diff_AB}}: estimate of differences between treatments A and B \cr
+
+\strong{\code{diff_BC}}: estimate of differences between treatments B and C \cr
+
+\strong{\code{diff_AC}}: estimate of differences between treatments A and C \cr
+
+\strong{\code{ci_diff_AB}}: x\% credible intervals for the differences between A and B \cr
+
+\strong{\code{ci_diff_BC}}: x\% credible intervals for the differences between B and C \cr
+
+\strong{\code{ci_diff_AC}}: x\% credible intervals for the differences between A and C \cr
+
+\strong{\code{beta0_hat}}: linkage parameter \code{beta0} estimates \cr
+
+\strong{\code{beta1_hat}}: linkage parameter \code{beta1} estimates \cr
+
+\strong{\code{ci_beta0_hat}}: linkage parameter \code{beta0} credible interval \cr
+
+\strong{\code{ci_beta1_hat}}: linkage parameter \code{beta1} credible interval \cr
+
+\strong{\code{pi_DTR_est}}: expected response rate of dynamic treatment regimens (DTRs) \cr
+}
 }
 \description{
-BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each treatment based on trial dataset
+BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each treatment (different active treatments, non-responders re-randomized; binary outcome) based on trial dataset
 generated by function  \code{trial_data}
 }
 \details{
-For gamma distribution, prior.a is the shape parameter r, prior.b is the rate parameter lambda. For beta distribution, prior.a is the shape parameter a, prior.b is the shape parameter b.
-For pareto distribution, prior.a is the scale parameter alpha, prior.b is the shape parameter c (see page 29 of the jags user manual version 3.4.0). link: http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf
+For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
+For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha}, \code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
 
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 second stage response probabilities through linkage parameters.

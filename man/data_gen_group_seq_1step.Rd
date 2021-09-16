@@ -51,53 +51,102 @@ data_gen_group_seq_1step(
 
 \item{n.month}{number of months to enroll subjects}
 
-\item{n.update}{number of updates during the study. Default is 1 (number of interim analysis? need to check with Kelley)}
+\item{n.update}{number of updates during the study. Default is 1 (also the number of interim analysis)}
 
 \item{drop_threshold}{a number between 0 and 1, if the posteriors probability of a treatment having the smallest response rate is bigger than the \code{drop_threshold}, this treatment will be dropped at that update. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study}
 
 \item{NUM_ARMS}{number of treatment arms}
 
-\item{trt.days}{subjects' responses are evaluated \code{trt.days} days after receiving the treatment, default 180}
+\item{trt.days}{subjects' responses are evaluated \code{trt.days} days after receiving the treatment, default is 180}
 
-\item{trt.break}{second stage trt is given \code{trt.break} day after the evaluation, default 1}
+\item{trt.break}{second stage trt is given \code{trt.break} day after the evaluation, default is 1}
 
-\item{pi_prior_dist}{prior distribution for pi, user can choose from gamma, beta, pareto}
+\item{pi_prior_dist}{prior distribution for \code{pi}, user can choose from "gamma", "beta", "pareto"}
 
-\item{pi_prior.a}{parameter a of the prior distribution for pi_1K, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
+\item{pi_prior.a}{parameter a of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
 
-\item{pi_prior.b}{parameter b of the prior distribution  for pi_1K, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
+\item{pi_prior.b}{parameter b of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
 
-\item{beta0_prior_dist}{prior distribution for beta0, user can choose from gamma, beta, pareto}
+\item{beta0_prior_dist}{prior distribution for \code{beta0}, user can choose from "gamma", "beta", "pareto"}
 
-\item{beta0_prior.a}{parameter a of the prior distribution for linkage parameter beta0}
+\item{beta0_prior.a}{parameter a of the prior distribution for linkage parameter \code{beta0}. Please check the \code{Details} section for more explanation}
 
-\item{beta0_prior.b}{parameter b of the prior distribution  for linkage parameter beta0}
+\item{beta0_prior.b}{parameter b of the prior distribution  for linkage parameter \code{beta0}. Please check the \code{Details} section for more explanation}
 
-\item{beta1_prior_dist}{prior distribution for beta1, user can choose from gamma, beta, pareto}
+\item{beta1_prior_dist}{prior distribution for \code{beta1}, user can choose from "gamma", "beta", "pareto"}
 
-\item{beta1_prior.a}{parameter a of the prior distribution for linkage parameter beta1}
+\item{beta1_prior.a}{parameter a of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explanation}
 
-\item{beta1_prior.c}{parameter b of the prior distribution for linkage parameter beta1}
+\item{beta1_prior.c}{parameter b of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explanation}
 
 \item{MCMC_SAMPLE}{number of iterations for MCMC}
 
 \item{BURN.IN}{number of burn-in iterations for MCMC}
 
-\item{n_MCMC_chain}{number of MCMC chains, default to 1. If this is set to a number more than 1}
+\item{n_MCMC_chain}{number of MCMC chains, default to 1.}
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
 \item{DTR, }{if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
 }
 \value{
-return the simulated dataset (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
-response for first treatment, treatment arm for second treatment, response for second treatment), randomization probabilities before each update (the number of rows
-equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; End of trial analysis outcome: (comments added next
-to the return function, similar to BJSM_binary)
+\strong{\verb{return the simulated dataset}} (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
+response for first treatment, treatment arm for second treatment, response for second treatment) \cr
+
+\strong{\verb{randomization probabilities before each update}} (the number of rows equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; \cr
+
+\strong{\verb{End of trial analysis outcome}}: \cr
+
+\strong{\code{posterior_sample}}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
+
+\strong{\code{pi_hat_bjsm}}: estimate of response rate/treatment effect \cr
+
+\strong{\code{se_hat_bjsm}}: standard error of the response rate \cr
+
+\strong{\code{ci_pi_A}}: x\% credible intervals for A \cr
+
+\strong{\code{ci_pi_B}}: x\% credible intervals for B \cr
+
+\strong{\code{ci_pi_C}}: x\% credible intervals for C \cr
+
+\strong{\code{diff_AB}}: estimate of differences between treatments A and B \cr
+
+\strong{\code{diff_BC}}: estimate of differences between treatments B and C \cr
+
+\strong{\code{diff_AC}}: estimate of differences between treatments A and C \cr
+
+\strong{\code{ci_diff_AB}}: x\% credible intervals for the differences between A and B \cr
+
+\strong{\code{ci_diff_BC}}: x\% credible intervals for the differences between B and C \cr
+
+\strong{\code{ci_diff_AC}}: x\% credible intervals for the differences between A and C \cr
+
+\strong{\code{beta0_hat}}: linkage parameter \code{beta0} estimates \cr
+
+\strong{\code{beta1_hat}}: linkage parameter \code{beta1} estimates \cr
+
+\strong{\code{ci_beta0_hat}}: linkage parameter \code{beta0} credible interval \cr
+
+\strong{\code{ci_beta1_hat}}: linkage parameter \code{beta1} credible interval \cr
+
+\strong{\code{pi_DTR_est}}: expected response rate of dynamic treatment regimens (DTRs) \cr
+}
 }
 \description{
-generate data for the Group Sequential snSMART, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome)
-Use BJSM to conduct interim and final analysis
+generate data for the Group Sequential snSMART with a one-step rule, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome; with interim analysis)
+Use BJSM (Bayesian Joint Stage Model) to conduct interim and final analysis
+}
+\examples{
+simu1 = data_gen_group_seq_1step(pi_1A = 0.25, pi_1B = 0.45, pi_1C = 0.65, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
+rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, NUM_ARMS  = 3, trt.days = 100, trt.break = 2, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
+beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,
+ci = 0.95, DTR = TRUE)
+
+simu2 = data_gen_group_seq_1step(pi_1A = 0.3, pi_1B = 0.3, pi_1C = 0.3, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
+rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), NUM_ARMS  = 3, trt.days = 50, trt.break = 6, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
+beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,
+ci = 0.95, DTR = TRUE)
+
 }
 \references{
 Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group sequential small n sequential multiple‐assignment randomized trial. Journal of the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.

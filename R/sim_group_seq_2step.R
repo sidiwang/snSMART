@@ -1,7 +1,7 @@
 #' Data generation of a group sequential snSMART with a two-step rule
 #'
-#' generate data for the Group Sequential snSMART with a two-step rule, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome)
-#' Use BJSM method to conduct interim and final analysis.
+#' generate data for the Group Sequential snSMART with a two-step rule, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome; with interim analysis)
+#' Use BJSM (Bayesian Joint Stage Model) method to conduct interim and final analysis.
 #'
 #' @param pi_1A first stage response rate of A
 #' @param pi_1B first stage response rate of B
@@ -11,53 +11,72 @@
 #' @param discount_n2 linkage parameters, vector of three values: 1) nonresponders to A receive treatment C in second stage, 2) nonresponders to B receive treatment C in second stage, 3) nonresponders to C receive B in the second stage
 #' @param rate accrual rate. Rate equals to 5 if participants are enrolled in the study at the rate of five people per month
 #' @param n.month number of months to enroll subjects
-#' @param n.update number of updates during the study. Default is 1 (number of interim analysis? need to check with Kelley)
-#' @param drop_threshold_large a number between 0 and 1. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study. See the details section for more explaination
-#' @param drop_threshold_small a number between 0 and 1. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study. See the details section for more explaination
+#' @param n.update number of updates during the study. Default is 1 (also the number of interim analysis)
+#' @param drop_threshold_large a number between 0 and 1. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study. See the details section for more explanation
+#' @param drop_threshold_small a number between 0 and 1. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study. See the details section for more explanation
 #' @param NUM_ARMS number of treatment arms
-#' @param trt.days subjects' responses are evaluated `trt.days` days after receiving the treatment, default 180
-#' @param trt.break second stage trt is given `trt.break` day after the evaluation, default 1
-#' @param pi_prior.a parameter a of the prior distribution for pi_1K, a vector with three values, one for each treatment. Please check the `Details` section for more explaination
-#' @param pi_prior.b parameter b of the prior distribution  for pi_1K, a vector with three values, one for each treatment. Please check the `Details` section for more explaination
-#' @param beta0_prior.a parameter a of the prior distribution for linkage parameter beta0
-#' @param beta0_prior.b parameter b of the prior distribution  for linkage parameter beta0
-#' @param beta1_prior.a parameter a of the prior distribution for linkage parameter beta1
-#' @param beta1_prior.c parameter b of the prior distribution for linkage parameter beta1
-#' @param n_MCMC_chain number of MCMC chains, default to 1. If this is set to a number more than 1
+#' @param trt.days subjects' responses are evaluated `trt.days` days after receiving the treatment, default is 180
+#' @param trt.break second stage trt is given `trt.break` day after the evaluation, default is 1
+#' @param pi_prior.a parameter a of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the `Details` section for more explanation
+#' @param pi_prior.b parameter b of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the `Details` section for more explanation
+#' @param beta0_prior.a parameter a of the prior distribution for linkage parameter `beta0`. Please check the `Details` section for more explanation
+#' @param beta0_prior.b parameter b of the prior distribution  for linkage parameter `beta0`. Please check the `Details` section for more explanation
+#' @param beta1_prior.a parameter a of the prior distribution for linkage parameter `beta1`. Please check the `Details` section for more explanation
+#' @param beta1_prior.c parameter b of the prior distribution for linkage parameter `beta1`. Please check the `Details` section for more explanation
+#' @param n_MCMC_chain number of MCMC chains, default to 1.
 #' @param BURN.IN number of burn-in iterations for MCMC
 #' @param MCMC_SAMPLE number of iterations for MCMC
-#' @param pi_prior_dist prior distribution for pi, user can choose from gamma, beta, pareto
-#' @param beta0_prior_dist prior distribution for beta0, user can choose from gamma, beta, pareto
-#' @param beta1_prior_dist prior distribution for beta1, user can choose from gamma, beta, pareto
+#' @param pi_prior_dist prior distribution for \code{pi}, user can choose from "gamma", "beta", "pareto"
+#' @param beta0_prior_dist prior distribution for `beta0`, user can choose from "gamma", "beta", "pareto"
+#' @param beta1_prior_dist prior distribution for `beta1`, user can choose from "gamma", "beta", "pareto"
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param DTR, if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE
 
 #'
 #' @details
-#' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small are corresponding to `\tau_l` and `\phi_l` respectively {need to check with Kelley})
+#' please check the paper provided in the reference section, section 2.2.2 Bayesian decision rules. `drop_threshold_large` and `drop_threshold_small` are corresponding to `\tau_l` and `\phi_l` respectively
 #'
 #' @return
-#' return the simulated dataset (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
-#' response for first treatment, treatment arm for second treatment, response for second treatment), randomization probabilities before each update (the number of rows
-#' equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; End of trial analysis outcome:
-#' \itemize{
-#' posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
-#' pi_hat_bjsm: estimate of response rate/treatment effect
-#' se_hat_bjsm: standard error of the response rate
-#' ci_pi_A: x% credible intervals for A
-#' ci_pi_B: x% credible intervals for B
-#' ci_pi_C: x% credible intervals for C
-#' diff_AB: estimate of differences between treatments A and B
-#' diff_BC: estimate of differences between treatments B and C
-#' diff_AC: estimate of differences between treatments A and C
-#' ci_diff_AB: x% credible intervals for the differences between A and B
-#' ci_diff_BC: x% credible intervals for the differences between B and C
-#' ci_diff_AC: x% credible intervals for the differences between A and C
-#' beta0_hat: linkage parameter beta0 estimates
-#' beta1_hat: linkage parameter beta1 estimates
-#' ci_beta0_hat: linkage parameter beta0 credible interval
-#' ci_beta1_hat: linkage parameter beta1 credible interval
-#' pi_DTR_est: expected response rate of dynamic treatment regimens (DTRs)
+#' \strong{`return the simulated dataset`} (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
+#' response for first treatment, treatment arm for second treatment, response for second treatment) \cr
+#'
+#' \strong{`randomization probabilities before each update`} (the number of rows equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; \cr
+#'
+#' \strong{`End of trial analysis outcome`}: \cr
+#'
+#' \strong{`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
+#'
+#' \strong{`pi_hat_bjsm`}: estimate of response rate/treatment effect \cr
+#'
+#' \strong{`se_hat_bjsm`}: standard error of the response rate \cr
+#'
+#' \strong{`ci_pi_A`}: x% credible intervals for A \cr
+#'
+#' \strong{`ci_pi_B`}: x% credible intervals for B \cr
+#'
+#' \strong{`ci_pi_C`}: x% credible intervals for C \cr
+#'
+#' \strong{`diff_AB`}: estimate of differences between treatments A and B \cr
+#'
+#' \strong{`diff_BC`}: estimate of differences between treatments B and C \cr
+#'
+#' \strong{`diff_AC`}: estimate of differences between treatments A and C \cr
+#'
+#' \strong{`ci_diff_AB`}: x% credible intervals for the differences between A and B \cr
+#'
+#' \strong{`ci_diff_BC`}: x% credible intervals for the differences between B and C \cr
+#'
+#' \strong{`ci_diff_AC`}: x% credible intervals for the differences between A and C \cr
+#'
+#' \strong{`beta0_hat`}: linkage parameter \code{beta0} estimates \cr
+#'
+#' \strong{`beta1_hat`}: linkage parameter \code{beta1} estimates \cr
+#'
+#' \strong{`ci_beta0_hat`}: linkage parameter \code{beta0} credible interval \cr
+#'
+#' \strong{`ci_beta1_hat`}: linkage parameter \code{beta1} credible interval \cr
+#'
+#' \strong{`pi_DTR_est`}: expected response rate of dynamic treatment regimens (DTRs) \cr
 #' }
 #'
 #' @examples

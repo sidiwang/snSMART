@@ -5,8 +5,8 @@
 #' @param p_IA first stage response rate of A
 #' @param p_IB first stage response rate of B
 #' @param p_IC first stage response rate of C
-#' @param discount_y0 linkage parameters, for nonresponders to treatment k in the first stage who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `discount_y0 * pi_IK'`
-#' @param discount_y1 linkage parameters, the second stage response rate for first stage responders is equal to `discount_y1 * p_Ik`
+#' @param discount_y0 linkage parameters, for nonresponders to treatment k in the first stage who received treatment `k'` in the second stage, the second stage response rate is equal to `discount_y0 * pi_IK'`
+#' @param discount_y1 linkage parameters, the second stage response rate for first stage responders is equal to `discount_y1 * p_IK`
 #' @param p_1nA_2B probability for first stage non-responders to A being randomized to arm B in second stage
 #' @param p_1nB_2A probability for first stage non-responders to B being randomized to arm A in second stage
 #' @param p_1nC_2A probability for first stage non-responders to C being randomized to arm A in second stage
@@ -14,7 +14,7 @@
 #' @param n_B first stage sample size of B
 #' @param n_C first stage sample size of C
 #'
-#' @return The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
+#' @return The simulated dataset with five columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`, `response_status_stageI` (responders will be 2 and non-responders will be 1)
 #'
 #' @examples
 #' data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4,

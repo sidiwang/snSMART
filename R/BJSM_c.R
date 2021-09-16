@@ -5,11 +5,11 @@
 #'
 #' @param data trial data generated through function `continuous_trialDataGen`
 #' @param NUM_ARMS number of treatment arms
-#' @param beta_prior.mean vector of mean of the prior distributions (normal distribution) for beta (treatment effect). Please check the `Details` section for more explaination
-#' @param beta_prior.sd vector of standard deviation of the prior distributions (normal distribution) for beta (treatment effect). Please check the `Details` section for more explaination
-#' @param alpha3_prior.sd standard deviation of the prior distribution (folded normal distribution) of alpha3 (if the patient stays on the same treatment, alpha3 is the cumulative effect of stage 1 that occurs on the treatment longer term). Please check the `Details` section for more explaination
-#' @param n_MCMC_chain number of MCMC chains, default to 1. If this is set to a number more than 1
-#' @param n.adapt the number of iterations for adaptation. If n.adapt = 0 then no adaptation takes place.
+#' @param beta_prior.mean vector of mean of the prior distributions (normal distribution) for \code{beta} (treatment effect). Please check the `Details` section for more explaination
+#' @param beta_prior.sd vector of standard deviation of the prior distributions (normal distribution) for \code{beta} (treatment effect). Please check the `Details` section for more explaination
+#' @param alpha3_prior.sd standard deviation of the prior distribution (folded normal distribution) of \code{alpha3} (if the patient stays on the same treatment, \code{alpha3} is the cumulative effect of stage 1 that occurs on the treatment longer term). Please check the `Details` section for more explaination
+#' @param n_MCMC_chain number of MCMC chains, default to 1
+#' @param n.adapt the number of iterations for adaptation. If \code{n.adapt = 0} then no adaptation takes place
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param n.digits number of digits to keep in the final output
@@ -18,12 +18,17 @@
 #' section 2.2.1 of the paper listed under `reference` provides a detailed description of the assumptions of the model.
 #'
 #' @return
-#' \itemize{
-#' posterior_sample: posterior samples of the link parameters and response rates generated through the MCMC process
-#' mean_estimate: BJSM estimate of each parameter 1> alpha1 - lingering effect of the first treatment; 2> alpha3 - if the patient stays on the same treatment, alpha3 is the cumulative effect of stage 1 that occurs on the treatment longer term
-#' 3> betaj - betaj parameters are the expected effect of treat j, j = A, B, C, in the first stage; 4> rho is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
-#' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix.
-#' }
+#' \strong{`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process
+#'
+#' \strong{`mean_estimate`}: \cr
+#' BJSM estimate of each parameter: \cr
+#' 1> \code{alpha1} - lingering effect of the first treatment; \cr
+#' 2> \code{alpha3} - if the patient stays on the same treatment, \code{alpha3} is the cumulative effect of stage 1 that occurs on the treatment longer term \cr
+#' 3> \code{betaj} - \code{betaj} parameters are the expected effect of treat j, j = A, B, C, in the first stage \cr
+#' 4> \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
+#' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix. \cr
+#'
+#' \strong{`ci_estimate`}: x% credible interval for each parameter
 #'
 #' @examples
 #' treat.a<-c(70, 15, c(0,0,0))

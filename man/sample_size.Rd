@@ -27,7 +27,7 @@ sample_size(
 
 \item{piC}{the response rate (ranges from 0.01 to 0.99) for treatment C}
 
-\item{beta1}{the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smller value leads to more conservative sample size calculation because two stages are less correlated)}
+\item{beta1}{the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smaller value leads to more conservative sample size calculation because two stages are less correlated)}
 
 \item{beta0}{the linkage parameter (ranges from 0.01 to 0.99) for first stage non-responders. A larger value leads to a more conservative sample size calculation because two stages are less correlated}
 
@@ -51,7 +51,11 @@ sample_size(
 the estimated sample size per arm for an snSMART
 }
 \description{
-conduct Bayesian sample size calculation for an snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
+conduct Bayesian sample size calculation for a standard snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
+}
+\examples{
+sampleSize = sample_size(piA = 0.7, piB = 0.5, piC = 0.25, beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, muA = 0.65, muB = 0.55, muC = 0.25, nA = 4, nB = 2, nC = 3)
+
 }
 \references{
 Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).

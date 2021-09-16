@@ -1,19 +1,18 @@
-#' JSRM
+#' JSRM for dose level snSMART
 #'
 #' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
-#' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results/
+#' Generalized estimating equations (GEE) are used to estimate the response rates of each dose level.
 #'
 #' @param data data format produced by the `trial_dataset_dose` function
 #'
 #' @return a `list` containing
 #' \itemize{
-#'   \item{GEE_output}{ - original output of the GEE (geeglm) model}
-#'   \item{pi_hat}{ - estimate of response rate/treatment effect}
-#'   \item{sd_pi_hat}{ - standard error of the response rate}
+#'   \item{`GEE_output`}{ - original output of the GEE (geeglm) model}
+#'   \item{`pi_hat`}{ - estimate of response rate/treatment effect}
+#'   \item{`sd_pi_hat`}{ - standard error of the response rate}
 #' }
 #'
 #' @examples
-#' #data
 #' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
 #'     respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
 #'     trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
@@ -22,11 +21,13 @@
 #'     trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
 #'     respNLL_II = 7, respNHH_II = 10)
 #'
-#' #JSRM_result = JSRM_dose_binary(data = mydata)
+#' JSRM_result = JSRM_dose_binary(data = mydata)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 #' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
+#'
+#' @export
 #'
 JSRM_dose_binary = function(data){
 

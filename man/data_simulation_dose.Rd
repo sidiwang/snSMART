@@ -75,7 +75,7 @@ data_simulation_dose(
 \item{n_C}{first stage sample size of C}
 }
 \value{
-The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
+The simulated dataset with five columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}, \code{response_status_stageI} (responders will be 2 and non-responders will be 1)
 }
 \description{
 simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome)

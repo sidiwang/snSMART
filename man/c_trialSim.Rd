@@ -14,33 +14,46 @@ c_trialSim(
 )
 }
 \arguments{
-\item{treatInfo}{Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, sd of treatment effects, c(priming effect on trt A,  trt B, trt C)), see example for detail}
+\item{treatInfo}{Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, sd of treatment effects, \code{c(priming effect on trt A,  trt B, trt C)}), see example for detail}
 
 \item{treatCors}{Treatment correlations matrix. Format example:
-[[ (A,A) (A,B) (A,C)
-(B,A) (B,B) (B,C)
-(C,A) (C,B) (C,C) ]], (A,B) denotes the treatment correlation between first stage treatment A and second stage treatment B}
+\code{[[ (A,A) (A,B) (A,C) ],
+   [ (B,A) (B,B) (B,C) ],
+   [ (C,A) (C,B) (C,C) ]]}, \code{(A,B)} denotes the treatment correlation between first stage treatment A and second stage treatment B}
 
 \item{stay.ethical}{numerical value, if stage 1 outcome is bigger than \code{stay.ethical} value, patient has probability of 1 of staying on the same treatment in stage 2}
 
 \item{switch.safety}{numerical value, if stage 1 outcome is smaller than \code{switch.safety} value, patient has probability of 0 of staying on the same treatment in stage 2}
 
-\item{n}{vector of number of patients on each treatment e.g. n <- c(100, 100, 100)}
+\item{n}{vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}}
 
-\item{nsim}{number of simulations}
+\item{nsim}{number of simulations. Use the \code{c_trialDataGen} function to generate \code{nsim} simulated datasets}
 }
 \value{
-switch.safety: input by user; stay.ethical: input by user; stage1Eff: average simulated stage 1 treatment effect; stage2EFF: average simulated stage 2 treatment effect
-stage2best: percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial;
-stage2worst: percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial;
-improve: percentage of patients received an improved treatment outcome in stage 2;
-switchBetterOrStayedBest: percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial;
-stayedSame: percentage of patients received the same treatment in stage 2 after randomization;
-gotBetter: percentage of patients that received more effective treatments in stage 2;
-gotWorse: percentage of patients that received less effective treatments in stage 2;
+\strong{\code{switch.safety}}: input by user \cr
+
+\strong{\code{stay.ethical}}: input by user \cr
+
+\strong{\code{stage1Eff}}: average simulated stage 1 treatment effect \cr
+
+\strong{\code{stage2EFF}}: average simulated stage 2 treatment effect \cr
+
+\strong{\code{stage2best}}: percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial; \cr
+
+\strong{\code{stage2worst}}: percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial; \cr
+
+\strong{\code{improve}}: percentage of patients received an improved treatment outcome in stage 2; \cr
+
+\strong{\code{switchBetterOrStayedBest}}: percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial; \cr
+
+\strong{\code{stayedSame}}: percentage of patients received the same treatment in stage 2 after randomization; \cr
+
+\strong{\code{gotBetter}}: percentage of patients that received more effective treatments in stage 2; \cr
+
+\strong{\code{gotWorse}}: percentage of patients that received less effective treatments in stage 2; \cr
 }
 \description{
-assess the characteristics of trial design based on simulated data
+assess the characteristics of trial design based on data simulated by \code{c_trialDataGen}
 }
 \examples{
 treat.a<-c(70, 15, c(0,0,0))

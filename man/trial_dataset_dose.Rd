@@ -2,7 +2,7 @@
 % Please edit documentation in R/BJSM_dose_binary.R
 \name{trial_dataset_dose}
 \alias{trial_dataset_dose}
-\title{Trial dataset (dose level design)}
+\title{Trial dataset (dose level snSMART design)}
 \usage{
 trial_dataset_dose(
   trtP_I,
@@ -96,7 +96,7 @@ trial_dataset_dose(
 a \code{matrix} of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 }
 \description{
-Generate trial dataset for dose level design without missing value
+Generate trial dataset for dose level snSMART design (placebo, low, high dose; binary outcome) without missing value
 }
 \examples{
 mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,

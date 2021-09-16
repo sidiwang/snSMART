@@ -23,14 +23,14 @@ c_trialDataGen(
 )
 }
 \arguments{
-\item{treatInfo}{Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, sd of treatment effects, c(priming effect on trt A,  trt B, trt C)), see example for detail}
+\item{treatInfo}{Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, standard deviation of treatment effects, \code{c(priming effect on trt A,  trt B, trt C))}, see example for detail}
 
 \item{treatCors}{Treatment correlations matrix. Format example:
-[[ (A,A) (A,B) (A,C)
-(B,A) (B,B) (B,C)
-(C,A) (C,B) (C,C) ]], (A,B) denotes the treatment correlation between first stage treatment A and second stage treatment B}
+\code{[[ (A,A) (A,B) (A,C) ],
+   [ (B,A) (B,B) (B,C) ],
+   [ (C,A) (C,B) (C,C) ]]}, \code{(A,B)} denotes the treatment correlation between first stage treatment A and second stage treatment B}
 
-\item{n}{vector of number of patients on each treatment e.g. n <- c(100, 100, 100)}
+\item{n}{vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}}
 
 \item{stay.ethical}{numerical value, if stage 1 outcome is bigger than \code{stay.ethical} value, patient has probability of 1 of staying on the same treatment in stage 2}
 
@@ -41,12 +41,12 @@ c_trialDataGen(
 \value{
 The simulated dataset with 7 variables: patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome
 
-The simulated dataset with 7 variables: patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome
+The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
 }
 \description{
 simulate data for snSMART with continuous outcome (non-responders re-randomized)
 
-simulate data for snSMART with continuous outcome (non-responders re-randomized)
+simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes)
 }
 \examples{
 treat.a<-c(70, 15, c(0,0,0))
@@ -73,10 +73,12 @@ treatCors<-diag(.9, 3)
 
 switch.safety<-NULL
 stay.ethical<- NULL
+
 na<-100
 nb<-100
 nc<-100
 n<-c(na,nb,nc)
+
 trialData = c_trialDataGen(treatInfo, treatCors, n, wideForm = FALSE)
 
 }

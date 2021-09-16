@@ -2,7 +2,7 @@
 % Please edit documentation in R/JSRM_dose_binary.R
 \name{JSRM_dose_binary}
 \alias{JSRM_dose_binary}
-\title{JSRM}
+\title{JSRM for dose level snSMART}
 \usage{
 JSRM_dose_binary(data)
 }
@@ -12,17 +12,16 @@ JSRM_dose_binary(data)
 \value{
 a \code{list} containing
 \itemize{
-\item{GEE_output}{ - original output of the GEE (geeglm) model}
-\item{pi_hat}{ - estimate of response rate/treatment effect}
-\item{sd_pi_hat}{ - standard error of the response rate}
+\item{\code{GEE_output}}{ - original output of the GEE (geeglm) model}
+\item{\code{pi_hat}}{ - estimate of response rate/treatment effect}
+\item{\code{sd_pi_hat}}{ - standard error of the response rate}
 }
 }
 \description{
 A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
-Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results/
+Generalized estimating equations (GEE) are used to estimate the response rates of each dose level.
 }
 \examples{
-#data
 mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
     respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
     trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
@@ -31,7 +30,7 @@ mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
     trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
     respNLL_II = 7, respNHH_II = 10)
 
-#JSRM_result = JSRM_dose_binary(data = mydata)
+JSRM_result = JSRM_dose_binary(data = mydata)
 
 }
 \references{

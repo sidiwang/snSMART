@@ -1,11 +1,11 @@
 #' snSMART Sample Size Calculation
 #'
-#' conduct Bayesian sample size calculation for an snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
+#' conduct Bayesian sample size calculation for a standard snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
 #'
 #' @param piA the response rate (ranges from 0.01 to 0.99) for treatment A
 #' @param piB the response rate (ranges from 0.01 to 0.99) for treatment B
 #' @param piC the response rate (ranges from 0.01 to 0.99) for treatment C
-#' @param beta1 the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smller value leads to more conservative sample size calculation because two stages are less correlated)
+#' @param beta1 the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smaller value leads to more conservative sample size calculation because two stages are less correlated)
 #' @param beta0 the linkage parameter (ranges from 0.01 to 0.99) for first stage non-responders. A larger value leads to a more conservative sample size calculation because two stages are less correlated
 #' @param coverage the coverage rate (ranges from 0.01 to 0.99) for the posterior difference of top two treatments
 #' @param power the probability (ranges from 0.01 to 0.99) for identify the best treatment
@@ -18,12 +18,14 @@
 #'
 #' @return the estimated sample size per arm for an snSMART
 #'
-#' @example
+#' @examples
 #' sampleSize = sample_size(piA = 0.7, piB = 0.5, piC = 0.25, beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, muA = 0.65, muB = 0.55, muC = 0.25, nA = 4, nB = 2, nC = 3)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
 #' Statistics in medicine, 37(26), pp.3723-3732.
+#'
+#' @export
 #'
 
 

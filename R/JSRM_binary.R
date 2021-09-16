@@ -1,7 +1,7 @@
-#' JSRM
+#' JSRM for standard snSMART
 #'
 #' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
-#' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results/
+#' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
 #'
 #' @param data data format produced by the `trial_dataset` function
 #' @param six if TRUE, will run the six beta model, if FALSE will run the two
@@ -10,20 +10,27 @@
 #'
 #' @return a `list` containing
 #' \itemize{
-#'   \item{GEE_output}{ - original output of the GEE (geeglm) model}
-#'   \item{pi_hat}{ - estimate of response rate/treatment effect}
-#'   \item{sd_pi_hat}{ - standard error of the response rate}
-#'   \item{pi_DTR_hat}{ - expected response rate of dynamic treatment regimens (DTRs)}
-#'   \item{pi_DTR_se}{ - standard deviation of DTR estimates}
+#'   \item{`GEE_output`}{ - original output of the GEE (geeglm) model}
+#'   \item{`pi_hat`}{ - estimate of response rate/treatment effect}
+#'   \item{`sd_pi_hat`}{ - standard error of the response rate}
+#'   \item{`pi_DTR_hat`}{ - expected response rate of dynamic treatment regimens (DTRs)}
+#'   \item{`pi_DTR_se`}{ - standard deviation of DTR estimates}
 #' }
 #'
 #' @examples
-#' #data
-#' #JSRM_binary = function(data = data, six = TRUE, DTR = TRUE)
+#' data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
+#'     respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
+#'     respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
+#'     trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
+#'     respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+#'
+#' JSRM_result = JSRM_binary(data = data, six = TRUE, DTR = TRUE)
 #'
 #' @references
 #' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
 #' randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+#'
+#' @export
 #'
 JSRM_binary = function(data, six = TRUE, DTR = TRUE){
 

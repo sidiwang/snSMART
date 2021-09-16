@@ -25,9 +25,9 @@ data_simulation(
 
 \item{p_IC}{first stage response rate of C}
 
-\item{discount_y0}{linkage parameters, for nonresponders to treatment k in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{discount_y0 * pi_IK'}}
+\item{discount_y0}{linkage parameters, for nonresponders to treatment k in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate is equal to \verb{discount_y0 * pi_IK'}}
 
-\item{discount_y1}{linkage parameters, the second stage response rate for first stage responders is equal to \code{discount_y1 * p_Ik}}
+\item{discount_y1}{linkage parameters, the second stage response rate for first stage responders is equal to \code{discount_y1 * p_IK}}
 
 \item{p_1nA_2B}{probability for first stage non-responders to A being randomized to arm B in second stage}
 
@@ -42,7 +42,7 @@ data_simulation(
 \item{n_C}{first stage sample size of C}
 }
 \value{
-The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
+The simulated dataset with five columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}, \code{response_status_stageI} (responders will be 2 and non-responders will be 1)
 }
 \description{
 simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome)

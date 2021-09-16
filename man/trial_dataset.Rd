@@ -84,7 +84,7 @@ trial_dataset(
 a \code{matrix} of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 }
 \description{
-Generate trial dataset with or without missing value
+Generate trial dataset for standard snSMART (3 active treatments, non-responders re-randomized; binary outcome) with or without missing value
 }
 \examples{
 trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,

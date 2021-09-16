@@ -25,7 +25,7 @@
 #' @param n_B first stage sample size of B
 #' @param n_C first stage sample size of C
 #'
-#' @return The simulated dataset with five columns: response_stageI, treatment_stageI, response_stageII, treatment_stageII, response_status_stageI (responders will be two and non-responders will be one)
+#' @return The simulated dataset with five columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`, `response_status_stageI` (responders will be 2 and non-responders will be 1)
 #'
 #' @examples
 #' data = data_simulation_dose(p_IP = 0.15, p_IL = 0.15, p_IH = 0.15,
