@@ -10,7 +10,7 @@ The aim of the **snSMART** R package is to consolidate data simulation, sample s
 
 You can download and install **snSMART** with:
 
-```{r}
+```{r echo = TRUE, eval = FALSE}
 # Install devtools first if you haven't done so
 library(devtools)
 # install snSMART
