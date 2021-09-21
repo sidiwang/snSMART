@@ -56,9 +56,11 @@ library(snSMART)
 
 ## References
 
-Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian
-analysis of small n sequential multiple assignment randomized trials
-(snSMARTs). Statistics in medicine, 37(26), pp.3723-3732.
+Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and
+Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential,
+multiple assignment, randomized trials: An application in focal
+segmental glomerulosclerosis. Contemporary clinical trials, 92,
+p.105989.
 
 Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A
 Bayesian group sequential small n sequential multiple‐assignment
@@ -74,3 +76,12 @@ Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021.
 Design and analysis considerations for utilizing a mapping function in a
 small sample, sequential, multiple assignment, randomized trials with
 continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
+
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size
+determination for Bayesian analysis of small n sequential, multiple
+assignment, randomized trials (snSMARTs) with three agents. Journal of
+Biopharmaceutical Statistics, 30(6), pp.1109-1120.
+
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian
+analysis of small n sequential multiple assignment randomized trials
+(snSMARTs). Statistics in medicine, 37(26), pp.3723-3732.

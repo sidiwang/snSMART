@@ -25,6 +25,8 @@
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
 #' Statistics in medicine, 37(26), pp.3723-3732.
 #'
+#' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination for Bayesian analysis of small n sequential, multiple assignment, randomized trials (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
+#'
 #' @export
 #'
 

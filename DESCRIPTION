@@ -32,5 +32,5 @@ BugReports: https://github.com/sidiwang/snSMART/issues
 Encoding: UTF-8
 LazyData: true
 Biarch: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
