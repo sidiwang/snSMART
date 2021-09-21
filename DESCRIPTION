@@ -1,6 +1,6 @@
 Package: snSMART
 Type: Package
-Title: R package for data simulation, sample size calculation and trial data analysis.
+Title: R package for data simulation, sample size calculation and trial data analysis
 Version: 0.1.0
 Authors@R: c(
     person(given = "Sidi", family = "Wang", role = c("aut"), email = "sidiwang@umich.edu"),
