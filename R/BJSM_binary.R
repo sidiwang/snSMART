@@ -151,9 +151,8 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' second stage response probabilities through linkage parameters.
 #'
 #' @return
-#' @param posterior_sample posterior samples of the link parameters and response rates generated through the MCMC process
 #' \itemize{
-#'
+#' \strong {`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
 #'
 #' \strong{`pi_hat_bjsm`}: estimate of response rate/treatment effect \cr
 #'
