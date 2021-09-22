@@ -140,8 +140,8 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' @param pi_prior_dist prior distribution for \code{pi}, user can choose from "gamma", "beta", "pareto"
 #' @param beta0_prior_dist prior distribution for \code{beta0}, user can choose from "gamma", "beta", "pareto"
 #' @param beta1_prior_dist prior distribution for \code{beta1}, user can choose from "gamma", "beta", "pareto"
-#' @param six, TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE
-#' @param DTR, TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE
+#' @param six TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE
+#' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -151,8 +151,9 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' second stage response probabilities through linkage parameters.
 #'
 #' @return
+#' @param posterior_sample posterior samples of the link parameters and response rates generated through the MCMC process
 #' \itemize{
-#' \strong{`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
+#'
 #'
 #' \strong{`pi_hat_bjsm`}: estimate of response rate/treatment effect \cr
 #'

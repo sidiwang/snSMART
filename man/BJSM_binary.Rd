@@ -55,13 +55,12 @@ BJSM_binary(
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
-\item{six, }{TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE}
+\item{six}{TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE}
 
-\item{DTR, }{TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
-}
-\value{
+\item{DTR}{TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
+
+\item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process
 \itemize{
-\strong{\code{posterior_sample}}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
 
 \strong{\code{pi_hat_bjsm}}: estimate of response rate/treatment effect \cr
 
@@ -94,7 +93,10 @@ BJSM_binary(
 \strong{\code{ci_beta1_hat}}: linkage parameter \code{beta1} credible interval \cr
 
 \strong{\code{pi_DTR_est}}: expected response rate of dynamic treatment regimens (DTRs) \cr
+}}
 }
+\value{
+
 }
 \description{
 BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each treatment (different active treatments, non-responders re-randomized; binary outcome) based on trial dataset
