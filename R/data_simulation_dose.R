@@ -1,56 +1,80 @@
 #' Data Simulation (dose level design)
 #'
-#' simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome)
+#' simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset_dose}}
 #'
-#' @param p_IA first stage response rate of placebo
-#' @param p_IB first stage response rate of low dose treatment
-#' @param p_IC first stage response rate of high dose treatment
-#' @param RESPONSE_RATE_DISCOUNT_P_Y_0 linkage parameters, for nonresponders to placebo in the first stage who received who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_P_Y_0 * pi_IK'`
-#' @param RESPONSE_RATE_DISCOUNT_P_Y_1 linkage parameters, for responders to placebo in the first stage who received who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_P_Y_1 * pi_IK'`
-#' @param RESPONSE_RATE_DISCOUNT_L_Y_0 linkage parameters, for nonresponders to low dose treatment in the first stage who received who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_L_Y_0 * pi_IK'`
-#' @param RESPONSE_RATE_DISCOUNT_L_Y_1 linkage parameters, for responders to low dose treatment in the first stage who received who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_L_Y_1 * pi_IK'`
-#' @param RESPONSE_RATE_DISCOUNT_H_Y_0 similar to `RESPONSE_RATE_DISCOUNT_L_Y_0`
-#' @param RESPONSE_RATE_DISCOUNT_H_Y_1 similar to `RESPONSE_RATE_DISCOUNT_L_Y_1`
-#' @param RAND_PROB_POS_P_TRT_H probability for first stage responders to placebo being randomized to high dose treatment in second stage
-#' @param RAND_PROB_POS_P_TRT_L probability for first stage responders to placebo being randomized to low dose treatment in second stage
-#' @param RAND_PROB_NEG_P_TRT_L probability for first stage nonresponders to placebo being randomized to low dose treatment in second stage
-#' @param RAND_PROB_NEG_P_TRT_H probability for first stage nonresponders to placebo being randomized to high dose treatment in second stage
-#' @param RAND_PROB_POS_L_TRT_L similar to above
-#' @param RAND_PROB_POS_L_TRT_H similar to above
-#' @param RAND_PROB_NEG_L_TRT_L similar to above
-#' @param RAND_PROB_NEG_L_TRT_H similar to above
-#' @param RAND_PROB_POS_H_TRT_L similar to above
-#' @param RAND_PROB_POS_H_TRT_H similar to above
-#' @param n_A first stage sample size of A
-#' @param n_B first stage sample size of B
-#' @param n_C first stage sample size of C
+#' @param p_trt vector of 3 values (first stage response rate of placebo, first stage response rate of low dose treatment, first stage response rate of high dose treatment)
+#' @param RESPONSE_RATE_DISCOUNT_P vector of 2 values (`RESPONSE_RATE_DISCOUNT_P_Y_0`, `RESPONSE_RATE_DISCOUNT_P_Y_1`). `RESPONSE_RATE_DISCOUNT_P_Y_0` is the linkage parameter for nonresponders to placebo in the first stage who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_P_Y_0 * pi_IK'`. `RESPONSE_RATE_DISCOUNT_P_Y_1` is the linkage parameter for responders to placebo in the first stage who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_P_Y_1 * first stage response rate of trt K'`
+#' @param RESPONSE_RATE_DISCOUNT_L vector of 2 values (`RESPONSE_RATE_DISCOUNT_L_Y_0`, `RESPONSE_RATE_DISCOUNT_L_Y_1`). `RESPONSE_RATE_DISCOUNT_L_Y_0` is the linkage parameters for nonresponders to low dose treatment in the first stage who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_L_Y_0 * first stage response rate of trt K`. `RESPONSE_RATE_DISCOUNT_L_Y_1` is the linkage parameter for responders to low dose treatment in the first stage who received treatment `k'` in the second stage, the second stage response rate in the second stage is equal to `RESPONSE_RATE_DISCOUNT_L_Y_1 * first stage response rate of trt K`
+#' @param RESPONSE_RATE_DISCOUNT_H vector of 2 values (`RESPONSE_RATE_DISCOUNT_H_Y_0`, `RESPONSE_RATE_DISCOUNT_H_Y_1`). Similar to `RESPONSE_RATE_DISCOUNT_P` and `RESPONSE_RATE_DISCOUNT_L`
+#' @param RAND_PROB_POS_P_TRT vector of 2 values (`RAND_PROB_POS_P_TRT_L`, `RAND_PROB_POS_P_TRT_H`). `RAND_PROB_POS_P_TRT_L` is the probability probability for first stage responders to placebo being randomized to low dose treatment in second stage. `RAND_PROB_POS_P_TRT_H` is the probability for first stage responders to placebo being randomized to high dose treatment in second stage
+#' @param RAND_PROB_NEG_P_TRT vector of 2 values (`RAND_PROB_NEG_P_TRT_L`, `RAND_PROB_NEG_P_TRT_H`). `RAND_PROB_NEG_P_TRT_L` is the probability for first stage nonresponders to placebo being randomized to low dose treatment in second stage. `RAND_PROB_NEG_P_TRT_H` is the probability for first stage nonresponders to placebo being randomized to high dose treatment in second stage
+#' @param RAND_PROB_POS_L_TRT vector of 2 values (`RAND_PROB_POS_L_TRT_L`, `RAND_PROB_POS_L_TRT_H`). similar to above
+#' @param RAND_PROB_NEG_L_TRT vector of 2 values (`RAND_PROB_NEG_L_TRT_L`, `RAND_PROB_NEG_L_TRT_H`). similar to above
+#' @param RAND_PROB_POS_H_TRT vector of 2 values (`RAND_PROB_POS_H_TRT_L`, `RAND_PROB_POS_H_TRT_H`). similar to above
+#' @param RAND_PROB_POS_H_TRT similar to above
+#' @param n vector of 3 values (first stage sample size of placebo, first stage sample size of low dose, first stage sample size of high dose)
 #'
 #' @return The simulated dataset with five columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`, `response_status_stageI` (responders will be 2 and non-responders will be 1)
 #'
 #' @examples
-#' data = data_simulation_dose(p_IP = 0.15, p_IL = 0.15, p_IH = 0.15,
-#'     RESPONSE_RATE_DISCOUNT_P_Y_0 = 0.9, RESPONSE_RATE_DISCOUNT_P_Y_1 = 1.3,
-#'     RESPONSE_RATE_DISCOUNT_L_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_L_Y_1 = 1.2,
-#'     RESPONSE_RATE_DISCOUNT_H_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_H_Y_1 = 1.2,
-#'     RAND_PROB_POS_P_TRT_H = 0.5, RAND_PROB_POS_P_TRT_L = 0.5,
-#'     RAND_PROB_NEG_P_TRT_L = 0.5, RAND_PROB_NEG_P_TRT_H = 0.5,
-#'     RAND_PROB_POS_L_TRT_L = 0.5, RAND_PROB_POS_L_TRT_H = 0.5,
-#'     RAND_PROB_NEG_L_TRT_L = 0.5, RAND_PROB_NEG_L_TRT_H = 0.5,
-#'     RAND_PROB_POS_H_TRT_L = 0.5, RAND_PROB_POS_H_TRT_H = 0.5, n_P = 30,
-#'     n_L = 30, n_H = 30)
+#' data = data_simulation_dose(p_trt = c(0.15, 0.15, 0.15),
+#'     RESPONSE_RATE_DISCOUNT_P = c(0.9, 1.3),
+#'     RESPONSE_RATE_DISCOUNT_L = c(0.8, 1.2),
+#'     RESPONSE_RATE_DISCOUNT_H = c(0.8, 1.2),
+#'     RAND_PROB_POS_P = c(0.5, 0.5),
+#'     RAND_PROB_NEG_P = c(0.5, 0.5),
+#'     RAND_PROB_POS_L = c(0.5, 0.5),
+#'     RAND_PROB_NEG_L = c(0.5, 0.5),
+#'     RAND_PROB_POS_H = c(0.5, 0.5),
+#'     n = c(30, 30, 30))
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n, sequential, multiple assignment, randomized trial.
 #' Statistics in Medicine, 40(4), pp.963-977.
 
+#' @seealso
+#' \code{\link{trial_dataset_dose}} \cr
+#' \code{\link{BJSM_binary_dose}} \cr
+#' \code{\link{JSRM_binary_dose}}
 #'
 #' @export
 #'
 
-data_simulation_dose <- function(p_IP, p_IL, p_IH, RESPONSE_RATE_DISCOUNT_P_Y_0, RESPONSE_RATE_DISCOUNT_P_Y_1, RESPONSE_RATE_DISCOUNT_L_Y_0, RESPONSE_RATE_DISCOUNT_L_Y_1,
-                                 RESPONSE_RATE_DISCOUNT_H_Y_0, RESPONSE_RATE_DISCOUNT_H_Y_1, RAND_PROB_POS_P_TRT_H, RAND_PROB_POS_P_TRT_L, RAND_PROB_NEG_P_TRT_L,
-                                 RAND_PROB_NEG_P_TRT_H, RAND_PROB_POS_L_TRT_L, RAND_PROB_POS_L_TRT_H, RAND_PROB_NEG_L_TRT_L, RAND_PROB_NEG_L_TRT_H,
-                                 RAND_PROB_POS_H_TRT_L, RAND_PROB_POS_H_TRT_H, n_P, n_L, n_H){
+data_simulation_dose <- function(p_trt, RESPONSE_RATE_DISCOUNT_P, RESPONSE_RATE_DISCOUNT_L, RESPONSE_RATE_DISCOUNT_H, RAND_PROB_POS_P, RAND_PROB_NEG_P, RAND_PROB_POS_L, RAND_PROB_NEG_L,
+                                 RAND_PROB_POS_H, n){
+
+  p_IP = p_trt[1]
+  p_IL = p_trt[2]
+  p_IH = p_trt[3]
+
+  n_P = n[1]
+  n_L = n[2]
+  n_H = n[3]
+
+  RESPONSE_RATE_DISCOUNT_P_Y_0 = RESPONSE_RATE_DISCOUNT_P[1]
+  RESPONSE_RATE_DISCOUNT_P_Y_1 = RESPONSE_RATE_DISCOUNT_P[2]
+
+  RESPONSE_RATE_DISCOUNT_L_Y_0 = RESPONSE_RATE_DISCOUNT_L[1]
+  RESPONSE_RATE_DISCOUNT_L_Y_1 = RESPONSE_RATE_DISCOUNT_L[2]
+
+  RESPONSE_RATE_DISCOUNT_H_Y_0 = RESPONSE_RATE_DISCOUNT_H[1]
+  RESPONSE_RATE_DISCOUNT_H_Y_1 = RESPONSE_RATE_DISCOUNT_H[2]
+
+  RAND_PROB_POS_P_TRT_L = RAND_PROB_POS_P[1]
+  RAND_PROB_POS_P_TRT_H = RAND_PROB_POS_P[2]
+
+  RAND_PROB_NEG_P_TRT_L = RAND_PROB_NEG_P[1]
+  RAND_PROB_NEG_P_TRT_H = RAND_PROB_NEG_P[1]
+
+  RAND_PROB_POS_L_TRT_L = RAND_PROB_POS_L[1]
+  RAND_PROB_POS_L_TRT_H = RAND_PROB_POS_L[2]
+
+  RAND_PROB_NEG_L_TRT_L = RAND_PROB_NEG_L[1]
+  RAND_PROB_NEG_L_TRT_H = RAND_PROB_NEG_L[2]
+
+  RAND_PROB_POS_H_TRT_L = RAND_PROB_POS_H[1]
+  RAND_PROB_POS_H_TRT_H = RAND_PROB_POS_H[2]
+
   #stage I
   # Placebo
   num_responseP_stageI=rbinom(n=1, size=n_P, prob=p_IP)

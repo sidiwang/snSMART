@@ -1,6 +1,6 @@
 #' Trial Characteristics Assessment based on Simulation (continuous snSMART design)
 #'
-#' assess the characteristics of trial design based on data simulated by `c_trialDataGen`
+#' assess the characteristics of trial design based on datasets simulated by \code{\link{c_trialDataGen}}
 #'
 #' @param treatInfo Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, sd of treatment effects, \code{c(priming effect on trt A,  trt B, trt C)}), see example for detail
 #' @param treatCors Treatment correlations matrix. Format example:
@@ -13,28 +13,29 @@
 #' @param switch.safety numerical value, if stage 1 outcome is smaller than `switch.safety` value, patient has probability of 0 of staying on the same treatment in stage 2
 
 #' @return
-#' \strong{`switch.safety`}: input by user \cr
+#' \describe{
+#' \item{switch.safety}{input by user or estimated based on data if `switch.safety` = NULL}
 #'
-#' \strong{`stay.ethical`}: input by user \cr
+#' \item{stay.ethical}{input by user or estimated based on data if `stay.ethical` = NULL}
 #'
-#' \strong{`stage1Eff`}: average simulated stage 1 treatment effect \cr
+#' \item{stage1Eff}{average simulated stage 1 treatment effect }
 #'
-#' \strong{`stage2EFF`}: average simulated stage 2 treatment effect \cr
+#' \item{stage2EFF}{average simulated stage 2 treatment effect }
 #'
-#' \strong{`stage2best`}: percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial; \cr
+#' \item{stage2best}{percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial}
 #'
-#' \strong{`stage2worst`}: percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial; \cr
+#' \item{stage2worst}{percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial}
 #'
-#' \strong{`improve`}: percentage of patients received an improved treatment outcome in stage 2; \cr
+#' \item{improve}{percentage of patients received an improved treatment outcome in stage 2}
 #'
-#' \strong{`switchBetterOrStayedBest`}: percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial; \cr
+#' \item{switchBetterOrStayedBest}{percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial}
 #'
-#' \strong{`stayedSame`}: percentage of patients received the same treatment in stage 2 after randomization; \cr
+#' \item{stayedSame}{percentage of patients received the same treatment in stage 2 after randomization}
 #'
-#' \strong{`gotBetter`}: percentage of patients that received more effective treatments in stage 2; \cr
+#' \item{gotBetter}{percentage of patients that received more effective treatments in stage 2}
 #'
-#' \strong{`gotWorse`}: percentage of patients that received less effective treatments in stage 2; \cr
-#'
+#' \item{gotWorse}{percentage of patients that received less effective treatments in stage 2}
+#' }
 #'
 #' @examples
 #' treat.a<-c(70, 15, c(0,0,0))
@@ -57,6 +58,11 @@
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
 #' sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
+#'
+#'
+#' @seealso
+#' \code{\link{BJSM_c}} \cr
+#' \code{\link{c_trialDataGen}}
 #'
 #' @export
 

@@ -1,60 +1,90 @@
 #' Trial dataset (dose level snSMART design)
 #'
-#' Generate trial dataset for dose level snSMART design (placebo, low, high dose; binary outcome) without missing value
+#' Generate trial dataset based on the exact number of responders/non-responders for dose level snSMART design (placebo, low, high dose; binary outcome) without missing value.
+#' Useful for recording real snSMART trial result or generating specific simulation scenario. Not to be confused with \code{\link{data_simulation_dose}}.
 #'
-#' @param trtP_I number of people who receive placebo in stage 1
-#' @param trtL_I number of people who receive low dose treatment in stage 1
-#' @param trtH_I number of people who receive high dose treatment in stage 1
-#' @param respP_I number of people who respond to placebo in stage 1
-#' @param respL_I number of people who respond to low dose treatment in stage 1
-#' @param respH_I number of people who respond to high dose treatment in stage 1
-#' @param trtPL_II number of 1st stage responders to placebo who receive low dose treatment in stage 2
-#' @param trtPH_II number of 1st stage responders to placebo who receive high dose treatment in stage 2
-#' @param trtLL_II number of 1st stage responders to low dose treatment who receive low dose treatment in stage 2
-#' @param trtLH_II number of 1st stage responders to low dose treatment who receive high dose treatment in stage 2
-#' @param trtHL_II number of 1st stage responders to high dose treatment who receive low dose treatment in stage 2
-#' @param trtHH_II number of 1st stage responders to high dose treatment who receive high dose treatment in stage 2
-#' @param respPL_II number of 1st stage responders to placebo who also respond to low dose treatment in stage 2
-#' @param respPH_II number of 1st stage responders to placebo who also respond to high dose treatment in stage 2
-#' @param respLL_II number of 1st stage responders to low dose treatment who also respond to low dose treatment  in stage 2
-#' @param respLH_II number of 1st stage responders to low dose treatment who also respond to high dose treatment in stage 2
-#' @param respHL_II number of 1st stage responders to high dose treatment who also respond to low dose treatment in stage 2
-#' @param respHH_II number of 1st stage responders to high dose treatment who also respond to high dose treatment in stage 2
-#' @param trtNPL_II number of 1st stage non-responders to placebo who receive low dose treatment in stage 2
-#' @param trtNPH_II number of 1st stage non-responders to placebo who receive high dose treatment in stage 2
-#' @param trtNLH_II number of 1st stage non-responders to low dose treatment who receive high dose treatment in stage 2
-#' @param trtNLL_II number of 1st stage non-responders to low dose treatment who receive low dose treatment again in stage 2
-#' @param trtNHH_II number of 1st stage non-responders to high dose treatment who receive high dose treatment again in stage 2
-#' @param respNPL_II number of 1st stage non-responders to placebo who respond to low dose treatment in stage 2
-#' @param respNPH_II number of 1st stage non-responders to placebo who respond to high dose treatment in stage 2
-#' @param respNLH_II number of 1st stage non-responders to low dose treatment who respond to high dose treatment in stage 2
-#' @param respNLL_II number of 1st stage non-responders to low dose treatment who respond to low dose treatment in stage 2
-#' @param respNHH_II number of 1st stage non-responders to high dose treatment who respond to high dose treatment in stage 2
+#' @param trt vector of 3 values - c(number of people who receive placebo in stage 1, number of people who receive low dose treatment in stage 1, number of people who receive high dose treatment in stage 1)
+#' @param resp vector of 3 values - c(number of people who respond to placebo in stage 1, number of people who respond to low dose treatment in stage 1, number of people who respond to high dose treatment in stage 1)
+#' @param trt_rep_P vector of 2 values - c(number of 1st stage responders to placebo who receive low dose treatment in stage 2, number of 1st stage responders to placebo who receive high dose treatment in stage 2)
+#' @param trt_rep_L vector of 2 values - c(number of 1st stage responders to low dose treatment who receive low dose treatment in stage 2, number of 1st stage responders to low dose treatment who receive high dose treatment in stage 2)
+#' @param trt_rep_H vector of 2 values - c(number of 1st stage responders to high dose treatment who receive low dose treatment in stage 2, number of 1st stage responders to high dose treatment who receive high dose treatment in stage 2)
+#' @param resp_rep_P vector of 2 values - c(number of 1st stage responders to placebo who also respond to low dose treatment in stage 2, number of 1st stage responders to placebo who also respond to high dose treatment in stage 2)
+#' @param resp_rep_L vector of 2 values - c(number of 1st stage responders to low dose treatment who also respond to low dose treatment  in stage 2, number of 1st stage responders to low dose treatment who also respond to high dose treatment in stage 2)
+#' @param resp_rep_H vector of 2 values - c(number of 1st stage responders to high dose treatment who also respond to low dose treatment in stage 2, number of 1st stage responders to high dose treatment who also respond to high dose treatment in stage 2)
+#' @param trt_nrep_P vector of 2 values - c(number of 1st stage non-responders to placebo who receive low dose treatment in stage 2, number of 1st stage non-responders to placebo who receive high dose treatment in stage 2)
+#' @param trt_nrep_L vector of 2 values -c(number of 1st stage non-responders to low dose treatment who receive low dose treatment again in stage 2, number of 1st stage non-responders to low dose treatment who receive high dose treatment in stage 2)
+#' @param trt_nrep_H number of 1st stage non-responders to high dose treatment who receive high dose treatment again in stage 2
+#' @param resp_nrep_P vector of 2 values - c(number of 1st stage non-responders to placebo who respond to low dose treatment in stage 2, number of 1st stage non-responders to placebo who respond to high dose treatment in stage 2)
+#' @param resp_nrep_L vector of 2 values - c(number of 1st stage non-responders to low dose treatment who respond to low dose treatment in stage 2, number of 1st stage non-responders to low dose treatment who respond to high dose treatment in stage 2)
+#' @param resp_nrep_H number of 1st stage non-responders to high dose treatment who respond to high dose treatment in stage 2
 #'
 #' @return a `matrix` of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 
 #'
 #' @examples
-#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
-#'      respL_I = 10, respH_I = 15,trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
-#'      trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
-#'      respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6, trtNPL_II = 10,
-#'      trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
-#'      respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7,
-#'      respNHH_II = 10)
+#' mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P = c(3, 2), trt_rep_L = c(5, 5),
+#'      trt_rep_H = c(8, 7), resp_rep_P = c(1, 2), resp_rep_L = c(2, 3), resp_rep_H = c(4, 6), trt_nrep_P = c(10, 15),
+#'      trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 #' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
 #'
+#' @seealso
+#' \code{\link{data_simulation_dose}} \cr
+#' \code{\link{BJSM_binary_dose}} \cr
+#' \code{\link{JSRM_binary_dose}}
+#'
 #' @export
 #'
 
-trial_dataset_dose <- function(trtP_I, trtL_I, trtH_I, respP_I, respL_I, respH_I,
-                          trtPL_II, trtPH_II, trtLL_II, trtLH_II, trtHL_II, trtHH_II,
-                          respPL_II, respPH_II, respLL_II, respLH_II, respHL_II, respHH_II,
-                          trtNPL_II, trtNPH_II, trtNLH_II, trtNLL_II, trtNHH_II,
-                          respNPL_II, respNPH_II, respNLH_II, respNLL_II, respNHH_II){
+trial_dataset_dose <- function(trt, resp,
+                               trt_rep_P, trt_rep_L, trt_rep_H,
+                               resp_rep_P, resp_rep_L, resp_rep_H,
+                               trt_nrep_P, trt_nrep_L, trt_nrep_H,
+                               resp_nrep_P, resp_nrep_L, resp_nrep_H){
+
+  trtP_I = trt[1]
+  trtL_I = trt[2]
+  trtH_I = trt[3]
+
+  respP_I = resp[1]
+  respL_I = resp[2]
+  respH_I = resp[3]
+
+  trtPL_II = trt_rep_P[1]
+  trtPH_II = trt_rep_P[2]
+
+  trtLL_II = trt_rep_L[1]
+  trtLH_II = trt_rep_L[2]
+
+  trtHL_II = trt_rep_H[1]
+  trtHH_II = trt_rep_H[2]
+
+  respPL_II = resp_rep_P[1]
+  respPH_II = resp_rep_P[2]
+
+  respLL_II = resp_rep_L[1]
+  respLH_II = resp_rep_L[2]
+
+  respHL_II = resp_rep_H[1]
+  respHH_II = resp_rep_H[2]
+
+  trtNPL_II = trt_nrep_P[1]
+  trtNPH_II = trt_nrep_P[2]
+
+  trtNLH_II = trt_nrep_L[2]
+  trtNLL_II = trt_nrep_L[1]
+
+  trtNHH_II = trt_nrep_H
+
+  respNPL_II = resp_nrep_P[1]
+  respNPH_II = resp_nrep_P[2]
+
+  respNLH_II = resp_nrep_L[2]
+  respNLL_II = resp_nrep_L[1]
+
+  respNHH_II = resp_nrep_H
 
 
   data_P.L.Y <- data.frame(treatment_stageI = c(rep(1, trtPL_II + trtNPL_II)),
@@ -120,22 +150,17 @@ trial_dataset_dose <- function(trtP_I, trtL_I, trtH_I, respP_I, respL_I, respH_I
 #' BJSM binary (dose level snSMART design)
 #'
 #' BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each dose level (placebo, low, high does; binary outcome) based on trial dataset
-#' generated by function  `trial_dataset_dose`
+#' generated by function \code{\link{trial_dataset_dose}} or \code{\link{data_simulation_dose}}
 #'
-#' @param data trial data generated through function `trial_dataset_dose`
-#' @param NUM_ARMS number of treatment arms
-#' @param pi_prior.a parameter a of the prior distribution for \code{pi} (response rate) of placebo. Please check the `Details` section for more explanation
-#' @param pi_prior.b parameter b of the prior distribution for \code{pi} (response rate) of placebo. Please check the `Details` section for more explanation
-#' @param beta_prior.a parameter a of the prior distribution for linkage parameter \code{beta}
-#' @param beta_prior.b parameter b of the prior distribution  for linkage parameter \code{beta}
+#' @param data trial data generated through function \code{\link{trial_dataset_dose}} or \code{\link{data_simulation_dose}}
+#' @param pi_prior vector of two values (a, b). `a` is the parameter `a` of the prior distribution for \code{pi} (response rate) of placebo. `b` is the parameter `b` of the prior distribution for \code{pi} (response rate) of placebo. Please check the `Details` section for more explanation
+#' @param beta_prior vector of two values (a, b). `a` is the parameter `a` of the prior distribution for linkage parameter \code{beta}. `b` is the parameter b of the prior distribution  for linkage parameter \code{beta}
 #' @param n_MCMC_chain number of MCMC chains, default to 1
-#' @param normal.mean our function assumes that the logarithm of treatment effect ratio follows a Gaussian prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)}, and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of this Gaussian prior
-#' @param normal.var similar to above, `normal.var` is the variance of this Gaussian prior distribution
+#' @param normal.par vector of two values (normal.mean, normal.var). our function assumes that the logarithm of treatment effect ratio follows a Gaussian prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)}, and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of this Gaussian prior. `normal.var` is the variance of this Gaussian prior distribution
 #' @param BURN.IN number of burn-in iterations for MCMC
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
-#' @param pi_prior_dist prior distribution for pi (response rate) of placebo, user can choose from "gamma", "beta", "pareto"
-#' @param beta_prior_dist prior distribution for beta, user can choose from gamma, beta, pareto
+#' @param prior_dist vector of two values ("prior distribution for \code{pi}", "prior distribution for \code{beta}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "gamma")
 #'
 #' @details
 #' For gamma distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For beta distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -145,44 +170,56 @@ trial_dataset_dose <- function(trtP_I, trtL_I, trtH_I, respP_I, respL_I, respH_I
 #' second stage response probabilities through linkage parameters.
 #'
 #' @return
-#' \strong{`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process
-#' \strong{`pi_hat_bjsm`}: estimate of response rate/treatment effect
-#' \strong{`se_hat_bjsm`}: standard error of the response rate
-#' \strong{`ci_pi_P`}: x% credible intervals for A
-#' \strong{`ci_pi_L`}: x% credible intervals for B
-#' \strong{`ci_pi_H`}: x% credible intervals for C
-#' \strong{`diff_PL`}: estimate of differences between treatments A and B
-#' \strong{`diff_LH`}: estimate of differences between treatments B and C
-#' \strong{`diff_PH`}: estimate of differences between treatments A and C
-#' \strong{`ci_diff_PL`}: x% credible intervals for the differences between A and B
-#' \strong{`ci_diff_LH`}: x% credible intervals for the differences between B and C
-#' \strong{`ci_diff_PH`}: x% credible intervals for the differences between A and C
-#' \strong{`beta_hat`}: linkage parameter beta estimates
-#' \strong{`ci_beta_hat`}: linkage parameter beta estimates
+#' \describe{
+#'   \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+#'   \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
+#'   \item{se_hat_bjsm}{standard error of the response rate}
+#'   \item{ci_pi_P}{x% credible intervals for A}
+#'   \item{ci_pi_L}{x% credible intervals for B}
+#'   \item{ci_pi_H}{x% credible intervals for C}
+#'   \item{diff_PL}{estimate of differences between treatments A and B}
+#'   \item{diff_LH}{estimate of differences between treatments B and C}
+#'   \item{diff_PH}{estimate of differences between treatments A and C}
+#'   \item{ci_diff_PL}{x% credible intervals for the differences between A and B}
+#'   \item{ci_diff_LH}{x% credible intervals for the differences between B and C}
+#'   \item{ci_diff_PH}{x% credible intervals for the differences between A and C}
+#'   \item{beta_hat}{linkage parameter beta estimates}
+#'   \item{ci_beta_hat}{linkage parameter beta estimates}}
+#'
 #'
 #' @examples
-#' mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
-#'     respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
-#'     trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
-#'     respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
-#'     trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10,
-#'     trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
-#'     respNLL_II = 7, respNHH_II = 10)
+#' mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P = c(3, 2), trt_rep_L = c(5, 5),
+#'      trt_rep_H = c(8, 7), resp_rep_P = c(1, 2), resp_rep_L = c(2, 3), resp_rep_H = c(4, 6), trt_nrep_P = c(10, 15),
+#'      trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 #'
-#' BJSM_dose_result = BJSM_binary_dose(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
-#'     pi_prior.a = 3, pi_prior.b = 17, beta_prior_dist = "gamma",
-#'     normal.mean = 0.2, normal.var = 100, beta_prior.a = 2, beta_prior.b = 2,
+#' BJSM_dose_result = BJSM_binary_dose(data = mydata, prior_dist = c("beta", "gamma"),
+#'     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
 #'     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 #' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
 #'
+#' @seealso
+#' \code{\link{data_simulation_dose}} \cr
+#' \code{\link{trial_dataset_dose}} \cr
+#' \code{\link{JSRM_binary_dose}}
+#'
 #' @export
 
-BJSM_binary_dose = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, normal.mean, normal.var, beta_prior_dist, beta_prior.a, beta_prior.b, n_MCMC_chain, BURN.IN,
+BJSM_binary_dose = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, BURN.IN,
                             MCMC_SAMPLE, ci = 0.95){
 
+  pi_prior_dist = prior_dist[1]
+  beta_prior_dist = prior_dist[2]
+
+  NUM_ARMS = length(unique(data$treatment_stageI))
+  pi_prior.a = pi_prior[1]
+  pi_prior.b = pi_prior[2]
+  beta_prior.a = beta_prior[1]
+  beta_prior.b = beta_prior[2]
+  normal.mean = normal.par[1]
+  normal.var = normal.par[2]
   beta_prior_dist = ifelse(beta_prior_dist == "gamma", "dgamma", ifelse(beta_prior_dist == "beta", "dbeta", "dpar"))
   pi_prior_dist = ifelse(pi_prior_dist == "gamma", "dgamma", ifelse(pi_prior_dist == "beta", "dbeta", "dpar"))
 

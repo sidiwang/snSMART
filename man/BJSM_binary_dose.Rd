@@ -6,15 +6,10 @@
 \usage{
 BJSM_binary_dose(
   data,
-  NUM_ARMS,
-  pi_prior_dist,
-  pi_prior.a,
-  pi_prior.b,
-  normal.mean,
-  normal.var,
-  beta_prior_dist,
-  beta_prior.a,
-  beta_prior.b,
+  prior_dist,
+  pi_prior,
+  normal.par,
+  beta_prior,
   n_MCMC_chain,
   BURN.IN,
   MCMC_SAMPLE,
@@ -22,25 +17,15 @@ BJSM_binary_dose(
 )
 }
 \arguments{
-\item{data}{trial data generated through function \code{trial_dataset_dose}}
+\item{data}{trial data generated through function \code{\link{trial_dataset_dose}} or \code{\link{data_simulation_dose}}}
 
-\item{NUM_ARMS}{number of treatment arms}
+\item{prior_dist}{vector of two values ("prior distribution for \code{pi}", "prior distribution for \code{beta}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "gamma")}
 
-\item{pi_prior_dist}{prior distribution for pi (response rate) of placebo, user can choose from "gamma", "beta", "pareto"}
+\item{pi_prior}{vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for \code{pi} (response rate) of placebo. \code{b} is the parameter \code{b} of the prior distribution for \code{pi} (response rate) of placebo. Please check the \code{Details} section for more explanation}
 
-\item{pi_prior.a}{parameter a of the prior distribution for \code{pi} (response rate) of placebo. Please check the \code{Details} section for more explanation}
+\item{normal.par}{vector of two values (normal.mean, normal.var). our function assumes that the logarithm of treatment effect ratio follows a Gaussian prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)}, and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of this Gaussian prior. \code{normal.var} is the variance of this Gaussian prior distribution}
 
-\item{pi_prior.b}{parameter b of the prior distribution for \code{pi} (response rate) of placebo. Please check the \code{Details} section for more explanation}
-
-\item{normal.mean}{our function assumes that the logarithm of treatment effect ratio follows a Gaussian prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)}, and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of this Gaussian prior}
-
-\item{normal.var}{similar to above, \code{normal.var} is the variance of this Gaussian prior distribution}
-
-\item{beta_prior_dist}{prior distribution for beta, user can choose from gamma, beta, pareto}
-
-\item{beta_prior.a}{parameter a of the prior distribution for linkage parameter \code{beta}}
-
-\item{beta_prior.b}{parameter b of the prior distribution  for linkage parameter \code{beta}}
+\item{beta_prior}{vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for linkage parameter \code{beta}. \code{b} is the parameter b of the prior distribution  for linkage parameter \code{beta}}
 
 \item{n_MCMC_chain}{number of MCMC chains, default to 1}
 
@@ -51,24 +36,25 @@ BJSM_binary_dose(
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 }
 \value{
-\strong{\code{posterior_sample}}: posterior samples of the link parameters and response rates generated through the MCMC process
-\strong{\code{pi_hat_bjsm}}: estimate of response rate/treatment effect
-\strong{\code{se_hat_bjsm}}: standard error of the response rate
-\strong{\code{ci_pi_P}}: x\% credible intervals for A
-\strong{\code{ci_pi_L}}: x\% credible intervals for B
-\strong{\code{ci_pi_H}}: x\% credible intervals for C
-\strong{\code{diff_PL}}: estimate of differences between treatments A and B
-\strong{\code{diff_LH}}: estimate of differences between treatments B and C
-\strong{\code{diff_PH}}: estimate of differences between treatments A and C
-\strong{\code{ci_diff_PL}}: x\% credible intervals for the differences between A and B
-\strong{\code{ci_diff_LH}}: x\% credible intervals for the differences between B and C
-\strong{\code{ci_diff_PH}}: x\% credible intervals for the differences between A and C
-\strong{\code{beta_hat}}: linkage parameter beta estimates
-\strong{\code{ci_beta_hat}}: linkage parameter beta estimates
+\describe{
+\item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+\item{pi_hat_bjsm}{estimate of response rate/treatment effect}
+\item{se_hat_bjsm}{standard error of the response rate}
+\item{ci_pi_P}{x\% credible intervals for A}
+\item{ci_pi_L}{x\% credible intervals for B}
+\item{ci_pi_H}{x\% credible intervals for C}
+\item{diff_PL}{estimate of differences between treatments A and B}
+\item{diff_LH}{estimate of differences between treatments B and C}
+\item{diff_PH}{estimate of differences between treatments A and C}
+\item{ci_diff_PL}{x\% credible intervals for the differences between A and B}
+\item{ci_diff_LH}{x\% credible intervals for the differences between B and C}
+\item{ci_diff_PH}{x\% credible intervals for the differences between A and C}
+\item{beta_hat}{linkage parameter beta estimates}
+\item{ci_beta_hat}{linkage parameter beta estimates}}
 }
 \description{
 BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each dose level (placebo, low, high does; binary outcome) based on trial dataset
-generated by function  \code{trial_dataset_dose}
+generated by function \code{\link{trial_dataset_dose}} or \code{\link{data_simulation_dose}}
 }
 \details{
 For gamma distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For beta distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -78,21 +64,21 @@ The individual response rate is regarded as a permanent feature of the treatment
 second stage response probabilities through linkage parameters.
 }
 \examples{
-mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
-    respL_I = 10, respH_I = 15, trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
-    trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
-    respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6,
-    trtNPL_II = 10, trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10,
-    trtNHH_II = 15, respNPL_II = 7, respNPH_II = 8, respNLH_II = 6,
-    respNLL_II = 7, respNHH_II = 10)
+mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P = c(3, 2), trt_rep_L = c(5, 5),
+     trt_rep_H = c(8, 7), resp_rep_P = c(1, 2), resp_rep_L = c(2, 3), resp_rep_H = c(4, 6), trt_nrep_P = c(10, 15),
+     trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 
-BJSM_dose_result = BJSM_binary_dose(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
-    pi_prior.a = 3, pi_prior.b = 17, beta_prior_dist = "gamma",
-    normal.mean = 0.2, normal.var = 100, beta_prior.a = 2, beta_prior.b = 2,
+BJSM_dose_result = BJSM_binary_dose(data = mydata, prior_dist = c("beta", "gamma"),
+    pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 
 }
 \references{
 Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
+}
+\seealso{
+\code{\link{data_simulation_dose}} \cr
+\code{\link{trial_dataset_dose}} \cr
+\code{\link{JSRM_binary_dose}}
 }

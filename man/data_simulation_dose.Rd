@@ -5,95 +5,64 @@
 \title{Data Simulation (dose level design)}
 \usage{
 data_simulation_dose(
-  p_IP,
-  p_IL,
-  p_IH,
-  RESPONSE_RATE_DISCOUNT_P_Y_0,
-  RESPONSE_RATE_DISCOUNT_P_Y_1,
-  RESPONSE_RATE_DISCOUNT_L_Y_0,
-  RESPONSE_RATE_DISCOUNT_L_Y_1,
-  RESPONSE_RATE_DISCOUNT_H_Y_0,
-  RESPONSE_RATE_DISCOUNT_H_Y_1,
-  RAND_PROB_POS_P_TRT_H,
-  RAND_PROB_POS_P_TRT_L,
-  RAND_PROB_NEG_P_TRT_L,
-  RAND_PROB_NEG_P_TRT_H,
-  RAND_PROB_POS_L_TRT_L,
-  RAND_PROB_POS_L_TRT_H,
-  RAND_PROB_NEG_L_TRT_L,
-  RAND_PROB_NEG_L_TRT_H,
-  RAND_PROB_POS_H_TRT_L,
-  RAND_PROB_POS_H_TRT_H,
-  n_P,
-  n_L,
-  n_H
+  p_trt,
+  RESPONSE_RATE_DISCOUNT_P,
+  RESPONSE_RATE_DISCOUNT_L,
+  RESPONSE_RATE_DISCOUNT_H,
+  RAND_PROB_POS_P,
+  RAND_PROB_NEG_P,
+  RAND_PROB_POS_L,
+  RAND_PROB_NEG_L,
+  RAND_PROB_POS_H,
+  n
 )
 }
 \arguments{
-\item{RESPONSE_RATE_DISCOUNT_P_Y_0}{linkage parameters, for nonresponders to placebo in the first stage who received who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_0 * pi_IK'}}
+\item{p_trt}{vector of 3 values (first stage response rate of placebo, first stage response rate of low dose treatment, first stage response rate of high dose treatment)}
 
-\item{RESPONSE_RATE_DISCOUNT_P_Y_1}{linkage parameters, for responders to placebo in the first stage who received who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_1 * pi_IK'}}
+\item{RESPONSE_RATE_DISCOUNT_P}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_P_Y_0}, \code{RESPONSE_RATE_DISCOUNT_P_Y_1}). \code{RESPONSE_RATE_DISCOUNT_P_Y_0} is the linkage parameter for nonresponders to placebo in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_0 * pi_IK'}. \code{RESPONSE_RATE_DISCOUNT_P_Y_1} is the linkage parameter for responders to placebo in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_1 * first stage response rate of trt K'}}
 
-\item{RESPONSE_RATE_DISCOUNT_L_Y_0}{linkage parameters, for nonresponders to low dose treatment in the first stage who received who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_0 * pi_IK'}}
+\item{RESPONSE_RATE_DISCOUNT_L}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_L_Y_0}, \code{RESPONSE_RATE_DISCOUNT_L_Y_1}). \code{RESPONSE_RATE_DISCOUNT_L_Y_0} is the linkage parameters for nonresponders to low dose treatment in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_0 * first stage response rate of trt K}. \code{RESPONSE_RATE_DISCOUNT_L_Y_1} is the linkage parameter for responders to low dose treatment in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_1 * first stage response rate of trt K}}
 
-\item{RESPONSE_RATE_DISCOUNT_L_Y_1}{linkage parameters, for responders to low dose treatment in the first stage who received who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_1 * pi_IK'}}
+\item{RESPONSE_RATE_DISCOUNT_H}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_H_Y_0}, \code{RESPONSE_RATE_DISCOUNT_H_Y_1}). Similar to \code{RESPONSE_RATE_DISCOUNT_P} and \code{RESPONSE_RATE_DISCOUNT_L}}
 
-\item{RESPONSE_RATE_DISCOUNT_H_Y_0}{similar to \code{RESPONSE_RATE_DISCOUNT_L_Y_0}}
+\item{n}{vector of 3 values (first stage sample size of placebo, first stage sample size of low dose, first stage sample size of high dose)}
 
-\item{RESPONSE_RATE_DISCOUNT_H_Y_1}{similar to \code{RESPONSE_RATE_DISCOUNT_L_Y_1}}
+\item{RAND_PROB_POS_P_TRT}{vector of 2 values (\code{RAND_PROB_POS_P_TRT_L}, \code{RAND_PROB_POS_P_TRT_H}). \code{RAND_PROB_POS_P_TRT_L} is the probability probability for first stage responders to placebo being randomized to low dose treatment in second stage. \code{RAND_PROB_POS_P_TRT_H} is the probability for first stage responders to placebo being randomized to high dose treatment in second stage}
 
-\item{RAND_PROB_POS_P_TRT_H}{probability for first stage responders to placebo being randomized to high dose treatment in second stage}
+\item{RAND_PROB_NEG_P_TRT}{vector of 2 values (\code{RAND_PROB_NEG_P_TRT_L}, \code{RAND_PROB_NEG_P_TRT_H}). \code{RAND_PROB_NEG_P_TRT_L} is the probability for first stage nonresponders to placebo being randomized to low dose treatment in second stage. \code{RAND_PROB_NEG_P_TRT_H} is the probability for first stage nonresponders to placebo being randomized to high dose treatment in second stage}
 
-\item{RAND_PROB_POS_P_TRT_L}{probability for first stage responders to placebo being randomized to low dose treatment in second stage}
+\item{RAND_PROB_POS_L_TRT}{vector of 2 values (\code{RAND_PROB_POS_L_TRT_L}, \code{RAND_PROB_POS_L_TRT_H}). similar to above}
 
-\item{RAND_PROB_NEG_P_TRT_L}{probability for first stage nonresponders to placebo being randomized to low dose treatment in second stage}
+\item{RAND_PROB_NEG_L_TRT}{vector of 2 values (\code{RAND_PROB_NEG_L_TRT_L}, \code{RAND_PROB_NEG_L_TRT_H}). similar to above}
 
-\item{RAND_PROB_NEG_P_TRT_H}{probability for first stage nonresponders to placebo being randomized to high dose treatment in second stage}
-
-\item{RAND_PROB_POS_L_TRT_L}{similar to above}
-
-\item{RAND_PROB_POS_L_TRT_H}{similar to above}
-
-\item{RAND_PROB_NEG_L_TRT_L}{similar to above}
-
-\item{RAND_PROB_NEG_L_TRT_H}{similar to above}
-
-\item{RAND_PROB_POS_H_TRT_L}{similar to above}
-
-\item{RAND_PROB_POS_H_TRT_H}{similar to above}
-
-\item{p_IA}{first stage response rate of placebo}
-
-\item{p_IB}{first stage response rate of low dose treatment}
-
-\item{p_IC}{first stage response rate of high dose treatment}
-
-\item{n_A}{first stage sample size of A}
-
-\item{n_B}{first stage sample size of B}
-
-\item{n_C}{first stage sample size of C}
+\item{RAND_PROB_POS_H_TRT}{similar to above}
 }
 \value{
 The simulated dataset with five columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}, \code{response_status_stageI} (responders will be 2 and non-responders will be 1)
 }
 \description{
-simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome)
+simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset_dose}}
 }
 \examples{
-data = data_simulation_dose(p_IP = 0.15, p_IL = 0.15, p_IH = 0.15,
-    RESPONSE_RATE_DISCOUNT_P_Y_0 = 0.9, RESPONSE_RATE_DISCOUNT_P_Y_1 = 1.3,
-    RESPONSE_RATE_DISCOUNT_L_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_L_Y_1 = 1.2,
-    RESPONSE_RATE_DISCOUNT_H_Y_0 = 0.8, RESPONSE_RATE_DISCOUNT_H_Y_1 = 1.2,
-    RAND_PROB_POS_P_TRT_H = 0.5, RAND_PROB_POS_P_TRT_L = 0.5,
-    RAND_PROB_NEG_P_TRT_L = 0.5, RAND_PROB_NEG_P_TRT_H = 0.5,
-    RAND_PROB_POS_L_TRT_L = 0.5, RAND_PROB_POS_L_TRT_H = 0.5,
-    RAND_PROB_NEG_L_TRT_L = 0.5, RAND_PROB_NEG_L_TRT_H = 0.5,
-    RAND_PROB_POS_H_TRT_L = 0.5, RAND_PROB_POS_H_TRT_H = 0.5, n_P = 30,
-    n_L = 30, n_H = 30)
+data = data_simulation_dose(p_trt = c(0.15, 0.15, 0.15),
+    RESPONSE_RATE_DISCOUNT_P = c(0.9, 1.3),
+    RESPONSE_RATE_DISCOUNT_L = c(0.8, 1.2),
+    RESPONSE_RATE_DISCOUNT_H = c(0.8, 1.2),
+    RAND_PROB_POS_P = c(0.5, 0.5),
+    RAND_PROB_NEG_P = c(0.5, 0.5),
+    RAND_PROB_POS_L = c(0.5, 0.5),
+    RAND_PROB_NEG_L = c(0.5, 0.5),
+    RAND_PROB_POS_H = c(0.5, 0.5),
+    n = c(30, 30, 30))
 
 }
 \references{
 Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n, sequential, multiple assignment, randomized trial.
 Statistics in Medicine, 40(4), pp.963-977.
+}
+\seealso{
+\code{\link{trial_dataset_dose}} \cr
+\code{\link{BJSM_binary_dose}} \cr
+\code{\link{JSRM_binary_dose}}
 }

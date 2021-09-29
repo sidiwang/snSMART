@@ -33,7 +33,7 @@ c_trialDataGen(
 The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
 }
 \description{
-simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes)
+simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 }
 \examples{
 treat.a<-c(70, 15, c(0,0,0))
@@ -57,4 +57,8 @@ trialData = c_trialDataGen(treatInfo, treatCors, n, wideForm = FALSE)
 \references{
 Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
 sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
+}
+\seealso{
+\code{\link{c_trialSim}} \cr
+\code{\link{BJSM_c}}
 }

@@ -5,25 +5,17 @@
 \title{Data Simulation (standard snSMART design)}
 \usage{
 data_simulation(
-  p_IA,
-  p_IB,
-  p_IC,
+  p_trt,
   discount_y0,
   discount_y1,
   p_1nA_2B,
   p_1nB_2A,
   p_1nC_2A,
-  n_A,
-  n_B,
-  n_C
+  n
 )
 }
 \arguments{
-\item{p_IA}{first stage response rate of A}
-
-\item{p_IB}{first stage response rate of B}
-
-\item{p_IC}{first stage response rate of C}
+\item{p_trt}{vector of 3 values (first stage response rate of trt A, first stage response rate of trt B, first stage response rate of trt C). e.g. \code{p_trt = c(0.2, 0.3, 0.5)}}
 
 \item{discount_y0}{linkage parameters, for nonresponders to treatment k in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate is equal to \verb{discount_y0 * pi_IK'}}
 
@@ -35,23 +27,18 @@ data_simulation(
 
 \item{p_1nC_2A}{probability for first stage non-responders to C being randomized to arm A in second stage}
 
-\item{n_A}{first stage sample size of A}
-
-\item{n_B}{first stage sample size of B}
-
-\item{n_C}{first stage sample size of C}
+\item{n}{vector of 3 values (first stage sample size of A, first stage sample size of B, first stage sample size of C). e.g. \code{n = c(30, 30, 30)}}
 }
 \value{
 The simulated dataset with five columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}, \code{response_status_stageI} (responders will be 2 and non-responders will be 1)
 }
 \description{
-simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome)
+simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset}}
 }
 \examples{
-data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4,
+data = data_simulation(p_trt = c(0.2, 0.3, 0.4),
     discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5),
-    p_1nA_2B = 0.5, p_1nB_2A = 0.5, p_1nC_2A = 0.5, n_A = 30, n_B = 30,
-    n_C = 30)
+    p_1nA_2B = 0.5, p_1nB_2A = 0.5, p_1nC_2A = 0.5, n = c(30, 30, 30))
 
 }
 \references{
@@ -59,4 +46,9 @@ Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis 
 Statistics in medicine, 37(26), pp.3723-3732.
 
 Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment, randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+}
+\seealso{
+\code{\link{trial_dataset}} \cr
+\code{\link{BJSM_binary}} \cr
+\code{\link{JSRM_binary}}
 }

@@ -1,6 +1,6 @@
 #' Data Simulation (continuous snSMART design)
 #'
-#' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes)
+#' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 #'
 #' @param treatInfo Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, standard deviation of treatment effects, \code{c(priming effect on trt A,  trt B, trt C))}, see example for detail
 #' @param treatCors Treatment correlations matrix. Format example:
@@ -36,6 +36,10 @@
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
 #' sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
 #'
+#' @seealso
+#' \code{\link{c_trialSim}} \cr
+#' \code{\link{BJSM_c}}
+#'
 #' @export
 #'
 
@@ -44,6 +48,7 @@ c_trialDataGen = function(treatInfo, treatCors, n,
                         stay.ethical = NULL, switch.safety = NULL,
                         wideForm = TRUE){
 
+  require(tidyr)
   #number of treatments based on input values
   n.trt<-dim(treatInfo)[1]
 

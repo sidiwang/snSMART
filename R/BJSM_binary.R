@@ -1,53 +1,74 @@
 #' Trial dataset
 #'
-#' Generate trial dataset for standard snSMART (3 active treatments, non-responders re-randomized; binary outcome) with or without missing value
+#' Generate trial dataset based on the exact number of responders/non-responders for standard snSMART (3 active treatments, non-responders re-randomized; binary outcome) with or without missing value.
+#' Useful for recording real snSMART trial result or generating specific simulation scenario. Not to be confused with \code{\link{data_simulation}}. Missing data in stage 2 is allowed.
 #'
-#' @param trtA_I number of people who receive A in stage 1
-#' @param trtB_I number of people who receive B in stage 1
-#' @param trtC_I number of people who receive C in stage 1
-#' @param respA_I number of people who respond to A in stage 1, who receive same trt in stage 2
-#' @param respB_I number of people who respond to B in stage 1, who receive same trt in stage 2
-#' @param respC_I number of people who respond to C in stage 1, who receive same trt in stage 2
-#' @param trtAA_II number of 1st stage responders to A who receive A in stage 2
-#' @param trtBB_II number of 1st stage responders to B who receive B in stage 2
-#' @param trtCC_II number of 1st stage responders to C who receive C in stage 2
-#' @param respA_II number of 1st stage responders who respond to A again in stage 2
-#' @param respB_II number of 1st stage responders who respond to B again in stage 2
-#' @param respC_II number of 1st stage responders who respond to C again in stage 2
-#' @param trtAB_II number of 1st stage non-responders to A who receive B in stage 2
-#' @param trtAC_II number of 1st stage non-responders to A who receive C in stage 2
-#' @param trtBA_II number of 1st stage non-responders to B who receive A in stage 2
-#' @param trtBC_II number of 1st stage non-responders to B who receive C in stage 2
-#' @param trtCA_II number of 1st stage non-responders to C who receive A in stage 2
-#' @param trtCB_II number of 1st stage non-responders to C who receive B in stage 2
-#' @param respAB_II number of 1st stage non-responders to A who respond to B in stage 2
-#' @param respAC_II number of 1st stage non-responders to A who respond to C in stage 2
-#' @param respBA_II number of 1st stage non-responders to B who respond to A in stage 2
-#' @param respBC_II number of 1st stage non-responders to B who respond to C in stage 2
-#' @param respCA_II number of 1st stage non-responders to C who respond to A in stage 2
-#' @param respCB_II number of 1st stage non-responders to C who respond to B in stage 2
+#' @param trt vector of 3 values c(number of people who receive A in stage 1, number of people who receive B in stage 1, number of people who receive C in stage 1)
+#' @param resp vector of 3 values c(number of people who respond to A in stage 1, number of people who respond to B in stage 1, number of people who respond to C in stage 1)
+#' @param trt_same_II vector of 3 values c(number of 1st stage responders to A who receive A in stage 2, number of 1st stage responders to B who receive B in stage 2, number of 1st stage responders to C who receive C in stage 2)
+#' @param resp_same_II vector of 3 values c(number of 1st stage responders who respond to A again in stage 2, number of 1st stage responders who respond to B again in stage 2, number of 1st stage responders who respond to C again in stage 2)
+#' @param trt_negA vector of 2 values c(number of 1st stage non-responders to A who receive B in stage 2, number of 1st stage non-responders to A who receive C in stage 2)
+#' @param trt_negB vector of 2 values c(number of 1st stage non-responders to B who receive A in stage 2, number of 1st stage non-responders to B who receive C in stage 2)
+#' @param trt_negc vector of 2 values c(number of 1st stage non-responders to C who receive A in stage 2, number of 1st stage non-responders to C who receive B in stage 2)
+#' @param resp_negA vector of 2 values c(number of 1st stage non-responders to A who respond to B in stage 2, number of 1st stage non-responders to A who respond to C in stage 2)
+#' @param resp_negB vector of 2 values c(number of 1st stage non-responders to B who respond to A in stage 2, number of 1st stage non-responders to B who respond to C in stage 2)
+#' @param resp_negC vector of 2 values c(number of 1st stage non-responders to C who respond to A in stage 2, number of 1st stage non-responders to C who respond to B in stage 2)
 #'
 #' @return a `matrix` of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 
 #'
 #' @examples
-#' trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
-#'     respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-#'     respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
-#'     trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-#'     respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+#' trial_data = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
+#'     resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
+#'     resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
 #' Statistics in medicine, 37(26), pp.3723-3732.
 #'
+#' @seealso
+#' \code{\link{data_simulation}} \cr
+#' \code{\link{BJSM_binary}} \cr
+#' \code{\link{JSRM_binary}}
 #' @export
 #'
 
-trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
-                          trtAA_II, trtBB_II, trtCC_II, respA_II, respB_II, respC_II,
-                          trtAB_II, trtAC_II, trtBA_II, trtBC_II, trtCA_II, trtCB_II,
-                          respAB_II, respAC_II, respBA_II, respBC_II, respCA_II, respCB_II){
+trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
+                          trt_negA, trt_negB, trt_negc, resp_negA, resp_negB, resp_negC){
+
+  trtA_I = trt[1]
+  trtB_I = trt[2]
+  trtC_I = trt[3]
+
+  respA_I = resp[1]
+  respB_I = resp[2]
+  respC_I = resp[3]
+
+  trtAA_II = trt_same_II[1]
+  trtBB_II = trt_same_II[2]
+  trtCC_II = trt_same_II[3]
+
+  respA_II = resp_same_II[1]
+  respB_II = resp_same_II[2]
+  respC_II = resp_same_II[3]
+
+  trtAB_II = trt_negA[1]
+  trtAC_II = trt_negA[2]
+
+  trtBA_II = trt_negB[1]
+  trtBC_II = trt_negB[2]
+
+  trtCA_II = trt_negc[1]
+  trtCB_II = trt_negc[2]
+
+  respAB_II = resp_negA[1]
+  respAC_II = resp_negA[2]
+
+  respBA_II = resp_negB[1]
+  respBC_II = resp_negB[2]
+
+  respCA_II = resp_negC[1]
+  respCB_II = resp_negC[2]
 
   data_A.A.Y <- data.frame(treatment_stageI = rep(1, trtAA_II),
                            response_stageI = rep(1, trtAA_II),
@@ -123,23 +144,18 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' BJSM binary
 #'
 #' BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each treatment (different active treatments, non-responders re-randomized; binary outcome) based on trial dataset
-#' generated by function  `trial_data`
+#' generated by function \code{\link{trial_dataset}} or \code{\link{data_simulation}}
 #'
-#' @param data trial data generated through function `trial_dataset`
-#' @param NUM_ARMS number of treatment arms
+#' @param data trial data generated through function \code{\link{trial_dataset}} or \code{\link{data_simulation}}
 #' @param pi_prior.a parameter \code{a} of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the `Details` section for more explaination
 #' @param pi_prior.b parameter \code{b} of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the `Details` section for more explaination
-#' @param beta0_prior.a parameter \code{a} of the prior distribution for linkage parameter \code{beta0}. Please check the `Details` section for more explaination
-#' @param beta0_prior.b parameter \code{b} of the prior distribution  for linkage parameter \code{beta0}. Please check the `Details` section for more explaination
-#' @param beta1_prior.a parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. Please check the `Details` section for more explaination
-#' @param beta1_prior.c parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. Please check the `Details` section for more explaination
+#' @param beta0_prior vector of two values (a, b). `a` is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta0}, `b` is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta0}. Please check the `Details` section for more explanation
+#' @param beta1_prior vector of two values (a, b). `a` is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. `b` is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. Please check the `Details` section for more explaination
 #' @param n_MCMC_chain number of MCMC chains, default to 1.
 #' @param BURN.IN number of burn-in iterations for MCMC
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
-#' @param pi_prior_dist prior distribution for \code{pi}, user can choose from "gamma", "beta", "pareto"
-#' @param beta0_prior_dist prior distribution for \code{beta0}, user can choose from "gamma", "beta", "pareto"
-#' @param beta1_prior_dist prior distribution for \code{beta1}, user can choose from "gamma", "beta", "pareto"
+#' @param prior_dist vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")
 #' @param six TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE
 #'
@@ -151,55 +167,50 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' second stage response probabilities through linkage parameters.
 #'
 #' @return
-#' \itemize{
-#' \strong {`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
+#' \describe{
+#'    \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+#'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'
-#' \strong{`pi_hat_bjsm`}: estimate of response rate/treatment effect \cr
+#' \item{se_hat_bjsm}{standard error of the response rate}
 #'
-#' \strong{`se_hat_bjsm`}: standard error of the response rate \cr
+#' \item{ci_pi_A}{x% credible intervals for A}
 #'
-#' \strong{`ci_pi_A`}: x% credible intervals for A \cr
+#' \item{ci_pi_B}{x% credible intervals for B}
 #'
-#' \strong{`ci_pi_B`}: x% credible intervals for B \cr
+#' \item{ci_pi_C}{x% credible intervals for C}
 #'
-#' \strong{`ci_pi_C`}: x% credible intervals for C \cr
+#' \item{diff_AB}{estimate of differences between treatments A and B}
 #'
-#' \strong{`diff_AB`}: estimate of differences between treatments A and B \cr
+#' \item{diff_BC}{estimate of differences between treatments B and C}
 #'
-#' \strong{`diff_BC`}: estimate of differences between treatments B and C \cr
+#' \item{diff_AC}{estimate of differences between treatments A and C}
 #'
-#' \strong{`diff_AC`}: estimate of differences between treatments A and C \cr
+#' \item{ci_diff_AB}{x% credible intervals for the differences between A and B}
 #'
-#' \strong{`ci_diff_AB`}: x% credible intervals for the differences between A and B \cr
+#' \item{ci_diff_BC}{x% credible intervals for the differences between B and C}
 #'
-#' \strong{`ci_diff_BC`}: x% credible intervals for the differences between B and C \cr
+#' \item{ci_diff_AC}{x% credible intervals for the differences between A and C}
 #'
-#' \strong{`ci_diff_AC`}: x% credible intervals for the differences between A and C \cr
+#' \item{beta0_hat}{linkage parameter \code{beta0} estimates}
 #'
-#' \strong{`beta0_hat`}: linkage parameter \code{beta0} estimates \cr
+#' \item{beta1_hat}{linkage parameter \code{beta1} estimates}
 #'
-#' \strong{`beta1_hat`}: linkage parameter \code{beta1} estimates \cr
+#' \item{ci_beta0_hat}{linkage parameter \code{beta0} credible interval}
 #'
-#' \strong{`ci_beta0_hat`}: linkage parameter \code{beta0} credible interval \cr
+#' \item{ci_beta1_hat}{linkage parameter \code{beta1} credible interval}
 #'
-#' \strong{`ci_beta1_hat`}: linkage parameter \code{beta1} credible interval \cr
-#'
-#' \strong{`pi_DTR_est`}: expected response rate of dynamic treatment regimens (DTRs) \cr
+#' \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
 #' }
 #'
 #' @examples
-#' mydata = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
-#'     respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-#'     respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
-#'     trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-#'     respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+#' mydata = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
+#'     resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
+#'     resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
 #'
-#' BJSM_result = BJSM_binary(data = mydata, NUM_ARMS = 3, pi_prior_dist = "beta",
+#' BJSM_result = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #'     pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-#'     beta0_prior_dist = "beta", beta0_prior.a = 1.6, beta0_prior.b = 0.4,
-#'     beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1,
-#'     n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
-#'     six = TRUE, DTR = TRUE)
+#'     beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
+#'     MCMC_SAMPLE = 60000, ci = 0.95, six = TRUE, DTR = TRUE)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -208,9 +219,16 @@ trial_dataset <- function(trtA_I, trtB_I, trtC_I, respA_I, respB_I, respC_I,
 #' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
 #' randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
 #'
+#'
+#' @seealso
+#' \code{\link{data_simulation}} \cr
+#' \code{\link{trial_dataset}} \cr
+#' \code{\link{JSRM_binary}}
+#'
+#'
 #' @export
 
-BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist, beta1_prior.a, beta1_prior.c, n_MCMC_chain, BURN.IN,
+BJSM_binary = function(data, prior_dist, pi_prior.a, pi_prior.b, beta0_prior, beta1_prior, n_MCMC_chain, BURN.IN,
                        MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE){
   # NUM_ARMS number of treatment arms
   # pi_prior.a  alpha parameter of the prior beta distribution for pi_1K, a vector with three values, one for each treatment
@@ -226,6 +244,16 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
   # pi_prior_dist, beta0_prior_dist, beta1_prior_dist are prior distributions for pi, beta0, and beta1, user can choose from gamma, beta, pareto
   # for gamma, prior.a is r, prior.b is lambda, for beta, prior.a is alpha, prior.b is beta, for pareto, prior.a is alpha, prior.b is c (page 29 of the jags user manual version 3.4.0)
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
+
+  NUM_ARMS = length(unique(data$treatment_stageI))
+
+  beta0_prior.a = beta0_prior[1]
+  beta0_prior.b = beta0_prior[2]
+  beta1_prior.a = beta1_prior[1]
+  beta1_prior.c = beta1_prior[2]
+  pi_prior_dist = prior_dist[1]
+  beta0_prior_dist = prior_dist[2]
+  beta1_prior_dist = prior_dist[3]
 
   pi_prior_dist = ifelse(pi_prior_dist == "gamma", "dgamma", ifelse(pi_prior_dist == "beta", "dbeta", "dpar"))
   beta0_prior_dist = ifelse(beta0_prior_dist == "gamma", "dgamma", ifelse(beta0_prior_dist == "beta", "dbeta", "dpar"))
@@ -310,7 +338,7 @@ BJSM_binary = function(data, NUM_ARMS, pi_prior_dist, pi_prior.a, pi_prior.b, be
 
   }
 
-  out_post = posterior_sample[[1]]
+  out_post = as.data.frame(posterior_sample[[1]])
 
 
   if (six == TRUE){

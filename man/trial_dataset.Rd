@@ -5,96 +5,58 @@
 \title{Trial dataset}
 \usage{
 trial_dataset(
-  trtA_I,
-  trtB_I,
-  trtC_I,
-  respA_I,
-  respB_I,
-  respC_I,
-  trtAA_II,
-  trtBB_II,
-  trtCC_II,
-  respA_II,
-  respB_II,
-  respC_II,
-  trtAB_II,
-  trtAC_II,
-  trtBA_II,
-  trtBC_II,
-  trtCA_II,
-  trtCB_II,
-  respAB_II,
-  respAC_II,
-  respBA_II,
-  respBC_II,
-  respCA_II,
-  respCB_II
+  trt,
+  resp,
+  trt_same_II,
+  resp_same_II,
+  trt_negA,
+  trt_negB,
+  trt_negc,
+  resp_negA,
+  resp_negB,
+  resp_negC
 )
 }
 \arguments{
-\item{trtA_I}{number of people who receive A in stage 1}
+\item{trt}{vector of 3 values c(number of people who receive A in stage 1, number of people who receive B in stage 1, number of people who receive C in stage 1)}
 
-\item{trtB_I}{number of people who receive B in stage 1}
+\item{resp}{vector of 3 values c(number of people who respond to A in stage 1, number of people who respond to B in stage 1, number of people who respond to C in stage 1)}
 
-\item{trtC_I}{number of people who receive C in stage 1}
+\item{trt_same_II}{vector of 3 values c(number of 1st stage responders to A who receive A in stage 2, number of 1st stage responders to B who receive B in stage 2, number of 1st stage responders to C who receive C in stage 2)}
 
-\item{respA_I}{number of people who respond to A in stage 1, who receive same trt in stage 2}
+\item{resp_same_II}{vector of 3 values c(number of 1st stage responders who respond to A again in stage 2, number of 1st stage responders who respond to B again in stage 2, number of 1st stage responders who respond to C again in stage 2)}
 
-\item{respB_I}{number of people who respond to B in stage 1, who receive same trt in stage 2}
+\item{trt_negA}{vector of 2 values c(number of 1st stage non-responders to A who receive B in stage 2, number of 1st stage non-responders to A who receive C in stage 2)}
 
-\item{respC_I}{number of people who respond to C in stage 1, who receive same trt in stage 2}
+\item{trt_negB}{vector of 2 values c(number of 1st stage non-responders to B who receive A in stage 2, number of 1st stage non-responders to B who receive C in stage 2)}
 
-\item{trtAA_II}{number of 1st stage responders to A who receive A in stage 2}
+\item{trt_negc}{vector of 2 values c(number of 1st stage non-responders to C who receive A in stage 2, number of 1st stage non-responders to C who receive B in stage 2)}
 
-\item{trtBB_II}{number of 1st stage responders to B who receive B in stage 2}
+\item{resp_negA}{vector of 2 values c(number of 1st stage non-responders to A who respond to B in stage 2, number of 1st stage non-responders to A who respond to C in stage 2)}
 
-\item{trtCC_II}{number of 1st stage responders to C who receive C in stage 2}
+\item{resp_negB}{vector of 2 values c(number of 1st stage non-responders to B who respond to A in stage 2, number of 1st stage non-responders to B who respond to C in stage 2)}
 
-\item{respA_II}{number of 1st stage responders who respond to A again in stage 2}
-
-\item{respB_II}{number of 1st stage responders who respond to B again in stage 2}
-
-\item{respC_II}{number of 1st stage responders who respond to C again in stage 2}
-
-\item{trtAB_II}{number of 1st stage non-responders to A who receive B in stage 2}
-
-\item{trtAC_II}{number of 1st stage non-responders to A who receive C in stage 2}
-
-\item{trtBA_II}{number of 1st stage non-responders to B who receive A in stage 2}
-
-\item{trtBC_II}{number of 1st stage non-responders to B who receive C in stage 2}
-
-\item{trtCA_II}{number of 1st stage non-responders to C who receive A in stage 2}
-
-\item{trtCB_II}{number of 1st stage non-responders to C who receive B in stage 2}
-
-\item{respAB_II}{number of 1st stage non-responders to A who respond to B in stage 2}
-
-\item{respAC_II}{number of 1st stage non-responders to A who respond to C in stage 2}
-
-\item{respBA_II}{number of 1st stage non-responders to B who respond to A in stage 2}
-
-\item{respBC_II}{number of 1st stage non-responders to B who respond to C in stage 2}
-
-\item{respCA_II}{number of 1st stage non-responders to C who respond to A in stage 2}
-
-\item{respCB_II}{number of 1st stage non-responders to C who respond to B in stage 2}
+\item{resp_negC}{vector of 2 values c(number of 1st stage non-responders to C who respond to A in stage 2, number of 1st stage non-responders to C who respond to B in stage 2)}
 }
 \value{
 a \code{matrix} of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 }
 \description{
-Generate trial dataset for standard snSMART (3 active treatments, non-responders re-randomized; binary outcome) with or without missing value
+Generate trial dataset based on the exact number of responders/non-responders for standard snSMART (3 active treatments, non-responders re-randomized; binary outcome) with or without missing value.
+Useful for recording real snSMART trial result or generating specific simulation scenario. Not to be confused with \code{\link{data_simulation}}. Missing data in stage 2 is allowed.
 }
 \examples{
-trial_data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
-    respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-    respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
-    trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-    respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+trial_data = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
+    resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
+    resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
 
 }
 \references{
 Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
 Statistics in medicine, 37(26), pp.3723-3732.
+}
+\seealso{
+\code{\link{data_simulation}} \cr
+\code{\link{BJSM_binary}} \cr
+\code{\link{JSRM_binary}}
 }

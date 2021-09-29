@@ -30,30 +30,32 @@ c_trialSim(
 \item{nsim}{number of simulations. Use the \code{c_trialDataGen} function to generate \code{nsim} simulated datasets}
 }
 \value{
-\strong{\code{switch.safety}}: input by user \cr
+\describe{
+\item{switch.safety}{input by user or estimated based on data if \code{switch.safety} = NULL}
 
-\strong{\code{stay.ethical}}: input by user \cr
+\item{stay.ethical}{input by user or estimated based on data if \code{stay.ethical} = NULL}
 
-\strong{\code{stage1Eff}}: average simulated stage 1 treatment effect \cr
+\item{stage1Eff}{average simulated stage 1 treatment effect }
 
-\strong{\code{stage2EFF}}: average simulated stage 2 treatment effect \cr
+\item{stage2EFF}{average simulated stage 2 treatment effect }
 
-\strong{\code{stage2best}}: percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial; \cr
+\item{stage2best}{percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial}
 
-\strong{\code{stage2worst}}: percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial; \cr
+\item{stage2worst}{percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial}
 
-\strong{\code{improve}}: percentage of patients received an improved treatment outcome in stage 2; \cr
+\item{improve}{percentage of patients received an improved treatment outcome in stage 2}
 
-\strong{\code{switchBetterOrStayedBest}}: percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial; \cr
+\item{switchBetterOrStayedBest}{percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial}
 
-\strong{\code{stayedSame}}: percentage of patients received the same treatment in stage 2 after randomization; \cr
+\item{stayedSame}{percentage of patients received the same treatment in stage 2 after randomization}
 
-\strong{\code{gotBetter}}: percentage of patients that received more effective treatments in stage 2; \cr
+\item{gotBetter}{percentage of patients that received more effective treatments in stage 2}
 
-\strong{\code{gotWorse}}: percentage of patients that received less effective treatments in stage 2; \cr
+\item{gotWorse}{percentage of patients that received less effective treatments in stage 2}
+}
 }
 \description{
-assess the characteristics of trial design based on data simulated by \code{c_trialDataGen}
+assess the characteristics of trial design based on datasets simulated by \code{\link{c_trialDataGen}}
 }
 \examples{
 treat.a<-c(70, 15, c(0,0,0))
@@ -75,4 +77,8 @@ k = c_trialSim(treatInfo, treatCors, stay.ethical, switch.safety, n, 100)
 \references{
 Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
 sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
+}
+\seealso{
+\code{\link{BJSM_c}} \cr
+\code{\link{c_trialDataGen}}
 }

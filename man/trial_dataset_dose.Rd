@@ -5,110 +5,70 @@
 \title{Trial dataset (dose level snSMART design)}
 \usage{
 trial_dataset_dose(
-  trtP_I,
-  trtL_I,
-  trtH_I,
-  respP_I,
-  respL_I,
-  respH_I,
-  trtPL_II,
-  trtPH_II,
-  trtLL_II,
-  trtLH_II,
-  trtHL_II,
-  trtHH_II,
-  respPL_II,
-  respPH_II,
-  respLL_II,
-  respLH_II,
-  respHL_II,
-  respHH_II,
-  trtNPL_II,
-  trtNPH_II,
-  trtNLH_II,
-  trtNLL_II,
-  trtNHH_II,
-  respNPL_II,
-  respNPH_II,
-  respNLH_II,
-  respNLL_II,
-  respNHH_II
+  trt,
+  resp,
+  trt_rep_P,
+  trt_rep_L,
+  trt_rep_H,
+  resp_rep_P,
+  resp_rep_L,
+  resp_rep_H,
+  trt_nrep_P,
+  trt_nrep_L,
+  trt_nrep_H,
+  resp_nrep_P,
+  resp_nrep_L,
+  resp_nrep_H
 )
 }
 \arguments{
-\item{trtP_I}{number of people who receive placebo in stage 1}
+\item{trt}{vector of 3 values - c(number of people who receive placebo in stage 1, number of people who receive low dose treatment in stage 1, number of people who receive high dose treatment in stage 1)}
 
-\item{trtL_I}{number of people who receive low dose treatment in stage 1}
+\item{resp}{vector of 3 values - c(number of people who respond to placebo in stage 1, number of people who respond to low dose treatment in stage 1, number of people who respond to high dose treatment in stage 1)}
 
-\item{trtH_I}{number of people who receive high dose treatment in stage 1}
+\item{trt_rep_P}{vector of 2 values - c(number of 1st stage responders to placebo who receive low dose treatment in stage 2, number of 1st stage responders to placebo who receive high dose treatment in stage 2)}
 
-\item{respP_I}{number of people who respond to placebo in stage 1}
+\item{trt_rep_L}{vector of 2 values - c(number of 1st stage responders to low dose treatment who receive low dose treatment in stage 2, number of 1st stage responders to low dose treatment who receive high dose treatment in stage 2)}
 
-\item{respL_I}{number of people who respond to low dose treatment in stage 1}
+\item{trt_rep_H}{vector of 2 values - c(number of 1st stage responders to high dose treatment who receive low dose treatment in stage 2, number of 1st stage responders to high dose treatment who receive high dose treatment in stage 2)}
 
-\item{respH_I}{number of people who respond to high dose treatment in stage 1}
+\item{resp_rep_P}{vector of 2 values - c(number of 1st stage responders to placebo who also respond to low dose treatment in stage 2, number of 1st stage responders to placebo who also respond to high dose treatment in stage 2)}
 
-\item{trtPL_II}{number of 1st stage responders to placebo who receive low dose treatment in stage 2}
+\item{resp_rep_L}{vector of 2 values - c(number of 1st stage responders to low dose treatment who also respond to low dose treatment  in stage 2, number of 1st stage responders to low dose treatment who also respond to high dose treatment in stage 2)}
 
-\item{trtPH_II}{number of 1st stage responders to placebo who receive high dose treatment in stage 2}
+\item{resp_rep_H}{vector of 2 values - c(number of 1st stage responders to high dose treatment who also respond to low dose treatment in stage 2, number of 1st stage responders to high dose treatment who also respond to high dose treatment in stage 2)}
 
-\item{trtLL_II}{number of 1st stage responders to low dose treatment who receive low dose treatment in stage 2}
+\item{trt_nrep_P}{vector of 2 values - c(number of 1st stage non-responders to placebo who receive low dose treatment in stage 2, number of 1st stage non-responders to placebo who receive high dose treatment in stage 2)}
 
-\item{trtLH_II}{number of 1st stage responders to low dose treatment who receive high dose treatment in stage 2}
+\item{trt_nrep_L}{vector of 2 values -c(number of 1st stage non-responders to low dose treatment who receive low dose treatment again in stage 2, number of 1st stage non-responders to low dose treatment who receive high dose treatment in stage 2)}
 
-\item{trtHL_II}{number of 1st stage responders to high dose treatment who receive low dose treatment in stage 2}
+\item{trt_nrep_H}{number of 1st stage non-responders to high dose treatment who receive high dose treatment again in stage 2}
 
-\item{trtHH_II}{number of 1st stage responders to high dose treatment who receive high dose treatment in stage 2}
+\item{resp_nrep_P}{vector of 2 values - c(number of 1st stage non-responders to placebo who respond to low dose treatment in stage 2, number of 1st stage non-responders to placebo who respond to high dose treatment in stage 2)}
 
-\item{respPL_II}{number of 1st stage responders to placebo who also respond to low dose treatment in stage 2}
+\item{resp_nrep_L}{vector of 2 values - c(number of 1st stage non-responders to low dose treatment who respond to low dose treatment in stage 2, number of 1st stage non-responders to low dose treatment who respond to high dose treatment in stage 2)}
 
-\item{respPH_II}{number of 1st stage responders to placebo who also respond to high dose treatment in stage 2}
-
-\item{respLL_II}{number of 1st stage responders to low dose treatment who also respond to low dose treatment  in stage 2}
-
-\item{respLH_II}{number of 1st stage responders to low dose treatment who also respond to high dose treatment in stage 2}
-
-\item{respHL_II}{number of 1st stage responders to high dose treatment who also respond to low dose treatment in stage 2}
-
-\item{respHH_II}{number of 1st stage responders to high dose treatment who also respond to high dose treatment in stage 2}
-
-\item{trtNPL_II}{number of 1st stage non-responders to placebo who receive low dose treatment in stage 2}
-
-\item{trtNPH_II}{number of 1st stage non-responders to placebo who receive high dose treatment in stage 2}
-
-\item{trtNLH_II}{number of 1st stage non-responders to low dose treatment who receive high dose treatment in stage 2}
-
-\item{trtNLL_II}{number of 1st stage non-responders to low dose treatment who receive low dose treatment again in stage 2}
-
-\item{trtNHH_II}{number of 1st stage non-responders to high dose treatment who receive high dose treatment again in stage 2}
-
-\item{respNPL_II}{number of 1st stage non-responders to placebo who respond to low dose treatment in stage 2}
-
-\item{respNPH_II}{number of 1st stage non-responders to placebo who respond to high dose treatment in stage 2}
-
-\item{respNLH_II}{number of 1st stage non-responders to low dose treatment who respond to high dose treatment in stage 2}
-
-\item{respNLL_II}{number of 1st stage non-responders to low dose treatment who respond to low dose treatment in stage 2}
-
-\item{respNHH_II}{number of 1st stage non-responders to high dose treatment who respond to high dose treatment in stage 2}
+\item{resp_nrep_H}{number of 1st stage non-responders to high dose treatment who respond to high dose treatment in stage 2}
 }
 \value{
 a \code{matrix} of the trial dataset with 4 columns: treatment_stageI, response_stageI, treatment_stageII, response_stageII
 }
 \description{
-Generate trial dataset for dose level snSMART design (placebo, low, high dose; binary outcome) without missing value
+Generate trial dataset based on the exact number of responders/non-responders for dose level snSMART design (placebo, low, high dose; binary outcome) without missing value.
+Useful for recording real snSMART trial result or generating specific simulation scenario. Not to be confused with \code{\link{data_simulation_dose}}.
 }
 \examples{
-mydata = trial_dataset_dose(trtP_I = 30, trtL_I = 30, trtH_I = 30, respP_I = 5,
-     respL_I = 10, respH_I = 15,trtPL_II = 3, trtPH_II = 2, trtLL_II = 5,
-     trtLH_II = 5, trtHL_II = 8, trtHH_II = 7, respPL_II = 1, respPH_II = 2,
-     respLL_II = 2, respLH_II = 3, respHL_II = 4, respHH_II = 6, trtNPL_II = 10,
-     trtNPH_II = 15, trtNLH_II = 10, trtNLL_II = 10, trtNHH_II = 15,
-     respNPL_II = 7, respNPH_II = 8, respNLH_II = 6, respNLL_II = 7,
-     respNHH_II = 10)
+mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P = c(3, 2), trt_rep_L = c(5, 5),
+     trt_rep_H = c(8, 7), resp_rep_P = c(1, 2), resp_rep_L = c(2, 3), resp_rep_H = c(4, 6), trt_nrep_P = c(10, 15),
+     trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 
 }
 \references{
 Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
+}
+\seealso{
+\code{\link{data_simulation_dose}} \cr
+\code{\link{BJSM_binary_dose}} \cr
+\code{\link{JSRM_binary_dose}}
 }

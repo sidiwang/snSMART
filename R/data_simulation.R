@@ -1,26 +1,21 @@
 #' Data Simulation (standard snSMART design)
 #'
-#' simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome)
+#' simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset}}
 #'
-#' @param p_IA first stage response rate of A
-#' @param p_IB first stage response rate of B
-#' @param p_IC first stage response rate of C
+#' @param p_trt vector of 3 values (first stage response rate of trt A, first stage response rate of trt B, first stage response rate of trt C). e.g. `p_trt = c(0.2, 0.3, 0.5)`
 #' @param discount_y0 linkage parameters, for nonresponders to treatment k in the first stage who received treatment `k'` in the second stage, the second stage response rate is equal to `discount_y0 * pi_IK'`
 #' @param discount_y1 linkage parameters, the second stage response rate for first stage responders is equal to `discount_y1 * p_IK`
 #' @param p_1nA_2B probability for first stage non-responders to A being randomized to arm B in second stage
 #' @param p_1nB_2A probability for first stage non-responders to B being randomized to arm A in second stage
 #' @param p_1nC_2A probability for first stage non-responders to C being randomized to arm A in second stage
-#' @param n_A first stage sample size of A
-#' @param n_B first stage sample size of B
-#' @param n_C first stage sample size of C
+#' @param n vector of 3 values (first stage sample size of A, first stage sample size of B, first stage sample size of C). e.g. `n = c(30, 30, 30)`
 #'
 #' @return The simulated dataset with five columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`, `response_status_stageI` (responders will be 2 and non-responders will be 1)
 #'
 #' @examples
-#' data = data_simulation(p_IA = 0.2, p_IB = 0.3, p_IC = 0.4,
+#' data = data_simulation(p_trt = c(0.2, 0.3, 0.4),
 #'     discount_y0 = c(0.6, 0.6, 0.6), discount_y1 = c(1.5, 1.5, 1.5),
-#'     p_1nA_2B = 0.5, p_1nB_2A = 0.5, p_1nC_2A = 0.5, n_A = 30, n_B = 30,
-#'     n_C = 30)
+#'     p_1nA_2B = 0.5, p_1nB_2A = 0.5, p_1nC_2A = 0.5, n = c(30, 30, 30))
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -28,11 +23,23 @@
 #'
 #' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment, randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
 
+#' @seealso
+#' \code{\link{trial_dataset}} \cr
+#' \code{\link{BJSM_binary}} \cr
+#' \code{\link{JSRM_binary}}
 #'
 #' @export
 #'
 
-data_simulation <- function(p_IA, p_IB, p_IC, discount_y0, discount_y1, p_1nA_2B, p_1nB_2A, p_1nC_2A, n_A, n_B, n_C){
+data_simulation <- function(p_trt, discount_y0, discount_y1, p_1nA_2B, p_1nB_2A, p_1nC_2A, n){
+
+  p_IA = p_trt[1]
+  p_IB = p_trt[2]
+  p_IC = p_trt[3]
+
+  n_A = n[1]
+  n_B = n[2]
+  n_C = n[3]
 
   RESPONSE_RATE_STAGE_II_A_Y_0=p_IA*discount_y0[2]
   RESPONSE_RATE_STAGE_II_A_Y_1=p_IA*discount_y1[2]

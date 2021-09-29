@@ -3,7 +3,7 @@
 #' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
 #'
-#' @param data data format produced by the `trial_dataset` function
+#' @param data data format produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}
 #' @param six if TRUE, will run the six beta model, if FALSE will run the two
 #' beta model. Default is `six = TRUE`
 #' @param DTR if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens
@@ -18,11 +18,9 @@
 #' }
 #'
 #' @examples
-#' data = trial_dataset(trtA_I = 9, trtB_I = 12, trtC_I = 9, respA_I = 3,
-#'     respB_I = 3, respC_I = 5, trtAA_II = 2, trtBB_II = 2, trtCC_II = 4,
-#'     respA_II = 2, respB_II = 2, respC_II = 4, trtAB_II = 3, trtAC_II = 2,
-#'     trtBA_II = 3, trtBC_II = 2, trtCA_II = 1, trtCB_II = 2, respAB_II = 3,
-#'     respAC_II = 1, respBA_II = 2, respBC_II = 2, respCA_II = 0, respCB_II = 0)
+#' data = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
+#'     resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
+#'     resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
 #'
 #' JSRM_result = JSRM_binary(data = data, six = TRUE, DTR = TRUE)
 #'
@@ -32,6 +30,11 @@
 #'
 #' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
 #' randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+#'
+#' @seealso
+#' \code{\link{data_simulation}} \cr
+#' \code{\link{trial_dataset}} \cr
+#' \code{\link{BJSM_binary}}
 #'
 #' @export
 #'
