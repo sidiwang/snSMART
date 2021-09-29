@@ -1,11 +1,25 @@
 
 # snSMART
 
+[![Github All
+Releases](https://img.shields.io/github/downloads/sidiwang/snSMART/total.svg)]()
+
 The aim of the **snSMART** R package is to consolidate data simulation,
 sample size calculation and analysis functions for several snSMART
 (small sample sequential, multiple assignment, randomized trial) designs
 under one library.
 
+An snSMART is a multi-stage trial design where for a two-stage design,
+randomization in the second stage depends on the outcome to first stage
+treatment. snSMART designs require that the same outcome is measured at
+the end of the first stage and at the end of the second stage.
+Additionally, the length of the first stage of the trial must be the
+same amount of time as the length for the second stage. snSMARTs are
+motivated by obtaining more information from a small sample of
+individuals with the primary goal to identify the superior first stage
+treatment or dosage level using both stages of data. Data are shared
+across the two stages of the snSMART design to more precisely estimate
+the effect of the treatments given in the first stage.
 
 ## Installation
 
