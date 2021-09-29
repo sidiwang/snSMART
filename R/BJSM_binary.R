@@ -29,7 +29,9 @@
 #' @seealso
 #' \code{\link{data_simulation}} \cr
 #' \code{\link{BJSM_binary}} \cr
-#' \code{\link{JSRM_binary}}
+#' \code{\link{JSRM_binary}} \cr
+#' \code{\link{sample_size}}
+#'
 #' @export
 #'
 
@@ -223,7 +225,8 @@ trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
 #' @seealso
 #' \code{\link{data_simulation}} \cr
 #' \code{\link{trial_dataset}} \cr
-#' \code{\link{JSRM_binary}}
+#' \code{\link{JSRM_binary}} \cr
+#' \code{\link{sample_size}}
 #'
 #'
 #' @export
@@ -245,7 +248,7 @@ BJSM_binary = function(data, prior_dist, pi_prior.a, pi_prior.b, beta0_prior, be
   # for gamma, prior.a is r, prior.b is lambda, for beta, prior.a is alpha, prior.b is beta, for pareto, prior.a is alpha, prior.b is c (page 29 of the jags user manual version 3.4.0)
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
 
-  NUM_ARMS = length(unique(data$treatment_stageI))
+  NUM_ARMS = length(unique(data$treatment_stageI[!is.na(data$treatment_stageI)]))
 
   beta0_prior.a = beta0_prior[1]
   beta0_prior.b = beta0_prior[2]

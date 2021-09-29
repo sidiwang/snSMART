@@ -3,91 +3,68 @@
 #' generate data for the Group Sequential snSMART with a one-step rule, which is designed based on the standard design of snSMART (3 treatments, non-responders re-randomized; binary outcome; with interim analysis)
 #' Use BJSM (Bayesian Joint Stage Model) to conduct interim and final analysis
 #'
-#' @param pi_1A first stage response rate of A
-#' @param pi_1B first stage response rate of B
-#' @param pi_1C first stage response rate of C
+#' @param p_trt vector of 3 values (first stage response rate of trt A, first stage response rate of trt B, first stage response rate of trt C). e.g. `p_trt = c(0.2, 0.3, 0.5)`
 #' @param discount_y linkage parameters, for responders to treatment k in the first stage who received treatment k again in the second stage, the second stage response rate is equal to `discount_y * pi_IK`
 #' @param discount_n1 linkage parameters, vector of three values: 1) nonresponders to A receive treatment B in second stage, 2) nonresponders to B receive treatment A in second stage, 3) nonresponders to C receive A in the second stage
 #' @param discount_n2 linkage parameters, vector of three values: 1) nonresponders to A receive treatment C in second stage, 2) nonresponders to B receive treatment C in second stage, 3) nonresponders to C receive B in the second stage
 #' @param rate accrual rate. Rate equals to 5 if participants are enrolled in the study at the rate of five people per month
 #' @param n.month number of months to enroll subjects
 #' @param n.update number of updates during the study. Default is 1 (also the number of interim analysis)
-#' @param drop_threshold a number between 0 and 1, if the posteriors probability of a treatment having the smallest response rate is bigger than the `drop_threshold`, this treatment will be dropped at that update. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study
-#' @param NUM_ARMS number of treatment arms
+#' @param drop_threshold a number/vector with value(s) between 0 and 1, if the posteriors probability of a treatment having the smallest response rate is bigger than the `drop_threshold`, this treatment will be dropped at that update. Default value is 0.5, the number of dropping threshold should be the same as the number update in the study
 #' @param trt.days subjects' responses are evaluated `trt.days` days after receiving the treatment, default is 180
 #' @param trt.break second stage trt is given `trt.break` day after the evaluation, default is 1
 #' @param pi_prior.a parameter a of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the `Details` section for more explanation
 #' @param pi_prior.b parameter b of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the `Details` section for more explanation
-#' @param beta0_prior.a parameter a of the prior distribution for linkage parameter \code{beta0}. Please check the `Details` section for more explanation
-#' @param beta0_prior.b parameter b of the prior distribution  for linkage parameter \code{beta0}. Please check the `Details` section for more explanation
-#' @param beta1_prior.a parameter a of the prior distribution for linkage parameter \code{beta1}. Please check the `Details` section for more explanation
-#' @param beta1_prior.c parameter b of the prior distribution for linkage parameter \code{beta1}. Please check the `Details` section for more explanation
+#' @param beta0_prior vector of 2 values (`beta0_prior.a`, `beta0_prior.b`). `beta0_prior.a` is the parameter a of the prior distribution for linkage parameter \code{beta0}. `beta0_prior.b` is the parameter b of the prior distribution  for linkage parameter \code{beta0}. Please check the `Details` section for more explanation
+#' @param beta1_prior vector of 2 values (`beta1_prior.a`, `beta1_prior.c`). `beta1_prior.a` is the parameter a of the prior distribution for linkage parameter \code{beta1}. `beta1_prior.c` is the parameter b of the prior distribution for linkage parameter \code{beta1}. Please check the `Details` section for more explanation
 #' @param n_MCMC_chain number of MCMC chains, default to 1.
 #' @param BURN.IN number of burn-in iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param MCMC_SAMPLE number of iterations for MCMC
-#' @param pi_prior_dist prior distribution for \code{pi}, user can choose from "gamma", "beta", "pareto"
-#' @param beta0_prior_dist prior distribution for \code{beta0}, user can choose from "gamma", "beta", "pareto"
-#' @param beta1_prior_dist prior distribution for \code{beta1}, user can choose from "gamma", "beta", "pareto"
+#' @param prior_dist vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")
 #' @param DTR, if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE
 
 #'
 #' @return
-#' \strong{`return the simulated dataset`} (8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
-#' response for first treatment, treatment arm for second treatment, response for second treatment) \cr
-#'
-#' \strong{`randomization probabilities before each update`} (the number of rows equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs; \cr
-#'
-#' \strong{`End of trial analysis outcome`}: \cr
-#'
-#' \strong{`posterior_sample`}: posterior samples of the link parameters and response rates generated through the MCMC process \cr
-#'
-#' \strong{`pi_hat_bjsm`}: estimate of response rate/treatment effect \cr
-#'
-#' \strong{`se_hat_bjsm`}: standard error of the response rate \cr
-#'
-#' \strong{`ci_pi_A`}: x% credible intervals for A \cr
-#'
-#' \strong{`ci_pi_B`}: x% credible intervals for B \cr
-#'
-#' \strong{`ci_pi_C`}: x% credible intervals for C \cr
-#'
-#' \strong{`diff_AB`}: estimate of differences between treatments A and B \cr
-#'
-#' \strong{`diff_BC`}: estimate of differences between treatments B and C \cr
-#'
-#' \strong{`diff_AC`}: estimate of differences between treatments A and C \cr
-#'
-#' \strong{`ci_diff_AB`}: x% credible intervals for the differences between A and B \cr
-#'
-#' \strong{`ci_diff_BC`}: x% credible intervals for the differences between B and C \cr
-#'
-#' \strong{`ci_diff_AC`}: x% credible intervals for the differences between A and C \cr
-#'
-#' \strong{`beta0_hat`}: linkage parameter \code{beta0} estimates \cr
-#'
-#' \strong{`beta1_hat`}: linkage parameter \code{beta1} estimates \cr
-#'
-#' \strong{`ci_beta0_hat`}: linkage parameter \code{beta0} credible interval \cr
-#'
-#' \strong{`ci_beta1_hat`}: linkage parameter \code{beta1} credible interval \cr
-#'
-#' \strong{`pi_DTR_est`}: expected response rate of dynamic treatment regimens (DTRs) \cr
+#' \describe{
+#'    \item{return the simulated dataset}{(8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
+#' response for first treatment, treatment arm for second treatment, response for second treatment)}
+#'    \item{randomization probabilities before each update}{(the number of rows equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs;}
+#'    \item{End of trial analysis outcome:}
+#'    \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+#'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
+#'    \item{se_hat_bjsm}{standard error of the response rate}
+#'    \item{ci_pi_A}{x% credible intervals for A}
+#'    \item{ci_pi_B}{x% credible intervals for B}
+#'    \item{ci_pi_C}{x% credible intervals for C}
+#'    \item{diff_AB}{estimate of differences between treatments A and B}
+#'    \item{diff_BC}{estimate of differences between treatments B and C}
+#'    \item{diff_AC}{estimate of differences between treatments A and C}
+#'    \item{ci_diff_AB}{x% credible intervals for the differences between A and B}
+#'    \item{ci_diff_BC}{x% credible intervals for the differences between B and C}
+#'    \item{ci_diff_AC}{x% credible intervals for the differences between A and C}
+#'    \item{beta0_hat}{linkage parameter \code{beta0} estimates}
+#'    \item{beta1_hat}{linkage parameter \code{beta1} estimates}
+#'    \item{ci_beta0_hat}{linkage parameter \code{beta0} credible interval}
+#'    \item{ci_beta1_hat}{linkage parameter \code{beta1} credible interval}
+#'    \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
 #' }
 #'
 #' @examples
-#' simu1 = data_gen_group_seq_1step(pi_1A = 0.25, pi_1B = 0.45, pi_1C = 0.65, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
-#' rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, NUM_ARMS  = 3, trt.days = 100, trt.break = 2, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
-#' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,
-#' ci = 0.95, DTR = TRUE)
+#' simu1 = sim_group_seq_1step(p_trt = c(0.25, 0.45, 0.65), discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
+#' rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, trt.days = 100, trt.break = 2, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+#' beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
-#' simu2 = data_gen_group_seq_1step(pi_1A = 0.3, pi_1B = 0.3, pi_1C = 0.3, discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
-#' rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), NUM_ARMS  = 3, trt.days = 50, trt.break = 6, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
-#' beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1,
-#' ci = 0.95, DTR = TRUE)
+#' simu2 = sim_group_seq_1step(p_trt = c(0.3, 0.3, 0.3), discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
+#' rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), trt.days = 50, trt.break = 6, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+#' beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
 #' @references
 #' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group sequential small n sequential multiple‐assignment randomized trial. Journal of the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
+#'
+#' @seealso
+#' \code{\link{sim_group_seq_2step}} \cr
+#' \code{\link{group_seq}}
 #'
 #' @export
 
@@ -95,9 +72,22 @@
 
 
 ## Data generation of a group sequential snSMART with a one-step rule
-data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,discount_n2, rate,n.month,n.update=1,drop_threshold=0.5, NUM_ARMS, trt.days = 180,
-                                     trt.break = 1, pi_prior_dist, pi_prior.a, pi_prior.b, beta0_prior_dist, beta0_prior.a, beta0_prior.b, beta1_prior_dist,
-                                     beta1_prior.a, beta1_prior.c, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
+sim_group_seq_1step <- function(p_trt,discount_y,discount_n1,discount_n2, rate,n.month,n.update=1,drop_threshold=0.5, trt.days = 180, trt.break = 1, prior_dist, pi_prior.a, pi_prior.b, beta0_prior, beta1_prior,
+                                     MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
+
+  NUM_ARMS = 3
+
+  pi_1A = p_trt[1]
+  pi_1B = p_trt[2]
+  pi_1C = p_trt[3]
+
+  beta0_prior.a = beta0_prior[1]
+  beta0_prior.b = beta0_prior[2]
+  beta1_prior.a = beta1_prior[1]
+  beta1_prior.c = beta1_prior[2]
+  pi_prior_dist = prior_dist[1]
+  beta0_prior_dist = prior_dist[2]
+  beta1_prior_dist = prior_dist[3]
 
   pi_prior_dist = ifelse(pi_prior_dist == "gamma", "dgamma", ifelse(pi_prior_dist == "beta", "dbeta", "dpar"))
   beta0_prior_dist = ifelse(beta0_prior_dist == "gamma", "dgamma", ifelse(beta0_prior_dist == "beta", "dbeta", "dpar"))
@@ -184,6 +174,7 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
     writeLines(bugfile2, con="inst/Bayes_AR_new.bug")
 
     error_ind <- 0
+    error_count = 0
     tryCatch({
       jags <- rjags::jags.model(file.path(file_path,jags.model.name.update),
                                 data=list(n1 = nrow(patient_entry[patient_entry$time.1st.resp<=time.update[k+1],]),
@@ -219,7 +210,7 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
       print(k)     # show the number of iterations run
     }
     )
-    out_post <- posterior_sample[[1]]
+    out_post <- as.data.frame(posterior_sample[[1]])
 
     min_A <- mean(apply(out_post[,7:9],1,function(x) {x[1]==min(x)})) # posterior probability that A has smallest response rate
     min_B <- mean(apply(out_post[,7:9],1,function(x) {x[2]==min(x)})) # posterior probability that B has smallest response rate
@@ -288,6 +279,7 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
 
   jags.model.name <- 'Bayes_new.bug'
   error_ind <- 0
+  error_count = 0
   tryCatch({
     jags <- rjags::jags.model(file.path(file_path,jags.model.name),
                        data=list(n = nrow(mydata),
@@ -319,7 +311,7 @@ data_gen_group_seq_1step <- function(pi_1A,pi_1B,pi_1C,discount_y,discount_n1,di
     error_ind <- 1
   }
   )
-  out_post <- posterior_sample[[1]]
+  out_post <- as.data.frame(posterior_sample[[1]])
 
   pi_DTR_est = c()
   pi_AB_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,8]*out_post[,1]

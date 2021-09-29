@@ -17,7 +17,7 @@
 #'      trt_rep_H = c(8, 7), resp_rep_P = c(1, 2), resp_rep_L = c(2, 3), resp_rep_H = c(4, 6), trt_nrep_P = c(10, 15),
 #'      trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 #'
-#' JSRM_result = JSRM_dose_binary(data = mydata)
+#' JSRM_result = JSRM_binary_dose(data = mydata)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-JSRM_dose_binary = function(data){
+JSRM_binary_dose = function(data){
 
   # data, same format as the bjsm_binary.R file trial dataset format
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model

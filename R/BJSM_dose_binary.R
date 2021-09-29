@@ -213,7 +213,7 @@ BJSM_binary_dose = function(data, prior_dist, pi_prior, normal.par, beta_prior, 
   pi_prior_dist = prior_dist[1]
   beta_prior_dist = prior_dist[2]
 
-  NUM_ARMS = length(unique(data$treatment_stageI))
+  NUM_ARMS = length(unique(data$treatment_stageI[!is.na(data$treatment_stageI)]))
   pi_prior.a = pi_prior[1]
   pi_prior.b = pi_prior[2]
   beta_prior.a = beta_prior[1]

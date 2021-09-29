@@ -50,5 +50,6 @@ Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M
 \seealso{
 \code{\link{trial_dataset}} \cr
 \code{\link{BJSM_binary}} \cr
-\code{\link{JSRM_binary}}
+\code{\link{JSRM_binary}} \cr
+\code{\link{sample_size}}
 }

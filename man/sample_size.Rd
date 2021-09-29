@@ -4,28 +4,10 @@
 \alias{sample_size}
 \title{snSMART Sample Size Calculation}
 \usage{
-sample_size(
-  piA,
-  piB,
-  piC,
-  beta1,
-  beta0,
-  coverage,
-  power,
-  muA,
-  muB,
-  muC,
-  nA,
-  nB,
-  nC
-)
+sample_size(pi, beta1, beta0, coverage, power, mu, n)
 }
 \arguments{
-\item{piA}{the response rate (ranges from 0.01 to 0.99) for treatment A}
-
-\item{piB}{the response rate (ranges from 0.01 to 0.99) for treatment B}
-
-\item{piC}{the response rate (ranges from 0.01 to 0.99) for treatment C}
+\item{pi}{a vector with 3 values (\code{piA}, \code{piB}, \code{piC}). \code{piA} is the the response rate (ranges from 0.01 to 0.99) for treatment A, \code{piB} is the response rate (ranges from 0.01 to 0.99) for treatment B, \code{piC} is the response rate (ranges from 0.01 to 0.99) for treatment C}
 
 \item{beta1}{the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smaller value leads to more conservative sample size calculation because two stages are less correlated)}
 
@@ -35,17 +17,9 @@ sample_size(
 
 \item{power}{the probability (ranges from 0.01 to 0.99) for identify the best treatment}
 
-\item{muA}{the prior mean (ranges from 0.01 to 0.99) for treatment A}
+\item{mu}{a vector with 3 values (\code{muA}, \code{muB}, \code{muC}). \code{muA} is the prior mean (ranges from 0.01 to 0.99) for treatment A, \code{muB} is the prior mean (ranges from 0.01 to 0.99) for treatment B, \code{muC} is the prior mean (ranges from 0.01 to 0.99) for treatment C}
 
-\item{muB}{the prior mean (ranges from 0.01 to 0.99) for treatment B}
-
-\item{muC}{the prior mean (ranges from 0.01 to 0.99) for treatment C}
-
-\item{nA}{the prior sample size (larger than 0) for treatment A}
-
-\item{nB}{the prior sample size (larger than 0) for treatment B}
-
-\item{nC}{the prior sample size (larger than 0) for treatment C}
+\item{n}{a vector with 3 values (\code{nA}, \code{nB}, \code{nC}). \code{nA} is the prior sample size (larger than 0) for treatment A. \code{nB}is the prior sample size (larger than 0) for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
 }
 \value{
 the estimated sample size per arm for an snSMART
@@ -54,7 +28,7 @@ the estimated sample size per arm for an snSMART
 conduct Bayesian sample size calculation for a standard snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
 }
 \examples{
-sampleSize = sample_size(piA = 0.7, piB = 0.5, piC = 0.25, beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, muA = 0.65, muB = 0.55, muC = 0.25, nA = 4, nB = 2, nC = 3)
+sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
 
 }
 \references{
@@ -62,4 +36,10 @@ Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis 
 Statistics in medicine, 37(26), pp.3723-3732.
 
 Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination for Bayesian analysis of small n sequential, multiple assignment, randomized trials (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
+}
+\seealso{
+\code{\link{data_simulation}} \cr
+\code{\link{trial_dataset}} \cr
+\code{\link{JSRM_binary}} \cr
+\code{\link{BJSM_binary}}
 }

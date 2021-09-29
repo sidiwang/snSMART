@@ -46,5 +46,6 @@ randomized trials: An application in focal segmental glomerulosclerosis. Contemp
 \seealso{
 \code{\link{data_simulation}} \cr
 \code{\link{trial_dataset}} \cr
-\code{\link{BJSM_binary}}
+\code{\link{BJSM_binary}} \cr
+\code{\link{sample_size}}
 }

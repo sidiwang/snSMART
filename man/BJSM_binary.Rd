@@ -112,5 +112,6 @@ randomized trials: An application in focal segmental glomerulosclerosis. Contemp
 \seealso{
 \code{\link{data_simulation}} \cr
 \code{\link{trial_dataset}} \cr
-\code{\link{JSRM_binary}}
+\code{\link{JSRM_binary}} \cr
+\code{\link{sample_size}}
 }

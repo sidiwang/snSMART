@@ -2,24 +2,18 @@
 #'
 #' conduct Bayesian sample size calculation for a standard snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
 #'
-#' @param piA the response rate (ranges from 0.01 to 0.99) for treatment A
-#' @param piB the response rate (ranges from 0.01 to 0.99) for treatment B
-#' @param piC the response rate (ranges from 0.01 to 0.99) for treatment C
+#' @param pi a vector with 3 values (`piA`, `piB`, `piC`). `piA` is the the response rate (ranges from 0.01 to 0.99) for treatment A, `piB` is the response rate (ranges from 0.01 to 0.99) for treatment B, `piC` is the response rate (ranges from 0.01 to 0.99) for treatment C
 #' @param beta1 the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smaller value leads to more conservative sample size calculation because two stages are less correlated)
 #' @param beta0 the linkage parameter (ranges from 0.01 to 0.99) for first stage non-responders. A larger value leads to a more conservative sample size calculation because two stages are less correlated
 #' @param coverage the coverage rate (ranges from 0.01 to 0.99) for the posterior difference of top two treatments
 #' @param power the probability (ranges from 0.01 to 0.99) for identify the best treatment
-#' @param muA the prior mean (ranges from 0.01 to 0.99) for treatment A
-#' @param muB the prior mean (ranges from 0.01 to 0.99) for treatment B
-#' @param muC the prior mean (ranges from 0.01 to 0.99) for treatment C
-#' @param nA the prior sample size (larger than 0) for treatment A
-#' @param nB the prior sample size (larger than 0) for treatment B
-#' @param nC the prior sample size (larger than 0) for treatment C
+#' @param mu a vector with 3 values (`muA`, `muB`, `muC`). `muA` is the prior mean (ranges from 0.01 to 0.99) for treatment A, `muB` is the prior mean (ranges from 0.01 to 0.99) for treatment B, `muC` is the prior mean (ranges from 0.01 to 0.99) for treatment C
+#' @param n a vector with 3 values (`nA`, `nB`, `nC`). `nA` is the prior sample size (larger than 0) for treatment A. `nB`is the prior sample size (larger than 0) for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
 #'
 #' @return the estimated sample size per arm for an snSMART
 #'
 #' @examples
-#' sampleSize = sample_size(piA = 0.7, piB = 0.5, piC = 0.25, beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, muA = 0.65, muB = 0.55, muC = 0.25, nA = 4, nB = 2, nC = 3)
+#' sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -27,11 +21,30 @@
 #'
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination for Bayesian analysis of small n sequential, multiple assignment, randomized trials (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
 #'
+#' @seealso
+#' \code{\link{data_simulation}} \cr
+#' \code{\link{trial_dataset}} \cr
+#' \code{\link{JSRM_binary}} \cr
+#' \code{\link{BJSM_binary}}
+#'
 #' @export
 #'
 
 
-sample_size <- function(piA, piB, piC, beta1, beta0, coverage, power, muA, muB, muC, nA, nB, nC){
+sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
+
+  piA = pi[1]
+  piB = pi[2]
+  piC = pi[3]
+
+  muA = mu[1]
+  muB = mu[2]
+  muC = mu[3]
+
+  nA = n[1]
+  nB = n[2]
+  nC = n[3]
+
 
   max_beta1=1/min(c(max(piA,piB,piC),0.99))
   str_beta1=paste0("The value of ","\u03B21"," should be within 1~",max_beta1)
@@ -121,6 +134,7 @@ sample_size <- function(piA, piB, piC, beta1, beta0, coverage, power, muA, muB, 
   # load functions
   #require(rmutil)
   CIL_MAX=(piA-piB)*magic_Z
+  require(EnvStats)
   beta1_sample=round(mean(truncdist::rtrunc(99999, spec="pareto",a=1,b=1/max(c(piA,piB,piC)),1,pareto_beta)),3)
   beta0_sample=rep(beta0_mean,1)
 

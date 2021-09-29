@@ -58,5 +58,6 @@ Statistics in medicine, 37(26), pp.3723-3732.
 \seealso{
 \code{\link{data_simulation}} \cr
 \code{\link{BJSM_binary}} \cr
-\code{\link{JSRM_binary}}
+\code{\link{JSRM_binary}} \cr
+\code{\link{sample_size}}
 }
