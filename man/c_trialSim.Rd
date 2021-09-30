@@ -5,8 +5,10 @@
 \title{Trial Characteristics Assessment based on Simulation (continuous snSMART design)}
 \usage{
 c_trialSim(
-  treatInfo,
-  treatCors,
+  stage1effects,
+  stage2weights,
+  stagecorrs,
+  variance,
   stay.ethical = NULL,
   switch.safety = NULL,
   n,
@@ -14,12 +16,13 @@ c_trialSim(
 )
 }
 \arguments{
-\item{treatInfo}{Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, sd of treatment effects, \code{c(priming effect on trt A,  trt B, trt C)}), see example for detail}
+\item{stage1effects}{a vector of 3 values (\verb{mean effect of treatment A}, \verb{mean effect of treatment B}, \verb{main effect of treatment C}). e.g. \code{stage1effects = c(40, 50, 70)}}
 
-\item{treatCors}{Treatment correlations matrix. Format example:
-\code{[[ (A,A) (A,B) (A,C) ],
-   [ (B,A) (B,B) (B,C) ],
-   [ (C,A) (C,B) (C,C) ]]}, \code{(A,B)} denotes the treatment correlation between first stage treatment A and second stage treatment B}
+\item{stage2weights}{a vector of 3 values (\verb{weight of stage I}, \verb{weight of stage II}, \verb{weight of staying on the same treatment}). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. \code{stage2weights = c(0.2, 0.7, 0.3)}}
+
+\item{stagecorrs}{a vector of 2 values (\verb{correlations between two stages if patient stays on the same treatment}, \verb{correlations between two stages if patent doesn't stay on the same treatment}). This allows those who stay on the same treatmetn to have a different correlation between stage one and stage two outcomes than those who switch treatments.}
+
+\item{variance}{the variance of the treatment effects}
 
 \item{stay.ethical}{numerical value, if stage 1 outcome is bigger than \code{stay.ethical} value, patient has probability of 1 of staying on the same treatment in stage 2}
 
@@ -27,30 +30,20 @@ c_trialSim(
 
 \item{n}{vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}}
 
-\item{nsim}{number of simulations. Use the \code{c_trialDataGen} function to generate \code{nsim} simulated datasets}
+\item{nsim}{number of simulations. Use the \code{\link{c_trialDataGen}} function to generate \code{nsim} simulated datasets}
 }
 \value{
 \describe{
 \item{switch.safety}{input by user or estimated based on data if \code{switch.safety} = NULL}
-
 \item{stay.ethical}{input by user or estimated based on data if \code{stay.ethical} = NULL}
-
 \item{stage1Eff}{average simulated stage 1 treatment effect }
-
 \item{stage2EFF}{average simulated stage 2 treatment effect }
-
 \item{stage2best}{percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial}
-
 \item{stage2worst}{percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial}
-
 \item{improve}{percentage of patients received an improved treatment outcome in stage 2}
-
 \item{switchBetterOrStayedBest}{percentage of patients received more effective treatments in stage 2 or stayed on the best treatment throughout the trial}
-
 \item{stayedSame}{percentage of patients received the same treatment in stage 2 after randomization}
-
 \item{gotBetter}{percentage of patients that received more effective treatments in stage 2}
-
 \item{gotWorse}{percentage of patients that received less effective treatments in stage 2}
 }
 }
@@ -71,7 +64,7 @@ na<-100
 nb<-100
 nc<-100
 n<-c(na,nb,nc)
-k = c_trialSim(treatInfo, treatCors, stay.ethical, switch.safety, n, 100)
+k = c_trialSim(stage1effects, stage2weights, stagecorrs, variance, n, 100)
 
 }
 \references{

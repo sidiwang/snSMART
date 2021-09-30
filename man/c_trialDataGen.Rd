@@ -5,8 +5,10 @@
 \title{Data Simulation (continuous snSMART design)}
 \usage{
 c_trialDataGen(
-  treatInfo,
-  treatCors,
+  stage1effects,
+  stage2weights,
+  stagecorrs,
+  variance,
   n,
   stay.ethical = NULL,
   switch.safety = NULL,
@@ -14,12 +16,13 @@ c_trialDataGen(
 )
 }
 \arguments{
-\item{treatInfo}{Treatment distribution information. Each row represents one treatment, format: (mean of treatment effects, standard deviation of treatment effects, \code{c(priming effect on trt A,  trt B, trt C))}, see example for detail}
+\item{stage1effects}{a vector of 3 values (\verb{mean effect of treatment A}, \verb{mean effect of treatment B}, \verb{main effect of treatment C}). e.g. \code{stage1effects = c(40, 50, 70)}}
 
-\item{treatCors}{Treatment correlations matrix. Format example:
-\code{[[ (A,A) (A,B) (A,C) ],
-   [ (B,A) (B,B) (B,C) ],
-   [ (C,A) (C,B) (C,C) ]]}, \code{(A,B)} denotes the treatment correlation between first stage treatment A and second stage treatment B}
+\item{stage2weights}{a vector of 3 values (\verb{weight of stage I}, \verb{weight of stage II}, \verb{weight of staying on the same treatment}). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. \code{stage2weights = c(0.2, 0.7, 0.3)}}
+
+\item{stagecorrs}{a vector of 2 values (\verb{correlations between two stages if patient stays on the same treatment}, \verb{correlations between two stages if patent doesn't stay on the same treatment}). This allows those who stay on the same treatmetn to have a different correlation between stage one and stage two outcomes than those who switch treatments.}
+
+\item{variance}{the variance of the treatment effects}
 
 \item{n}{vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}}
 
@@ -36,22 +39,19 @@ The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 o
 simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 }
 \examples{
-treat.a<-c(70, 15, c(0,0,0))
-treat.b<-c(50, 10, c(0,0,0))
-treat.c<-c(60, 12, c(0,0,0))
-treatInfo = rbind(treat.a, treat.b, treat.c)
-
-treatCors<-diag(.9, 3)
-
+stage1effects<-c(50,60,70)
+stage2weights<-c(.2, .8, 5)
+stagecorrs<-c(.8,.3)
+variance<-10
 switch.safety<-NULL
 stay.ethical<- NULL
-
+#number of patients on each treatment
 na<-100
 nb<-100
 nc<-100
 n<-c(na,nb,nc)
 
-trialData = c_trialDataGen(treatInfo, treatCors, n, wideForm = FALSE)
+trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = FALSE)
 
 }
 \references{
