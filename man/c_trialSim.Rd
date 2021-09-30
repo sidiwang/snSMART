@@ -51,20 +51,17 @@ c_trialSim(
 assess the characteristics of trial design based on datasets simulated by \code{\link{c_trialDataGen}}
 }
 \examples{
-treat.a<-c(70, 15, c(0,0,0))
-treat.b<-c(50, 10, c(0,0,0))
-treat.c<-c(60, 12, c(0,0,0))
-treatInfo = rbind(treat.a, treat.b, treat.c)
-
-treatCors<-diag(.9, 3)
-
-switch.safety <- NULL
+stage1effects<-c(50,60,70)
+stage2weights<-c(.2, .8, 5)
+stagecorrs<-c(.8,.3)
+variance<-10
+switch.safety<-NULL
 stay.ethical<- NULL
 na<-100
 nb<-100
 nc<-100
 n<-c(na,nb,nc)
-k = c_trialSim(stage1effects, stage2weights, stagecorrs, variance, n, 100)
+k = c_trialSim(stage1effects, stage2weights, stagecorrs, variance, stay.ethical, switch.safety, n, 100)
 
 }
 \references{
