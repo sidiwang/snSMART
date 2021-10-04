@@ -31,11 +31,13 @@
 #' second stage response probabilities through linkage parameters.
 #'
 #' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small are corresponding to \eqn{tau_l} and \eqn{phi_l} respectively)
+#'
+#' Please refer to the paper listed under `reference` section for detailed definition of parameters.
 
 #' @examples
 #' mydata = patient_entry
 #'
-#' result1 = group_seq(data = mydata, rule.type = 1, interim = TRUE, drop_threshold=0.5, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+#' result1 = group_seq(data = mydata, rule.type = 1, interim = TRUE, drop_threshold = 0.5, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
 #' beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
 #'
 #' result2 = group_seq(data = mydata, rule.type = 2, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
@@ -45,46 +47,36 @@
 #' result3 = group_seq(data = mydata, rule.type = 2, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
 #' beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
+#' summary(result3)
+#'
 #' @return
 #' if `interim = TRUE`, this function returns either 0 - no arm is dropped, or A/B/C - arm A/B/C is dropped \cr
 #'
 #' if `interim = FALSE`, this function returns:
 #'
 #' \describe{
-#' \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
-#'
-#' \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
+#'    \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+#'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'
 #' \item{se_hat_bjsm}{standard error of the response rate}
 #'
-#' \item{ci_pi_A}{x% credible intervals for A}
+#' \item{ci_pi_A, ci_pi_B, ci_pi_C}{x% credible intervals for treatment A, B, C}
 #'
-#' \item{ci_pi_B}{x% credible intervals for B}
+#' \item{diff_AB, diff_BC. diff_AC}{estimate of differences between treatments A and B, B and C, A and C}
 #'
-#' \item{ci_pi_C}{x% credible intervals for C}
+#' \item{ci_diff_AB, ci_diff_BC, ci_diff_AC}{x% credible intervals for the differences between treatments A and B, B and C, A and C}
 #'
-#' \item{diff_AB}{estimate of differences between treatments A and B}
+#' \item{se_AB, se_BC, se_AC}{standard error for the differences between treatments A and B, B and C, A and C}
 #'
-#' \item{diff_BC}{estimate of differences between treatments B and C}
+#' \item{beta0_hat, beta1_hat}{linkage parameter \code{beta0} and \code{beta1} estimates}
 #'
-#' \item{diff_AC}{estimate of differences between treatments A and C}
+#' \item{se_beta0_hat, se_beta1_hat}{standard error of the estimated value of linkage parameter \code{beta0} and \code{beta1}}
 #'
-#' \item{ci_diff_AB}{x% credible intervals for the differences between A and B}
-#'
-#' \item{ci_diff_BC}{x% credible intervals for the differences between B and C}
-#'
-#' \item{ci_diff_AC}{x% credible intervals for the differences between A and C}
-#'
-#' \item{beta0_hat}{linkage parameter \code{beta0} estimates}
-#'
-#' \item{beta1_hat}{linkage parameter \code{beta1} estimates}
-#'
-#' \item{ci_beta0_hat}{linkage parameter \code{beta0} credible interval}
-#'
-#' \item{ci_beta1_hat}{linkage parameter \code{beta1} credible interval}
+#' \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
 #'
 #' \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
 #' }
+#'
 #'
 #' @references
 #' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group sequential small n sequential multiple‐assignment randomized trial. Journal of the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
@@ -95,7 +87,8 @@
 #'
 #' @export
 #'
-group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, drop_threshold_pair = NULL, prior_dist, pi_prior.a,
+#' @rdname group_seq
+group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold = 0.5, drop_threshold_pair = NULL, prior_dist, pi_prior.a,
                      pi_prior.b, beta0_prior, beta1_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
 
   if (!is.null(drop_threshold_pair)){
@@ -123,8 +116,8 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
   assn.stage2 <- function(i, trt, y, rand.prob)    # Function that assigns the second stage treatment
   {
     alltrt <- 1:3
-    if (y[i]==1) newtrt <- trt[i]
-    if (y[i]==0) newtrt <- sample(alltrt[alltrt!=trt[i]], 1, prob=rand.prob[alltrt!=trt[i]])
+    if (y[i] == 1) newtrt <- trt[i]
+    if (y[i] == 0) newtrt <- sample(alltrt[alltrt != trt[i]], 1, prob=rand.prob[alltrt != trt[i]])
     return(newtrt)
   }
 
@@ -143,12 +136,12 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con="inst/Bayes_AR_new.bug")
+    writeLines(bugfile2, con = "inst/Bayes_AR_new.bug")
 
     error_ind <- 0
     error_count = 0
     tryCatch({
-      jags <- rjags::jags.model(file.path(file_path,jags.model.name.update),
+      jags <- rjags::jags.model(file.path(file_path, jags.model.name.update),
                                 data=list(n1 = nrow(patient_entry[!is.na(patient_entry$resp.1st),]),
                                           n2 = nrow(patient_entry[!is.na(patient_entry$resp.2nd),]),
                                           num_arms = NUM_ARMS,
@@ -164,7 +157,7 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
                                           beta0_prior.b = beta0_prior.b,
                                           beta1_prior.a = beta1_prior.a,
                                           beta1_prior.c = beta1_prior.c),
-                                n.chains=n_MCMC_chain,n.adapt = BURN.IN)
+                                n.chains = n_MCMC_chain,n.adapt = BURN.IN)
       posterior_sample <- rjags::coda.samples(jags,
                                               c('pi','beta'),
                                               MCMC_SAMPLE)
@@ -184,67 +177,70 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
     out_post <- posterior_sample[[1]]
 
     if (rule.type == 1){
-      min_A <- mean(apply(out_post[,7:9],1,function(x) {x[1]==min(x)})) # posterior probability that A has smallest response rate
-      min_B <- mean(apply(out_post[,7:9],1,function(x) {x[2]==min(x)})) # posterior probability that B has smallest response rate
-      min_C <- mean(apply(out_post[,7:9],1,function(x) {x[3]==min(x)})) # posterior probability that C has smallest response rate
-      drop_A <- (min_A>drop_threshold)   # decide if A needs to be removed
-      drop_B <- (min_B>drop_threshold)   # decide if B needs to be removed
-      drop_C <- (min_C>drop_threshold)   # decide if C needs to be removed
-      dropped_arm <- (drop_A==1) * 1 + (drop_B==1) * 2 + (drop_C==1) * 3
-      print("Interim Analysis Outcome:")
-      if(sum(drop_A,drop_B,drop_C)==0){     # if none of the arm is removed, move on to next update
-        print("none of the arm is removed, move on to next update")
-      } else if(sum(drop_A,drop_B,drop_C)==1){  # if one of the arms is removed, move on to last assignment
+      min_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == min(x)})) # posterior probability that A has smallest response rate
+      min_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == min(x)})) # posterior probability that B has smallest response rate
+      min_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == min(x)})) # posterior probability that C has smallest response rate
+      drop_A <- (min_A > drop_threshold)   # decide if A needs to be removed
+      drop_B <- (min_B > drop_threshold)   # decide if B needs to be removed
+      drop_C <- (min_C > drop_threshold)   # decide if C needs to be removed
+      dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
+      cat("\nInterim Analysis Outcome:\n")
+      if(sum(drop_A,drop_B,drop_C) == 0){     # if none of the arm is removed, move on to next update
+        cat("none of the arm is removed, move on to next update\n")
+      } else if(sum(drop_A,drop_B,drop_C) == 1){  # if one of the arms is removed, move on to last assignment
         if (drop_A == 1){
-          print("Arm A is dropped")
+          cat("Arm A is dropped\n")
         } else if (drop_B == 1){
-          print("Arm B is dropped")
+          cat("Arm B is dropped\n")
         } else {
-          print("Arm C is dropped")
+          cat("Arm C is dropped\n")
         }
+        cat("\n")
 
       }}else{
-        min_A <- mean(apply(out_post[,7:9],1,function(x) {x[1]==min(x)}))  # posterior probability that A has smallest response rate
-        min_B <- mean(apply(out_post[,7:9],1,function(x) {x[2]==min(x)}))  # posterior probability that B has smallest response rate
-        min_C <- mean(apply(out_post[,7:9],1,function(x) {x[3]==min(x)}))  # posterior probability that C has smallest response rate
-        max_A <- mean(apply(out_post[,7:9],1,function(x) {x[1]==max(x)}))  # posterior probability that A has largest response rate
-        max_B <- mean(apply(out_post[,7:9],1,function(x) {x[2]==max(x)}))  # posterior probability that B has largest response rate
-        max_C <- mean(apply(out_post[,7:9],1,function(x) {x[3]==max(x)}))  # posterior probability that C has largest response rate
-        keep_A <- (max_A>drop_threshold_large)
-        keep_B <- (max_B>drop_threshold_large)
-        keep_C <- (max_C>drop_threshold_large)
-        if(any(c(keep_A,keep_B,keep_C)>0)){
-          drop_A <- ((keep_A==0)*(min_A==max(min_A,min_B,min_C))==1)
-          drop_B <- ((keep_B==0)*(min_B==max(min_A,min_B,min_C))==1)
-          drop_C <- ((keep_C==0)*(min_C==max(min_A,min_B,min_C))==1)
-          if (sum(drop_A,drop_B,drop_C)>1){    # if more than one arm is dropped
-            randompick <- sample(1:3,1,prob=c(drop_A,drop_B,drop_C)/sum(drop_A,drop_B,drop_C))
-            drop_A <- (randompick==1)
-            drop_B <- (randompick==2)
-            drop_C <- (randompick==3)
+        min_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == min(x)}))  # posterior probability that A has smallest response rate
+        min_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == min(x)}))  # posterior probability that B has smallest response rate
+        min_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == min(x)}))  # posterior probability that C has smallest response rate
+        max_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == max(x)}))  # posterior probability that A has largest response rate
+        max_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == max(x)}))  # posterior probability that B has largest response rate
+        max_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == max(x)}))  # posterior probability that C has largest response rate
+        keep_A <- (max_A > drop_threshold_large)
+        keep_B <- (max_B > drop_threshold_large)
+        keep_C <- (max_C > drop_threshold_large)
+        if(any(c(keep_A, keep_B, keep_C) > 0)){
+          drop_A <- ((keep_A == 0)*(min_A == max(min_A, min_B, min_C)) == 1)
+          drop_B <- ((keep_B == 0)*(min_B == max(min_A, min_B, min_C)) == 1)
+          drop_C <- ((keep_C == 0)*(min_C == max(min_A, min_B, min_C)) == 1)
+          if (sum(drop_A, drop_B, drop_C)>1){    # if more than one arm is dropped
+            randompick <- sample(1:3,1,prob = c(drop_A, drop_B, drop_C)/sum(drop_A, drop_B, drop_C))
+            drop_A <- (randompick == 1)
+            drop_B <- (randompick == 2)
+            drop_C <- (randompick == 3)
           }
         } else {
-          drop_A <- (min_A>drop_threshold_small[k])
-          drop_B <- (min_B>drop_threshold_small[k])
-          drop_C <- (min_C>drop_threshold_small[k])
+          drop_A <- (min_A > drop_threshold_small[k])
+          drop_B <- (min_B > drop_threshold_small[k])
+          drop_C <- (min_C > drop_threshold_small[k])
         }
 
-        dropped_arm <- (drop_A==1) * 1 + (drop_B==1) * 2 + (drop_C==1) * 3
-        print("Interim Analysis Outcome:")
+        dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
+        cat("\nInterim Analysis Outcome:\n")
 
-        if(all(c(drop_A,drop_B,drop_C)==0)){     # if none of the arm is dropped, move on to next update
-          print("none of the arm is removed, move on to next update")
-        } else if(sum(drop_A,drop_B,drop_C)==1){  # if one of the arms is dropped, move on to last assignment
+        if(all(c(drop_A,drop_B,drop_C) == 0)){     # if none of the arm is dropped, move on to next update
+          cat("none of the arm is removed, move on to next update\n")
+        } else if(sum(drop_A,drop_B,drop_C) == 1){  # if one of the arms is dropped, move on to last assignment
           if (drop_A == 1){
-            print("Arm A is dropped")
+            cat("Arm A is dropped\n")
           } else if (drop_B == 1){
-            print("Arm B is dropped")
+            cat("Arm B is dropped\n")
           } else {
-            print("Arm C is dropped")
+            cat("Arm C is dropped\n")
           }
         }
 
       }
+    cat("\n")
+
     return(list("dropped_arm" = dropped_arm))
   } else {
 
@@ -256,12 +252,12 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con="inst/Bayes_new.bug")
+    writeLines(bugfile2, con = "inst/Bayes_new.bug")
     file_path <- 'inst'
     jags.model.name <- 'Bayes_new.bug'
     error_ind <- 0
     tryCatch({
-      jags <- rjags::jags.model(file.path(file_path,jags.model.name),
+      jags <- rjags::jags.model(file.path(file_path, jags.model.name),
                                 data=list(n = nrow(mydata),
                                           num_arms = NUM_ARMS,
                                           Y1 = mydata$resp.1st,
@@ -276,7 +272,7 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
                                           beta0_prior.b = beta0_prior.b,
                                           beta1_prior.a = beta1_prior.a,
                                           beta1_prior.c = beta1_prior.c),
-                                n.chains=n_MCMC_chain,n.adapt = BURN.IN)
+                                n.chains = n_MCMC_chain,n.adapt = BURN.IN)
       posterior_sample <- rjags::coda.samples(jags,
                                               c('pi','beta'),
                                               MCMC_SAMPLE)
@@ -287,57 +283,140 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold=0.5, dr
     }
     )
     out_post <- as.data.frame(posterior_sample[[1]])
+    colnames(out_post) = c("beta0A", "beta1A", "beta0B", "beta1B", "beta0C", "beta1C", "pi_A", "pi_B", "pi_C")
 
     pi_DTR_est = c()
-    pi_AB_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,8]*out_post[,1]
-    pi_AC_tt <- out_post[,7]^2*out_post[,2]+(1-out_post[,7])*out_post[,9]*out_post[,1]
-    pi_BA_tt <- out_post[,8]^2*out_post[,4]+(1-out_post[,8])*out_post[,7]*out_post[,3]
-    pi_BC_tt <- out_post[,8]^2*out_post[,4]+(1-out_post[,8])*out_post[,9]*out_post[,3]
-    pi_CA_tt <- out_post[,9]^2*out_post[,6]+(1-out_post[,9])*out_post[,7]*out_post[,5]
-    pi_CB_tt <- out_post[,9]^2*out_post[,6]+(1-out_post[,9])*out_post[,8]*out_post[,5]
-    pi_DTR_est <- rbind(pi_DTR_est,c(mean(pi_AB_tt),mean(pi_AC_tt),mean(pi_BA_tt),mean(pi_BC_tt),mean(pi_CA_tt),mean(pi_CB_tt)))
+    pi_AB_tt <- out_post[, 7]^2 * out_post[, 2] + (1 - out_post[, 7]) * out_post[, 8] * out_post[, 1]
+    pi_AC_tt <- out_post[, 7]^2 * out_post[, 2] + (1 - out_post[, 7]) * out_post[, 9] * out_post[, 1]
+    pi_BA_tt <- out_post[, 8]^2 * out_post[, 4] + (1 - out_post[, 8]) * out_post[, 7] * out_post[, 3]
+    pi_BC_tt <- out_post[, 8]^2 * out_post[, 4] + (1 - out_post[, 8]) * out_post[, 9] * out_post[, 3]
+    pi_CA_tt <- out_post[, 9]^2 * out_post[, 6] + (1 - out_post[, 9]) * out_post[, 7] * out_post[, 5]
+    pi_CB_tt <- out_post[, 9]^2 * out_post[, 6] + (1 - out_post[, 9]) * out_post[, 8] * out_post[, 5]
+    pi_DTR_est <- rbind(pi_DTR_est, c(mean(pi_AB_tt), mean(pi_AC_tt), mean(pi_BA_tt), mean(pi_BC_tt), mean(pi_CA_tt), mean(pi_CB_tt)))
+    colnames(pi_DTR_est) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
+    rownames(pi_DTR_est) = c("result")
 
     if (DTR == TRUE){
 
-      final = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
-                   "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
-                   "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
-                   "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
-                   "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
-                   "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
-                   "diff_AB" = mean(out_post[,7] - out_post[,8]), # estimate of differences between treatments A and B
-                   "diff_BC" = mean(out_post[,8] - out_post[,9]), # estimate of differences between treatments B and C
-                   "diff_AC" = mean(out_post[,7] - out_post[,9]), # estimate of differences between treatments A and C
-                   "ci_diff_AB" = bayestestR::ci(out_post[,7] - out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
-                   "ci_diff_BC" = bayestestR::ci(out_post[,8] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
-                   "ci_diff_AC" = bayestestR::ci(out_post[,7] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
-                   "beta0_hat" = apply(out_post[,c(1,3,5)],2,mean), # linkage parameter beta0 estimates
-                   "beta1_hat" = apply(out_post[,c(2,4,6)],2,mean),  # linkage parameter beta1 estimates
-                   "ci_beta0_hat" = HDInterval::hdi(out_post[,c(1,3,5)], ci), # linkage parameter beta0 credible interval
-                   "ci_beta1_hat" = HDInterval::hdi(out_post[,c(2,4,6)], ci), # linkage parameter beta1 credible interval
-                   "pi_DTR_est" = pi_DTR_est) # expected response rate of dynamic treatment regimens (DTRs)
-      return(final)
+      result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+                    "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
+                    "se_hat_bjsm" = apply(out_post[, 7:9], 2, stats::sd),     # standard error of the response rate
+                    "ci_pi_A" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
+                    "ci_pi_B" = bayestestR::ci(out_post[, 8], ci = ci, method = "HDI"), # x% credible intervals for B
+                    "ci_pi_C" = bayestestR::ci(out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for C
+                    "diff_AB" = mean(out_post[, 7] - out_post[, 8]), # estimate of differences between treatments A and B
+                    "se_AB" = stats::sd(out_post[, 7] - out_post[, 8]),
+                    "diff_BC" = mean(out_post[, 8] - out_post[, 9]), # estimate of differences between treatments B and C
+                    "se_BC" = stats::sd(out_post[, 8] - out_post[, 9]),
+                    "diff_AC" = mean(out_post[, 7] - out_post[, 9]), # estimate of differences between treatments A and C
+                    "se_AC" = stats::sd(out_post[, 7] - out_post[, 9]),
+                    "ci_diff_AB" = bayestestR::ci(out_post[, 7] - out_post[, 8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                    "ci_diff_BC" = bayestestR::ci(out_post[, 8] - out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
+                    "ci_diff_AC" = bayestestR::ci(out_post[, 7] - out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
+                    "beta0_hat" = apply(out_post[, c(1, 3, 5)], 2, mean), # linkage parameter beta0 estimates
+                    "beta1_hat" = apply(out_post[, c(2, 4, 6)], 2, mean),  # linkage parameter beta1 estimates
+                    "se_beta0_hat" = apply(out_post[, c(1, 3, 5)], 2, stats::sd),
+                    "se_beta1_hat" = apply(out_post[, c(2, 4, 6)], 2, stats::sd),
+                    "ci_beta0_hat" = HDInterval::hdi(out_post[, c(1, 3, 5)], ci), # linkage parameter beta0 credible interval
+                    "ci_beta1_hat" = HDInterval::hdi(out_post[, c(2, 4, 6)], ci), # linkage parameter beta1 credible interval
+                    "pi_DTR_est" = t(pi_DTR_est)) # expected response rate of dynamic treatment regimens (DTRs)
     }else{
-      final = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
-                   "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
-                   "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
-                   "ci_pi_A" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
-                   "ci_pi_B" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
-                   "ci_pi_C" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
-                   "diff_AB" = mean(out_post[,7] - out_post[,8]), # estimate of differences between treatments A and B
-                   "diff_BC" = mean(out_post[,8] - out_post[,9]), # estimate of differences between treatments B and C
-                   "diff_AC" = mean(out_post[,7] - out_post[,9]), # estimate of differences between treatments A and C
-                   "ci_diff_AB" = bayestestR::ci(out_post[,7] - out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
-                   "ci_diff_BC" = bayestestR::ci(out_post[,8] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
-                   "ci_diff_AC" = bayestestR::ci(out_post[,7] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
-                   "beta0_hat" = apply(out_post[,c(1,3,5)],2,mean), # linkage parameter beta0 estimates
-                   "beta1_hat" = apply(out_post[,c(2,4,6)],2,mean),  # linkage parameter beta1 estimates
-                   "ci_beta0_hat" = HDInterval::hdi(out_post[,c(1,3,5)], ci), # linkage parameter beta0 credible interval
-                   "ci_beta1_hat" = HDInterval::hdi(out_post[,c(2,4,6)], ci)) # linkage parameter beta1 credible interval
+      result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+                    "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
+                    "se_hat_bjsm" = apply(out_post[, 7:9], 2, stats::sd),     # standard error of the response rate
+                    "ci_pi_A" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
+                    "ci_pi_B" = bayestestR::ci(out_post[, 8], ci = ci, method = "HDI"), # x% credible intervals for B
+                    "ci_pi_C" = bayestestR::ci(out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for C
+                    "diff_AB" = mean(out_post[, 7] - out_post[, 8]), # estimate of differences between treatments A and B
+                    "se_AB" = stats::sd(out_post[, 7] - out_post[, 8]),
+                    "diff_BC" = mean(out_post[, 8] - out_post[, 9]), # estimate of differences between treatments B and C
+                    "se_BC" = stats::sd(out_post[, 8] - out_post[, 9]),
+                    "diff_AC" = mean(out_post[, 7] - out_post[, 9]), # estimate of differences between treatments A and C
+                    "se_AC" = stats::sd(out_post[, 7] - out_post[, 9]),
+                    "ci_diff_AB" = bayestestR::ci(out_post[, 7] - out_post[, 8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                    "ci_diff_BC" = bayestestR::ci(out_post[, 8] - out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
+                    "ci_diff_AC" = bayestestR::ci(out_post[, 7] - out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
+                    "beta0_hat" = apply(out_post[, c(1, 3, 5)], 2, mean), # linkage parameter beta0 estimates
+                    "beta1_hat" = apply(out_post[, c(2, 4, 6)], 2, mean),  # linkage parameter beta1 estimates
+                    "se_beta0_hat" = apply(out_post[, c(1, 3, 5)], 2, stats::sd),
+                    "se_beta1_hat" = apply(out_post[, c(2, 4, 6)], 2, stats::sd),
+                    "ci_beta0_hat" = HDInterval::hdi(out_post[, c(1, 3, 5)], ci), # linkage parameter beta0 credible interval
+                    "ci_beta1_hat" = HDInterval::hdi(out_post[, c(2, 4, 6)], ci)) # linkage parameter beta1 credible interval
       #    "pi_DTR_est" = pi_DTR_est) # expected response rate of dynamic treatment regimens (DTRs)
-      return(final)
     }
-
+    class(result) = "group_seq"
+    return(result)
   }
 }
 
+
+
+#' Summarizing BJSM fits
+#'
+#' `summary` method for class "`group_seq`"
+#'
+#' @param object an object of class "`group_seq`", usually, a result of a call to \code{\link{group_seq}}
+#' @param digits the number of significant digits to use when printing
+#'
+#' @returns
+#' \describe{
+#'    \item{Treatment Effects Estimate}{a 3 x 5 matrix with columns for the estimated treatment effects, its standard error, coverage probability of its credible interval, lower bound for its credible interval and higher bound for its credible interval}
+#'    \item{Differences between Treatments}{a 3 x 5 matrix with columns for the estimated differences in treatment effects between two treatments, its standard error, coverage probability of its credible interval, lower bound and higher bound of the credible interval}
+#'    \item{Linkage Parameter Estimate}{a 2 x 5 matrix, if the two beta model is fitted, or a 6 x 5 matrix, if the six beta model is fitted, with columns for the estimated linkage parameters}
+#'    \item{Expected Response Rate of Dynamic Treatment Regimens (DTR)}{}
+#' }
+#'
+#'
+#' @export
+summary.group_seq = function(object, digits = 5, ...){
+  if (length(object) != 1){
+    cat("\nTreatment Effects Estimate:\n")
+    trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
+    rownames(trteff) = c("trtA", "trtB", "trtC")
+    colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    print(trteff, digits = digits)
+    cat("\nDifferences between Treatments:\n")
+    trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
+    rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
+    colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
+    print(trtdiff, digits = digits)
+    cat("\nLinkage Parameter Estimate:\n")
+    if (length(object$beta0_hat) == 1){
+      betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
+      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+      rownames(betaest) = c("beta0", "beta1")
+    } else {
+      betaest = rbind(cbind(object$beta0_hat, object$se_beta0_hat, c(rep(trteff$C.I.[1], length(object$beta0_hat))), t(object$ci_beta0_hat)), cbind(object$beta1_hat, object$se_beta1_hat, c(rep(trteff$C.I.[1], length(object$beta1_hat))), t(object$ci_beta1_hat)))
+      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    }
+
+    print(betaest, digits = digits)
+    if (!is.null(object$pi_DTR_est)){
+      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR)\n")
+      print(object$pi_DTR_est, digits = digits)
+    }
+    cat("\n")
+  } else {
+    print(object)
+  }
+}
+
+
+#' @rdname group_seq
+#' @export
+print.group_seq = function(object, digits = 5, ...){
+  if (length(object) != 1){
+    cat("\nTreatment Effects Estimate:\n")
+    print(object$pi_hat_bjsm)
+    cat("\nDifferences between Treatments:\n")
+    trtdiff = rbind(object$diff_AB, object$diff_BC, object$diff_AC)
+    colnames(trtdiff) = c("estimate")
+    rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
+    print(trtdiff)
+    cat("\nLinkage Parameter Estimate:\n")
+    print(cbind(object$beta0_hat, object$beta1_hat))
+    cat("\n")
+  } else {
+    print(object)
+  }
+}

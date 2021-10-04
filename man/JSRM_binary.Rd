@@ -2,9 +2,15 @@
 % Please edit documentation in R/JSRM_binary.R
 \name{JSRM_binary}
 \alias{JSRM_binary}
+\alias{summary.JSRM_binary}
+\alias{print.JSRM_binary}
 \title{JSRM for standard snSMART}
 \usage{
 JSRM_binary(data, six = TRUE, DTR = TRUE)
+
+\method{summary}{JSRM_binary}(object, digits = 5, ...)
+
+\method{print}{JSRM_binary}(object, digits = 5, ...)
 }
 \arguments{
 \item{data}{data format produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}}
@@ -13,6 +19,8 @@ JSRM_binary(data, six = TRUE, DTR = TRUE)
 beta model. Default is \code{six = TRUE}}
 
 \item{DTR}{if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens}
+
+\item{digits}{the number of significant digits to use when printing}
 }
 \value{
 a \code{list} containing
@@ -34,6 +42,8 @@ data = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2,
     resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
 
 JSRM_result = JSRM_binary(data = data, six = TRUE, DTR = TRUE)
+
+summary(JSRM_result)
 
 }
 \references{

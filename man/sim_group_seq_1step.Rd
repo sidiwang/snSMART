@@ -2,6 +2,7 @@
 % Please edit documentation in R/sim_group_seq_1step.R
 \name{sim_group_seq_1step}
 \alias{sim_group_seq_1step}
+\alias{print.sim_group_seq_1step}
 \title{Data generation of a group sequential snSMART with a one-step rule}
 \usage{
 sim_group_seq_1step(
@@ -26,6 +27,8 @@ sim_group_seq_1step(
   ci = 0.95,
   DTR = TRUE
 )
+
+\method{print}{sim_group_seq_1step}(object, digits = 5, ...)
 }
 \arguments{
 \item{p_trt}{vector of 3 values (first stage response rate of trt A, first stage response rate of trt B, first stage response rate of trt C). e.g. \code{p_trt = c(0.2, 0.3, 0.5)}}
@@ -67,29 +70,24 @@ sim_group_seq_1step(
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
 \item{DTR, }{if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
+
+\item{digits}{the number of significant digits to use when printing}
 }
 \value{
 \describe{
-\item{return the simulated dataset}{(8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment,
-response for first treatment, treatment arm for second treatment, response for second treatment)}
+\item{return the simulated dataset}{(8 columns: first treatment time, first response time, second treatment time, second response time, treatment arm for first treatment, response for first treatment, treatment arm for second treatment, response for second treatment)}
 \item{randomization probabilities before each update}{(the number of rows equals to the number of updates plus 1), removed arm, the round of the update that removal of treatment arm occurs;}
-\item{End of trial analysis outcome:}
+\item{End of trial analysis outcome:}{}
 \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
 \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 \item{se_hat_bjsm}{standard error of the response rate}
-\item{ci_pi_A}{x\% credible intervals for A}
-\item{ci_pi_B}{x\% credible intervals for B}
-\item{ci_pi_C}{x\% credible intervals for C}
-\item{diff_AB}{estimate of differences between treatments A and B}
-\item{diff_BC}{estimate of differences between treatments B and C}
-\item{diff_AC}{estimate of differences between treatments A and C}
-\item{ci_diff_AB}{x\% credible intervals for the differences between A and B}
-\item{ci_diff_BC}{x\% credible intervals for the differences between B and C}
-\item{ci_diff_AC}{x\% credible intervals for the differences between A and C}
-\item{beta0_hat}{linkage parameter \code{beta0} estimates}
-\item{beta1_hat}{linkage parameter \code{beta1} estimates}
-\item{ci_beta0_hat}{linkage parameter \code{beta0} credible interval}
-\item{ci_beta1_hat}{linkage parameter \code{beta1} credible interval}
+\item{ci_pi_A, ci_pi_B, ci_pi_C}{x\% credible intervals for treatment A, B and C}
+\item{diff_AB, diff_BC, diff_AC}{estimate of differences between treatments A and B, B and C, A and C}
+\item{se_AB, se_BC, se_AC}{standard error for the differences between treatments A and B, B and C, A and C}
+\item{ci_diff_AB, ci_diff_BC, ci_diff_AC}{x\% credible intervals for the differences between A and B, B and C, A and C}
+\item{beta0_hat, beta1_hat}{linkage parameters \code{beta0} and \code{beta1} estimates}
+\item{se_beta0_hat, se_beta1_hat}{standard error of the estimated value of linkage parameter \code{beta0} and \code{beta1}}
+\item{ci_beta0_hat, ci_beta1_hat}{linkage parameters \code{beta0} and \code{beta1} credible interval}
 \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
 }
 }
@@ -98,13 +96,21 @@ generate data for the Group Sequential snSMART with a one-step rule, which is de
 Use BJSM (Bayesian Joint Stage Model) to conduct interim and final analysis
 }
 \examples{
-simu1 = sim_group_seq_1step(p_trt = c(0.25, 0.45, 0.65), discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
-rate = 5, n.month = 60, n.update = 1, drop_threshold = 0.5, trt.days = 100, trt.break = 2, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+simu1 = sim_group_seq_1step(p_trt = c(0.25, 0.45, 0.65), discount_y = c(1.5,1.5,1.5),
+discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8), rate = 5, n.month = 60,
+n.update = 1, drop_threshold = 0.5, trt.days = 100, trt.break = 2, prior_dist = c("beta", "beta", "pareto"),
+pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1),
+MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 
-simu2 = sim_group_seq_1step(p_trt = c(0.3, 0.3, 0.3), discount_y = c(1.5,1.5,1.5), discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8),
-rate = 5, n.month = 60, n.update = 2, drop_threshold = c(0.5, 0.5), trt.days = 50, trt.break = 6, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+summary(simu1)
+
+simu2 = sim_group_seq_1step(p_trt = c(0.3, 0.3, 0.3), discount_y = c(1.5,1.5,1.5),
+discount_n1 = c(0.8, 0.8, 0.8), discount_n2 = c(0.8, 0.8, 0.8), rate = 5, n.month = 60,
+n.update = 2, drop_threshold = c(0.5, 0.5), trt.days = 50, trt.break = 6, prior_dist = c("beta", "beta", "pareto"),
+pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1),
+MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+
+summary(simu2)
 
 }
 \references{

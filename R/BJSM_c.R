@@ -13,6 +13,9 @@
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param n.digits number of digits to keep in the final output
+#' @param object an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
+#' @param digits the number of significant digits to use when printing
+
 #'
 #' @details
 #' section 2.2.1 of the paper listed under `reference` provides a detailed description of the assumptions of the model.
@@ -32,28 +35,26 @@
 #' }
 #'
 #' @examples
-#' treat.a<-c(70, 15, c(0,0,0))
-#' treat.b<-c(50, 10, c(0,0,0))
-#' treat.c<-c(60, 12, c(0,0,0))
-#' treatInfo = rbind(treat.a, treat.b, treat.c)
-#'
-#' treatCors<-diag(.9, 3)
-#'
+#' stage1effects<-c(50,60,70)
+#' stage2weights<-c(.2, .8, 5)
+#' stagecorrs<-c(.8,.3)
+#' variance<-10
 #' switch.safety<-NULL
 #' stay.ethical<- NULL
-
+#' #number of patients on each treatment
 #' na<-100
 #' nb<-100
 #' nc<-100
 #' n<-c(na,nb,nc)
-
-#' trialData = c_trialDataGen(treatInfo, treatCors, n)
 #'
+#' trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n)
 #'
 #' BJSM_result = BJSM_c(data = trialData, beta_prior.mean = c(50, 50, 50),
 #'     beta_prior.sd = c(50, 50, 50), alpha3_prior.sd = 20, n_MCMC_chain = 1,
 #'     n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5)
 #'
+#' summary(BJSM_result)
+#' print(BJSM_result)
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
 #' sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
@@ -62,6 +63,7 @@
 #' \code{\link{c_trialSim}} \cr
 #' \code{\link{c_trialDataGen}}
 #'
+#' @rdname BJSM_c
 #' @export
 
 BJSM_c = function(data, beta_prior.mean, beta_prior.sd, alpha3_prior.sd, n_MCMC_chain, n.adapt,
@@ -71,11 +73,10 @@ BJSM_c = function(data, beta_prior.mean, beta_prior.sd, alpha3_prior.sd, n_MCMC_
 
   NUM_ARMS = length(unique(trialData$trt1[!is.na(trialData$trt1)]))
 
-  jag <- rjags::jags.model(file="inst/csnSMART.bugs",
-                    data=list(n = length(unique(trialData$id)),
+  jag <- rjags::jags.model(file = "inst/csnSMART.bugs",
+                    data = list(n = length(unique(trialData$id)),
                               ntrt = NUM_ARMS,
-                              Y = cbind(trialData$stage1outcome,
-                                        trialData$stage2outcome),
+                              Y = cbind(trialData$stage1outcome, trialData$stage2outcome),
                               trt1 = trialData$trt1,
                               trt2 = trialData$trt2,
                               stay = trialData$stay,
@@ -83,7 +84,7 @@ BJSM_c = function(data, beta_prior.mean, beta_prior.sd, alpha3_prior.sd, n_MCMC_
                               beta_prior.mean = beta_prior.mean,
                               beta_prior.sd = 1/(beta_prior.sd^2),
                               alpha3_prior.sd = 1/(alpha3_prior.sd^2)),
-                    n.chains=n_MCMC_chain,n.adapt = n.adapt)
+                    n.chains = n_MCMC_chain,n.adapt = n.adapt)
   posterior_sample <- rjags::coda.samples(jag,
                                    c('beta','alpha1','alpha3','rho'),
                                    MCMC_SAMPLE)
@@ -96,6 +97,28 @@ BJSM_c = function(data, beta_prior.mean, beta_prior.sd, alpha3_prior.sd, n_MCMC_
                 "mean_estimate" = round(apply(out_post,2,mean), n.digits),   # estimate of each parameter
                 "ci_estimate" = bayestestR::ci(out_post, ci = ci, method = "HDI")) # x% credible intervals for each parameter
 
+  class(result) = "BJSM_c"
 
   return(result)
+}
+
+#' @rdname BJSM_c
+#' @export
+#'
+summary.BJSM_c = function(object, digits = 5){
+  cat("\nParameter Estimation:\n")
+  out = cbind(object$mean_estimate, object$ci_estimate)
+  colnames(out)[1] = "Estimate"
+  print(out[-2])
+}
+
+
+#' @rdname BJSM_c
+#' @export
+#'
+print.BJSM_c = function(object, digits = 5){
+  cat("\nTreatment Effect Estimation:\n")
+  out = cbind(object$mean_estimate, object$ci_estimate)
+  colnames(out)[1] = "Estimate"
+  print(out[-c(1, 2, seq(6, 13, 1)),-2])
 }

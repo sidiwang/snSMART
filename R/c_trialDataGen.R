@@ -46,56 +46,57 @@ c_trialDataGen = function(stage1effects, stage2weights, stagecorrs, variance, n,
                           wideForm = TRUE){
 
   #number of treatments based on input values
-  n.trt<-length(stage1effects)
+  n.trt <- length(stage1effects)
 
   stage1outcome = c()
   for(i in 1:n.trt){
-    stage1outcome = c(stage1outcome, rnorm(n[i], mean=stage1effects[i], sd=variance))
+    stage1outcome = c(stage1outcome, rnorm(n[i], mean = stage1effects[i], sd = variance))
   }
 
   #probability of staying on same trt for each patient
-  pstay<-ifelse(stage1outcome/100 > 1, 1,
+  pstay <- ifelse(stage1outcome/100 > 1, 1,
                 ifelse(stage1outcome/100 < 0, 0 ,
                        stage1outcome/100))
   if(!is.null(switch.safety)){
-    pstay<-ifelse(stage1outcome < switch.safety, 0, pstay)
+    pstay <- ifelse(stage1outcome < switch.safety, 0, pstay)
   }
   if(!is.null(stay.ethical)){
-    pstay<-ifelse(stage1outcome > stay.ethical, 1, pstay)
+    pstay <- ifelse(stage1outcome > stay.ethical, 1, pstay)
   }
 
   #realization of staying for each patient
-  stay<-rbinom(sum(n),1,pstay)
+  stay <- rbinom(sum(n), 1, pstay)
   #vector of rerandomization treatments
   rerand = c()
-  trt.vect=1:n.trt
+  trt.vect = 1:n.trt
   for(i in 1:n.trt){
-    rerand = c(rerand, sample(trt.vect[!trt.vect == i],n[i],replace=T))
+    rerand = c(rerand, sample(trt.vect[!trt.vect == i], n[i], replace=T))
   }
-  trt1<-c()
+  trt1 <- c()
   for(i in 1:n.trt){
     trt1 <- c(trt1, rep(i, n[i]))
   }
   #realization of trt2 for each patient
-  trt2<-ifelse(stay==1, trt1, rerand)
+  trt2 <- ifelse(stay == 1, trt1, rerand)
 
-  stage2outcome<-c()
+  stage2outcome <- c()
   for(i in 1:sum(n)){
-    stage2outcomeDistn = condMVN(mean=c(stage1effects[trt1[i]],stage2weights[1]*stage1effects[trt1[i]]+stage2weights[2]*stage1effects[trt2[i]] + stage2weights[3]*stay[i]),
+    stage2outcomeDistn = condMVNorm::condMVN(mean = c(stage1effects[trt1[i]], stage2weights[1]*stage1effects[trt1[i]] + stage2weights[2] * stage1effects[trt2[i]] + stage2weights[3]*stay[i]),
                                  sigma = variance * matrix(c(1,
-                                                             stagecorrs[1]*stay[i]+ stagecorrs[2]*(1-stay[i]),
-                                                             stagecorrs[1]*stay[i]+ stagecorrs[2]*(1-stay[i]),
+                                                             stagecorrs[1] * stay[i] + stagecorrs[2] * (1 - stay[i]),
+                                                             stagecorrs[1] * stay[i] + stagecorrs[2] * (1 - stay[i]),
                                                              1),
-                                                           nrow=2),
+                                                           nrow = 2),
                                  dependent.ind = 2,
                                  given.ind = 1,
                                  X.given = stage1outcome[i])
-    stage2outcome = c(stage2outcome, rnorm(1, stage2outcomeDistn$condMean,stage2outcomeDistn$condVar))
+    stage2outcome = c(stage2outcome, rnorm(1, stage2outcomeDistn$condMean, stage2outcomeDistn$condVar))
   }
 
-  id= seq(1:sum(n))
-  trial.data=data.frame(id, trt1, stage1outcome, pstay, stay, trt2, stage2outcome, stage1outcome)
+  id = seq(1:sum(n))
+  trial.data = data.frame(id, trt1, stage1outcome, pstay, stay, trt2, stage2outcome, stage1outcome)
 
+  require("tidyr")
   if(wideForm == FALSE){
     trial.data.long = trial.data %>%
       gather(stage, outcome, c(stage1outcome, stage2outcome))

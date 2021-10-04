@@ -2,6 +2,7 @@
 % Please edit documentation in R/BJSM_binary.R
 \name{BJSM_binary}
 \alias{BJSM_binary}
+\alias{print.BJSM_binary}
 \title{BJSM binary}
 \usage{
 BJSM_binary(
@@ -18,19 +19,21 @@ BJSM_binary(
   six = TRUE,
   DTR = TRUE
 )
+
+\method{print}{BJSM_binary}(object, digits = 5, ...)
 }
 \arguments{
 \item{data}{trial data generated through function \code{\link{trial_dataset}} or \code{\link{data_simulation}}}
 
 \item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
 
-\item{pi_prior.a}{parameter \code{a} of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
+\item{pi_prior.a}{parameter \code{a} of the prior distribution for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
 
-\item{pi_prior.b}{parameter \code{b} of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explaination}
+\item{pi_prior.b}{parameter \code{b} of the prior distribution  for \code{pi_1K}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
 
 \item{beta0_prior}{vector of two values (a, b). \code{a} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta0}, \code{b} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta0}. Please check the \code{Details} section for more explanation}
 
-\item{beta1_prior}{vector of two values (a, b). \code{a} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. \code{b} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explaination}
+\item{beta1_prior}{vector of two values (a, b). \code{a} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. \code{b} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explanation}
 
 \item{n_MCMC_chain}{number of MCMC chains, default to 1.}
 
@@ -40,9 +43,11 @@ BJSM_binary(
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
-\item{six}{TRUE or FALSE. If TRUE, will run the six beta model, if FALSE will run the two beta model. default = TRUE}
+\item{six}{TRUE or FALSE. If TRUE, will run the six beta model (allow for estimating \code{beta_0k} and \code{beta_1k} values that differ among different treatments k), if FALSE will run the two beta model. default = TRUE.}
 
 \item{DTR}{TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
+
+\item{digits}{the number of significant digits to use when printing}
 }
 \value{
 \describe{
@@ -51,31 +56,19 @@ BJSM_binary(
 
 \item{se_hat_bjsm}{standard error of the response rate}
 
-\item{ci_pi_A}{x\% credible intervals for A}
+\item{ci_pi_A, ci_pi_B, ci_pi_C}{x\% credible intervals for treatment A, B, C}
 
-\item{ci_pi_B}{x\% credible intervals for B}
+\item{diff_AB, diff_BC. diff_AC}{estimate of differences between treatments A and B, B and C, A and C}
 
-\item{ci_pi_C}{x\% credible intervals for C}
+\item{ci_diff_AB, ci_diff_BC, ci_diff_AC}{x\% credible intervals for the differences between treatments A and B, B and C, A and C}
 
-\item{diff_AB}{estimate of differences between treatments A and B}
+\item{se_AB, se_BC, se_AC}{standard error for the differences between treatments A and B, B and C, A and C}
 
-\item{diff_BC}{estimate of differences between treatments B and C}
+\item{beta0_hat, beta1_hat}{linkage parameter \code{beta0} and \code{beta1} estimates}
 
-\item{diff_AC}{estimate of differences between treatments A and C}
+\item{se_beta0_hat, se_beta1_hat}{standard error of the estimated value of linkage parameter \code{beta0} and \code{beta1}}
 
-\item{ci_diff_AB}{x\% credible intervals for the differences between A and B}
-
-\item{ci_diff_BC}{x\% credible intervals for the differences between B and C}
-
-\item{ci_diff_AC}{x\% credible intervals for the differences between A and C}
-
-\item{beta0_hat}{linkage parameter \code{beta0} estimates}
-
-\item{beta1_hat}{linkage parameter \code{beta1} estimates}
-
-\item{ci_beta0_hat}{linkage parameter \code{beta0} credible interval}
-
-\item{ci_beta1_hat}{linkage parameter \code{beta1} credible interval}
+\item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
 
 \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
 }
@@ -90,6 +83,8 @@ For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alph
 
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 second stage response probabilities through linkage parameters.
+
+Please refer to the paper listed under \code{reference} section for detailed definition of parameters.
 }
 \examples{
 mydata = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
@@ -101,13 +96,20 @@ BJSM_result = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"
     beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
     MCMC_SAMPLE = 60000, ci = 0.95, six = TRUE, DTR = TRUE)
 
+BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
+    pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+    beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
+    MCMC_SAMPLE = 60000, ci = 0.95, six = FALSE, DTR = FALSE)
+
+summary(BJSM_result)
+summary(BJSM_result2)
+
 }
 \references{
 Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
 Statistics in medicine, 37(26), pp.3723-3732.
 
-Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
-randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment, randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
 }
 \seealso{
 \code{\link{data_simulation}} \cr

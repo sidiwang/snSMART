@@ -2,12 +2,20 @@
 % Please edit documentation in R/JSRM_dose_binary.R
 \name{JSRM_binary_dose}
 \alias{JSRM_binary_dose}
+\alias{summary.JSRM_binary}
+\alias{print.JSRM_binary}
 \title{JSRM for dose level snSMART}
 \usage{
 JSRM_binary_dose(data)
+
+\method{summary}{JSRM_binary}(object, digits = 5, ...)
+
+\method{print}{JSRM_binary}(object, digits = 5, ...)
 }
 \arguments{
 \item{data}{data format produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function}
+
+\item{digits}{the number of significant digits to use when printing}
 }
 \value{
 a \code{list} containing
@@ -27,6 +35,8 @@ mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P 
      trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 
 JSRM_result = JSRM_binary_dose(data = mydata)
+
+summary(JSRM_result)
 
 }
 \references{

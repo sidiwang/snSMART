@@ -64,21 +64,21 @@ c_trialSim = function(stage1effects, stage2weights, stagecorrs, variance, stay.e
     stage1EFF = mean(trialData$stage1outcome)
     stage2EFF = mean(trialData$stage2outcome)
 
-    stage2best = sum(trialData$trt2 == which.max(treatInfo[,1]))/sum(n)
+    stage2best = sum(trialData$trt2 == which.max(treatInfo[, 1]))/sum(n)
 
-    overallbest = sum(trialData$trt2 == which.max(treatInfo[,1]) | trialData$trt1 == which.max(treatInfo[,1]))/sum(n)
+    overallbest = sum(trialData$trt2 == which.max(treatInfo[, 1]) | trialData$trt1 == which.max(treatInfo[, 1]))/sum(n)
 
-    stage2worst = sum(trialData$trt2 == which.min(treatInfo[,1]))/sum(n)
+    stage2worst = sum(trialData$trt2 == which.min(treatInfo[, 1]))/sum(n)
 
-    overallworst = sum(trialData$trt2 == which.min(treatInfo[,1]) | trialData$trt1 == which.min(treatInfo[,1]))/sum(n)
+    overallworst = sum(trialData$trt2 == which.min(treatInfo[, 1]) | trialData$trt1 == which.min(treatInfo[, 1]))/sum(n)
 
     improve = sum(trialData$stage1outcome < trialData$stage2outcome)/sum(n)
 
-    switchBetterOrStayedBest = sum((trialData$trt1==which.min(treatInfo[,1]) & trialData$trt2!=which.min(treatInfo[,1])) | trialData$trt2 == which.max (treatInfo[,1]))/sum(n)
-    stayedSame = sum(trialData$trt1!=which.max(treatInfo[,1]) & trialData$trt1==trialData$trt2)/sum(n)
+    switchBetterOrStayedBest = sum((trialData$trt1 == which.min(treatInfo[, 1]) & trialData$trt2 != which.min(treatInfo[, 1])) | trialData$trt2 == which.max (treatInfo[,1]))/sum(n)
+    stayedSame = sum(trialData$trt1 != which.max(treatInfo[, 1]) & trialData$trt1 == trialData$trt2)/sum(n)
 
-    gotBetter =  sum((trialData$trt1==which.min(treatInfo[,1]) & trialData$trt2!=which.min(treatInfo[,1])) | (trialData$trt2 != which.max(treatInfo[,1]) & trialData$trt2 == which.max(treatInfo[,1])))/sum(n)
-    gotWorse = sum((trialData$trt1==which.max(treatInfo[,1]) & trialData$trt2!=which.max(treatInfo[,1])) | (trialData$trt2 != which.min(treatInfo[,1]) & trialData$trt2 == which.min(treatInfo[,1])))/sum(n)
+    gotBetter =  sum((trialData$trt1 == which.min(treatInfo[, 1]) & trialData$trt2 != which.min(treatInfo[, 1])) | (trialData$trt2 != which.max(treatInfo[, 1]) & trialData$trt2 == which.max(treatInfo[, 1])))/sum(n)
+    gotWorse = sum((trialData$trt1 == which.max(treatInfo[, 1]) & trialData$trt2 != which.max(treatInfo[, 1])) | (trialData$trt2 != which.min(treatInfo[, 1]) & trialData$trt2 == which.min(treatInfo[, 1])))/sum(n)
 
     x = rbind(x, cbind(stage1EFF, stage2EFF, stage2best, overallbest, stage2worst, overallworst, improve, switchBetterOrStayedBest, stayedSame, gotBetter, gotWorse))
   }

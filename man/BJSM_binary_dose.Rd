@@ -2,6 +2,7 @@
 % Please edit documentation in R/BJSM_dose_binary.R
 \name{BJSM_binary_dose}
 \alias{BJSM_binary_dose}
+\alias{print.BJSM_dose_binary}
 \title{BJSM binary (dose level snSMART design)}
 \usage{
 BJSM_binary_dose(
@@ -15,6 +16,8 @@ BJSM_binary_dose(
   MCMC_SAMPLE,
   ci = 0.95
 )
+
+\method{print}{BJSM_dose_binary}(object, digits = 5, ...)
 }
 \arguments{
 \item{data}{trial data generated through function \code{\link{trial_dataset_dose}} or \code{\link{data_simulation_dose}}}
@@ -34,22 +37,20 @@ BJSM_binary_dose(
 \item{MCMC_SAMPLE}{number of iterations for MCMC}
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
+
+\item{digits}{the number of significant digits to use when printing}
 }
 \value{
 \describe{
 \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
 \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 \item{se_hat_bjsm}{standard error of the response rate}
-\item{ci_pi_P}{x\% credible intervals for A}
-\item{ci_pi_L}{x\% credible intervals for B}
-\item{ci_pi_H}{x\% credible intervals for C}
-\item{diff_PL}{estimate of differences between treatments A and B}
-\item{diff_LH}{estimate of differences between treatments B and C}
-\item{diff_PH}{estimate of differences between treatments A and C}
-\item{ci_diff_PL}{x\% credible intervals for the differences between A and B}
-\item{ci_diff_LH}{x\% credible intervals for the differences between B and C}
-\item{ci_diff_PH}{x\% credible intervals for the differences between A and C}
+\item{ci_pi_P, ci_pi_L, ci_pi_H}{x\% credible intervals for treatment P, L, H}
+\item{diff_PL, diff_LH, diff_PH}{estimate of differences between treatment P and L, L and H, P and H}
+\item{se_PL, se_LH, se_PH}{standard error of the estimated differences between treatments}
+\item{ci_diff_PL, ci_diff_LH, ci_diff_PH}{x\% credible intervals for the differences between treatment P and L, L and H, P and H}
 \item{beta_hat}{linkage parameter beta estimates}
+\item{se_beta}{standard error of the estimated value of beta}
 \item{ci_beta_hat}{linkage parameter beta estimates}}
 }
 \description{
@@ -62,6 +63,8 @@ For pareto distribution, \code{prior.a} is the scale parameter \code{alpha}, \co
 
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 second stage response probabilities through linkage parameters.
+
+Please refer to the paper listed under \code{reference} section for detailed definition of parameters.
 }
 \examples{
 mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P = c(3, 2), trt_rep_L = c(5, 5),
@@ -71,6 +74,8 @@ mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P 
 BJSM_dose_result = BJSM_binary_dose(data = mydata, prior_dist = c("beta", "gamma"),
     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+
+summary(BJSM_dose_result)
 
 }
 \references{

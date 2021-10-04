@@ -161,6 +161,7 @@ trial_dataset_dose <- function(trt, resp,
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param prior_dist vector of two values ("prior distribution for \code{pi}", "prior distribution for \code{beta}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "gamma")
+#' @param digits the number of significant digits to use when printing
 #'
 #' @details
 #' For gamma distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For beta distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -169,21 +170,19 @@ trial_dataset_dose <- function(trt, resp,
 #' The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 #' second stage response probabilities through linkage parameters.
 #'
+#' Please refer to the paper listed under `reference` section for detailed definition of parameters.
+#'
 #' @return
 #' \describe{
 #'   \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
 #'   \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'   \item{se_hat_bjsm}{standard error of the response rate}
-#'   \item{ci_pi_P}{x% credible intervals for A}
-#'   \item{ci_pi_L}{x% credible intervals for B}
-#'   \item{ci_pi_H}{x% credible intervals for C}
-#'   \item{diff_PL}{estimate of differences between treatments A and B}
-#'   \item{diff_LH}{estimate of differences between treatments B and C}
-#'   \item{diff_PH}{estimate of differences between treatments A and C}
-#'   \item{ci_diff_PL}{x% credible intervals for the differences between A and B}
-#'   \item{ci_diff_LH}{x% credible intervals for the differences between B and C}
-#'   \item{ci_diff_PH}{x% credible intervals for the differences between A and C}
+#'   \item{ci_pi_P, ci_pi_L, ci_pi_H}{x% credible intervals for treatment P, L, H}
+#'   \item{diff_PL, diff_LH, diff_PH}{estimate of differences between treatment P and L, L and H, P and H}
+#'   \item{se_PL, se_LH, se_PH}{standard error of the estimated differences between treatments}
+#'   \item{ci_diff_PL, ci_diff_LH, ci_diff_PH}{x% credible intervals for the differences between treatment P and L, L and H, P and H}
 #'   \item{beta_hat}{linkage parameter beta estimates}
+#'   \item{se_beta}{standard error of the estimated value of beta}
 #'   \item{ci_beta_hat}{linkage parameter beta estimates}}
 #'
 #'
@@ -196,6 +195,8 @@ trial_dataset_dose <- function(trt, resp,
 #'     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
 #'     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 #'
+#' summary(BJSM_dose_result)
+#'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 #' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
@@ -205,6 +206,7 @@ trial_dataset_dose <- function(trt, resp,
 #' \code{\link{trial_dataset_dose}} \cr
 #' \code{\link{JSRM_binary_dose}}
 #'
+#' @rdname BJSM_binary_dose
 #' @export
 
 BJSM_binary_dose = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, BURN.IN,
@@ -226,15 +228,15 @@ BJSM_binary_dose = function(data, prior_dist, pi_prior, normal.par, beta_prior, 
   mydata = data
   mydata$response_status_stageI = mydata$response_stageI + 1
 
-  bugfile  <- readLines("inst/BJSM_dose.bug")
-  bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
-  bugfile2  <- gsub(pattern = "beta_prior_dist", replacement = beta_prior_dist, x = bugfile)
+  bugfile <- readLines("inst/BJSM_dose.bug")
+  bugfile <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
+  bugfile2 <- gsub(pattern = "beta_prior_dist", replacement = beta_prior_dist, x = bugfile)
 
-  writeLines(bugfile2, con="inst/BJSM_dose_new.bug")
+  writeLines(bugfile2, con = "inst/BJSM_dose_new.bug")
   jag.model.name <- "BJSM_dose_new.bug"
   tryCatch({
-    jag <- rjags::jags.model(file.path("inst",jag.model.name),
-                             data=list(overall_sample_size = nrow(mydata),
+    jag <- rjags::jags.model(file.path("inst", jag.model.name),
+                             data = list(overall_sample_size = nrow(mydata),
                                        num_arms = NUM_ARMS,
                                        response_stageI = mydata$response_stageI,
                                        response_stageII = mydata$response_stageII,
@@ -256,41 +258,99 @@ BJSM_binary_dose = function(data, prior_dist, pi_prior, normal.par, beta_prior, 
                                             MCMC_SAMPLE)
   },
   error = function(c) {rbind(error_round,i)
-    posterior_sample_burn=window(posterior_sample,start=BURN.IN, end=MCMC_SAMPLE)
-    posterior_sample_cmb=do.call(rbind, posterior_sample_burn)
-    error_round=rbind(error_round,i)
-    error_count=error_count+1
+    posterior_sample_burn = window(posterior_sample,start = BURN.IN, end = MCMC_SAMPLE)
+    posterior_sample_cmb = do.call(rbind, posterior_sample_burn)
+    error_round = rbind(error_round,i)
+    error_count = error_count+1
   },
-  warning = function(c) {warn_round=rbind(warn_round,i)
-  warn_count=warn_count+1},
+  warning = function(c) {warn_round = rbind(warn_round,i)
+  warn_count = warn_count+1},
   finally = {
-    posterior_sample_burn=window(posterior_sample,start=BURN.IN, end=MCMC_SAMPLE)
-    posterior_sample_cmb=do.call(rbind, posterior_sample_burn)
+    posterior_sample_burn = window(posterior_sample,start = BURN.IN, end = MCMC_SAMPLE)
+    posterior_sample_cmb = do.call(rbind, posterior_sample_burn)
   }
   )
 
 
 
-  out_post = posterior_sample_cmb
+  out_post = as.data.frame(posterior_sample_cmb)
+  colnames(out_post)[c(7:9)] = c("pi_P", "pi_L", "pi_H")
 
 
 
   result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
-                "pi_hat_bjsm" = apply(out_post[,7:9],2,mean),   # estimate of response rate/treatment effect
-                "se_hat_bjsm" = apply(out_post[,7:9],2,sd),     # standard error of the response rate
-                "ci_pi_P" = bayestestR::ci(out_post[,7], ci = ci, method = "HDI"), # x% credible intervals for A
-                "ci_pi_L" = bayestestR::ci(out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for B
-                "ci_pi_H" = bayestestR::ci(out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for C
-                "diff_PL" = mean(out_post[,7] - out_post[,8]), # estimate of differences between treatments A and B
-                "diff_LH" = mean(out_post[,8] - out_post[,9]), # estimate of differences between treatments B and C
-                "diff_PH" = mean(out_post[,7] - out_post[,9]), # estimate of differences between treatments A and C
-                "ci_diff_PL" = bayestestR::ci(out_post[,7] - out_post[,8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
-                "ci_diff_LH" = bayestestR::ci(out_post[,8] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
-                "ci_diff_PH" = bayestestR::ci(out_post[,7] - out_post[,9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
-                "beta_hat" = apply(out_post[,c(1:6)],2,mean), # linkage parameter beta estimates
-                "ci_beta_hat" = HDInterval::hdi(out_post[,1:6], ci)) # linkage parameter beta estimates
+                "pi_hat_bjsm" = apply(out_post[, 7:9],2,mean),   # estimate of response rate/treatment effect
+                "se_hat_bjsm" = apply(out_post[, 7:9],2,sd),     # standard error of the response rate
+                "ci_pi_P" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
+                "ci_pi_L" = bayestestR::ci(out_post[, 8], ci = ci, method = "HDI"), # x% credible intervals for B
+                "ci_pi_H" = bayestestR::ci(out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for C
+                "diff_PL" = mean(out_post[, 7] - out_post[, 8]), # estimate of differences between treatments A and B
+                "diff_LH" = mean(out_post[, 8] - out_post[, 9]), # estimate of differences between treatments B and C
+                "diff_PH" = mean(out_post[, 7] - out_post[, 9]), # estimate of differences between treatments A and C
+                "se_PL" = stats::sd(out_post[, 7] - out_post[, 8]),
+                "se_LH" = stats::sd(out_post[, 8] - out_post[, 9]),
+                "se_PH" = stats::sd(out_post[, 7] - out_post[, 9]),
+                "ci_diff_PL" = bayestestR::ci(out_post[, 7] - out_post[, 8], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and B
+                "ci_diff_LH" = bayestestR::ci(out_post[, 8] - out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for the differences between B and C
+                "ci_diff_PH" = bayestestR::ci(out_post[, 7] - out_post[, 9], ci = ci, method = "HDI"), # x% credible intervals for the differences between A and C
+                "beta_hat" = apply(out_post[, c(1:6)], 2, mean), # linkage parameter beta estimates
+                "se_beta" = apply(out_post[, c(1:6)], 2, stats::sd), # linkage parameter beta estimates
+                "ci_beta_hat" = HDInterval::hdi(out_post[, 1:6], ci)) # linkage parameter beta estimates
 
-
+  class(result) = "BJSM_dose_binary"
 
   return(result)
 }
+
+
+
+#' Summarizing BJSM fits
+#'
+#' `summary` method for class "`BJSM_dose_binary`"
+#'
+#' @param object an object of class "`BJSM_dose_binary`", usually, a result of a call to \code{\link{BJSM_dose_binary}}
+#' @param digits the number of significant digits to use when printing
+#'
+#' @returns
+#' \describe{
+#'    \item{Treatment Effects Estimate}{a 3 x 5 matrix with columns for the estimated treatment effects, its standard error, coverage probability of its credible interval, lower bound for its credible interval and higher bound for its credible interval}
+#'    \item{Differences between Treatments}{a 3 x 5 matrix with columns for the estimated differences in treatment effects between two treatments, its standard error, coverage probability of its credible interval, lower bound and higher bound of the credible interval}
+#'    \item{Linkage Parameter Estimate}{a 6 x 5 matrix with columns for the estimated linkage parameters}
+#' }
+#'
+#'
+#' @export
+summary.BJSM_dose_binary = function(object, digits = 5, ...){
+  cat("\nTreatment Effects Estimate:\n")
+  trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_P, object$ci_pi_L, object$ci_pi_H))
+  rownames(trteff) = c("trtP", "trtL", "trtH")
+  colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(trteff, digits = digits)
+  cat("\nDifferences between Treatments:\n")
+  trtdiff = cbind(rbind(object$diff_PL, object$diff_LH, object$diff_PH), rbind(object$se_PL, object$se_LH, object$se_PH), rbind(object$ci_diff_PL, object$ci_diff_LH, object$ci_diff_PH))
+  rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
+  colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
+  print(trtdiff, digits = digits)
+  cat("\nLinkage Parameter Estimate:\n")
+  betaest = t(rbind(object$beta_hat, object$se_beta, c(rep(trteff[, 3][1], length(object$beta_hat))), object$ci_beta_hat))
+  colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(betaest, digits = digits)
+  cat("\n")
+}
+
+
+#' @rdname BJSM_binary_dose
+#' @export
+print.BJSM_dose_binary = function(object, digits = 5, ...){
+  cat("\nTreatment Effects Estimate:\n")
+  print(object$pi_hat_bjsm)
+  cat("\nDifferences between Treatments:\n")
+  trtdiff = rbind(object$diff_PL, object$diff_LH, object$diff_PH)
+  colnames(trtdiff) = c("estimate")
+  rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
+  print(trtdiff)
+  cat("\nLinkage Parameter Estimate:\n")
+  print(object$beta_hat)
+  cat("\n")
+}
+

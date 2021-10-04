@@ -4,6 +4,7 @@
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each dose level.
 #'
 #' @param data data format produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function
+#' @param digits the number of significant digits to use when printing
 #'
 #' @return a `list` containing
 #' \itemize{
@@ -19,6 +20,8 @@
 #'
 #' JSRM_result = JSRM_binary_dose(data = mydata)
 #'
+#' summary(JSRM_result)
+#'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
 #' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
@@ -28,6 +31,7 @@
 #' \code{\link{trial_dataset_dose}} \cr
 #' \code{\link{BJSM_binary_dose}}
 #'
+#' @rdname JSRM_binary_dose
 #' @export
 #'
 JSRM_binary_dose = function(data){
@@ -40,21 +44,21 @@ JSRM_binary_dose = function(data){
   mydata$disc <- 2 * mydata$treatment_stageI - (mydata$response_stageI == 0)
 
   Y <- c(mydata$response_stageI, mydata$response_stageII)
-  XP1 <- as.numeric(mydata$treatment_stageI==1)
-  XL1 <- as.numeric(mydata$treatment_stageI==2)
-  XH1 <- as.numeric(mydata$treatment_stageI==3)
-  XP2 <- as.numeric(mydata$treatment_stageII==1)
-  XL2 <- as.numeric(mydata$treatment_stageII==2)
-  XH2 <- as.numeric(mydata$treatment_stageII==3)
+  XP1 <- as.numeric(mydata$treatment_stageI == 1)
+  XL1 <- as.numeric(mydata$treatment_stageI == 2)
+  XH1 <- as.numeric(mydata$treatment_stageI == 3)
+  XP2 <- as.numeric(mydata$treatment_stageII == 1)
+  XL2 <- as.numeric(mydata$treatment_stageII == 2)
+  XH2 <- as.numeric(mydata$treatment_stageII == 3)
   XP <- c(XP1, XP2)
   XL <- c(XL1, XL2)
   XH <- c(XH1, XH2)
-  X0P <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI==1,1-mydata$response_stageI,0))
-  X1P <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI==1,mydata$response_stageI,0))
-  X0L <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI==2,1-mydata$response_stageI,0))
-  X1L <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI==2,mydata$response_stageI,0))
-  X0H <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI==3,1-mydata$response_stageI,0))
-  X1H <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI==3,mydata$response_stageI,0))
+  X0P <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 1, 1 - mydata$response_stageI, 0))
+  X1P <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 1, mydata$response_stageI, 0))
+  X0L <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 2, 1 - mydata$response_stageI, 0))
+  X1L <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 2, mydata$response_stageI, 0))
+  X0H <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 3, 1 - mydata$response_stageI, 0))
+  X1H <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 3, mydata$response_stageI, 0))
   ptid <- rep(1:nrow(mydata), 2)
 
   geedata <- data.frame(ptid, XP, XL, XH, X0P, X1P, X0L, X1L, X0H, X1H,  Y)
@@ -62,11 +66,11 @@ JSRM_binary_dose = function(data){
   rm(ptid, XP, XL, XH, X0P, X1P, X0L, X1L, X0H, X1H,  Y)
   try({
     mod1=NULL
-    mod1 <- geepack::geeglm(Y~XP+XL+XH+X0P+X1P+X0L+X1L+X0H+X1H-1, family=poisson(link="log"), data=geedata, id=ptid,corstr = "independence")
+    mod1 <- geepack::geeglm(Y ~ XP + XL + XH + X0P + X1P + X0L + X1L + X0H + X1H - 1, family = poisson(link = "log"), data = geedata, id = ptid,corstr = "independence")
     beta_hat <- mod1$coefficients[1:3];
-    sd_beta_hat <- summary(mod1)$coef[1:3,2];
+    sd_beta_hat <- summary(mod1)$coef[1:3, 2];
     pi_hat <- exp(beta_hat);
-    sd_pi_hat <- exp(beta_hat)*sd_beta_hat;
+    sd_pi_hat <- exp(beta_hat) * sd_beta_hat;
     b_hat <- coef(mod1);
 
   })
@@ -81,3 +85,35 @@ JSRM_binary_dose = function(data){
 
   return(result)
 }
+
+
+
+#' @rdname JSRM_binary_dose
+#' @export
+summary.JSRM_binary = function(object, digits = 5, ...){
+  cat("\nGEE output:\n")
+  print(summary(object$GEE_output))
+  cat("\nTreatment Effect Estimate:\n")
+  trteff = cbind(object$pi_hat, object$sd_pi_hat)
+  rownames(trteff) = c("trtP", "trtL", "trtH")
+  colnames(trteff) = c("Estimate", "Std. Error")
+  print(trteff, digits = digits)
+  cat("\n")
+}
+
+
+
+#' @rdname JSRM_binary_dose
+#' @export
+#'
+print.JSRM_binary = function(object, digits = 5, ...){
+  cat("\nTreatment Effect Estimate:\n")
+  trteff = cbind(object$pi_hat, object$sd_pi_hat)
+  rownames(trteff) = c("trtP", "trtL", "trtH")
+  colnames(trteff) = c("Estimate", "Std. Error")
+  print(trteff, digits = digits)
+  cat("\n")
+}
+
+
+
