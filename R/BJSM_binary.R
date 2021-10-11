@@ -511,7 +511,7 @@ summary.BJSM_binary = function(object, digits = 5, ...){
   }
 
   print(betaest, digits = digits)
-  if (!is.null(object$pi_DTR_est)){
+  if (!is.null(object$pi_DTR_est) == TRUE){
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
     print(object$pi_DTR_est, digits = digits)
   }
@@ -532,7 +532,7 @@ print.BJSM_binary = function(object, digits = 5, ...){
   cat("\nLinkage Parameter Estimate:\n")
   ret = cbind(object$beta0_hat, object$beta1_hat)
   colnames(ret) = c("Estimate", "Std. Error")
-  print()
+  print(ret)
   cat("\n")
 }
 
