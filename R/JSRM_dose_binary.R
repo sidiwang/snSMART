@@ -82,7 +82,7 @@ JSRM_binary_dose = function(data){
                 "sd_pi_hat" = sd_pi_hat) # standard error of the response rate
 
 
-
+  class(result) = "JSRM_binary_dose"
   return(result)
 }
 
@@ -90,7 +90,7 @@ JSRM_binary_dose = function(data){
 
 #' @rdname JSRM_binary_dose
 #' @export
-summary.JSRM_binary = function(object, digits = 5, ...){
+summary.JSRM_binary_dose = function(object, digits = 5, ...){
   cat("\nGEE output:\n")
   print(summary(object$GEE_output))
   cat("\nTreatment Effect Estimate:\n")
@@ -106,7 +106,7 @@ summary.JSRM_binary = function(object, digits = 5, ...){
 #' @rdname JSRM_binary_dose
 #' @export
 #'
-print.JSRM_binary = function(object, digits = 5, ...){
+print.JSRM_binary_dose = function(object, digits = 5, ...){
   cat("\nTreatment Effect Estimate:\n")
   trteff = cbind(object$pi_hat, object$sd_pi_hat)
   rownames(trteff) = c("trtP", "trtL", "trtH")

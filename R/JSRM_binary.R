@@ -219,10 +219,10 @@ summary.JSRM_binary = function(object, digits = 5, ...){
   cat("\nGEE output:\n")
   print(summary(object$GEE_output))
   cat("\nTreatment Effect Estimate:\n")
- # trteff = cbind(object$pi_hat, object$sd_pi_hat)
-#  rownames(trteff) = c("trtA", "trtB", "trtC")
-#  colnames(trteff) = c("Estimate", "Std. Error")
-#  print(trteff, digits = digits)
+  trteff = cbind(object$pi_hat, object$sd_pi_hat)
+  rownames(trteff) = c("trtA", "trtB", "trtC")
+  colnames(trteff) = c("Estimate", "Std. Error")
+  print(trteff, digits = digits)
 
   if (!is.null(object$pi_DTR_hat) == TRUE){
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")

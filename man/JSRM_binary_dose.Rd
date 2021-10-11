@@ -2,15 +2,15 @@
 % Please edit documentation in R/JSRM_dose_binary.R
 \name{JSRM_binary_dose}
 \alias{JSRM_binary_dose}
-\alias{summary.JSRM_binary}
-\alias{print.JSRM_binary}
+\alias{summary.JSRM_binary_dose}
+\alias{print.JSRM_binary_dose}
 \title{JSRM for dose level snSMART}
 \usage{
 JSRM_binary_dose(data)
 
-\method{summary}{JSRM_binary}(object, digits = 5, ...)
+\method{summary}{JSRM_binary_dose}(object, digits = 5, ...)
 
-\method{print}{JSRM_binary}(object, digits = 5, ...)
+\method{print}{JSRM_binary_dose}(object, digits = 5, ...)
 }
 \arguments{
 \item{data}{data format produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function}
