@@ -36,7 +36,7 @@ c_trialDataGen(
 The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
 }
 \description{
-simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
+simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 }
 \examples{
 stage1effects<-c(50,60,70)
@@ -51,7 +51,7 @@ nb<-100
 nc<-100
 n<-c(na,nb,nc)
 
-trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = FALSE)
+trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = TRUE)
 
 }
 \references{

@@ -36,7 +36,7 @@ c_trialSim(
 \describe{
 \item{switch.safety}{input by user or estimated based on data if \code{switch.safety} = NULL}
 \item{stay.ethical}{input by user or estimated based on data if \code{stay.ethical} = NULL}
-\item{stage1Eff}{average simulated stage 1 treatment effect }
+\item{stage1EFF}{average simulated stage 1 treatment effect }
 \item{stage2EFF}{average simulated stage 2 treatment effect }
 \item{stage2best}{percentage of patients assigned to the best treatment in stage 2; overallbest: percentage of patients assigned to the best treatment at least once in the trial}
 \item{stage2worst}{percentage of patients assigned to the worst treatment in stage 2; overallworst: percentage of patients assigned to the worst treatment at least once in the trial}

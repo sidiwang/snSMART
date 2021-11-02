@@ -30,7 +30,7 @@ data_simulation(
 \item{n}{vector of 3 values (first stage sample size of A, first stage sample size of B, first stage sample size of C). e.g. \code{n = c(30, 30, 30)}}
 }
 \value{
-The simulated dataset with five columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}, \code{response_status_stageI} (responders will be 2 and non-responders will be 1)
+The simulated dataset with four columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}
 }
 \description{
 simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset}}

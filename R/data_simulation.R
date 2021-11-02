@@ -10,7 +10,7 @@
 #' @param p_1nC_2A probability for first stage non-responders to C being randomized to arm A in second stage
 #' @param n vector of 3 values (first stage sample size of A, first stage sample size of B, first stage sample size of C). e.g. `n = c(30, 30, 30)`
 #'
-#' @return The simulated dataset with five columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`, `response_status_stageI` (responders will be 2 and non-responders will be 1)
+#' @return The simulated dataset with four columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`
 #'
 #' @examples
 #' data = data_simulation(p_trt = c(0.2, 0.3, 0.4),
@@ -151,7 +151,7 @@ data_simulation <- function(p_trt, discount_y0, discount_y1, p_1nA_2B, p_1nB_2A,
                                 data_positiveC_stageI_treatmentC_stageII
   )
   # responders will be two and non-responders will be one
-  data_stageI_stageII=cbind(data_stageI_stageII_tmp,response_status_stageI=1+data_stageI_stageII_tmp$response_stageI)
+  data_stageI_stageII=cbind(data_stageI_stageII_tmp)
 
   return(data_stageI_stageII)
 }

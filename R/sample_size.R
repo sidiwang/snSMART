@@ -8,7 +8,7 @@
 #' @param coverage the coverage rate (ranges from 0.01 to 0.99) for the posterior difference of top two treatments
 #' @param power the probability (ranges from 0.01 to 0.99) for identify the best treatment
 #' @param mu a vector with 3 values (`muA`, `muB`, `muC`). `muA` is the prior mean (ranges from 0.01 to 0.99) for treatment A, `muB` is the prior mean (ranges from 0.01 to 0.99) for treatment B, `muC` is the prior mean (ranges from 0.01 to 0.99) for treatment C
-#' @param n a vector with 3 values (`nA`, `nB`, `nC`). `nA` is the prior sample size (larger than 0) for treatment A. `nB`is the prior sample size (larger than 0) for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
+#' @param n a vector with 3 values (`nA`, `nB`, `nC`). `nA` is the prior sample size (larger than 0) for treatment A. `nB` is the prior sample size (larger than 0) for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
 #'
 #' @return the estimated sample size per arm for an snSMART
 #'

@@ -39,7 +39,7 @@ data_simulation_dose(
 \item{RAND_PROB_POS_H_TRT}{similar to above}
 }
 \value{
-The simulated dataset with five columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}, \code{response_status_stageI} (responders will be 2 and non-responders will be 1)
+The simulated dataset with four columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}
 }
 \description{
 simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset_dose}}

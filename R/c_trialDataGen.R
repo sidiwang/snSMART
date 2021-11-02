@@ -1,6 +1,6 @@
 #' Data Simulation (continuous snSMART design)
 #'
-#' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1, continuous outcomes). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
+#' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 #'
 #' @param stage1effects a vector of 3 values (`mean effect of treatment A`, `mean effect of treatment B`, `main effect of treatment C`). e.g. `stage1effects = c(40, 50, 70)`
 #' @param stage2weights a vector of 3 values (`weight of stage I`, `weight of stage II`, `weight of staying on the same treatment`). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. `stage2weights = c(0.2, 0.7, 0.3)`
@@ -27,7 +27,7 @@
 #' nc<-100
 #' n<-c(na,nb,nc)
 #'
-#' trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = FALSE)
+#' trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = TRUE)
 #'
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
@@ -105,7 +105,7 @@ c_trialDataGen = function(stage1effects, stage2weights, stagecorrs, variance, n,
     return(trial.data.long)
   }else{
 
-  return(trial.data)
+  return(trial.data[, -8])
   }
 }
 

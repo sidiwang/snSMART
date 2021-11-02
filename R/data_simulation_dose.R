@@ -14,7 +14,7 @@
 #' @param RAND_PROB_POS_H_TRT similar to above
 #' @param n vector of 3 values (first stage sample size of placebo, first stage sample size of low dose, first stage sample size of high dose)
 #'
-#' @return The simulated dataset with five columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`, `response_status_stageI` (responders will be 2 and non-responders will be 1)
+#' @return The simulated dataset with four columns: `response_stageI`, `treatment_stageI`, `response_stageII`, `treatment_stageII`
 #'
 #' @examples
 #' data = data_simulation_dose(p_trt = c(0.15, 0.15, 0.15),
@@ -214,7 +214,7 @@ data_simulation_dose <- function(p_trt, RESPONSE_RATE_DISCOUNT_P, RESPONSE_RATE_
                                 data_responseH_stageI_treatmentH_stageII,
                                 data_responseH_stageI_treatmentL_stageII
   )
-  data_stageI_stageII_tmp$response_status_stageI<-data_stageI_stageII_tmp$response_stageI+1
+  #data_stageI_stageII_tmp$response_status_stageI<-data_stageI_stageII_tmp$response_stageI+1
 
   return(data_stageI_stageII_tmp)
 }

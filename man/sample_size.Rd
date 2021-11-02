@@ -19,7 +19,7 @@ sample_size(pi, beta1, beta0, coverage, power, mu, n)
 
 \item{mu}{a vector with 3 values (\code{muA}, \code{muB}, \code{muC}). \code{muA} is the prior mean (ranges from 0.01 to 0.99) for treatment A, \code{muB} is the prior mean (ranges from 0.01 to 0.99) for treatment B, \code{muC} is the prior mean (ranges from 0.01 to 0.99) for treatment C}
 
-\item{n}{a vector with 3 values (\code{nA}, \code{nB}, \code{nC}). \code{nA} is the prior sample size (larger than 0) for treatment A. \code{nB}is the prior sample size (larger than 0) for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
+\item{n}{a vector with 3 values (\code{nA}, \code{nB}, \code{nC}). \code{nA} is the prior sample size (larger than 0) for treatment A. \code{nB} is the prior sample size (larger than 0) for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
 }
 \value{
 the estimated sample size per arm for an snSMART
