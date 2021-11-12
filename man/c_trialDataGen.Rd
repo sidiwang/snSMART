@@ -11,8 +11,7 @@ c_trialDataGen(
   variance,
   n,
   stay.ethical = NULL,
-  switch.safety = NULL,
-  wideForm = TRUE
+  switch.safety = NULL
 )
 }
 \arguments{
@@ -29,8 +28,6 @@ c_trialDataGen(
 \item{stay.ethical}{numerical value, if stage 1 outcome is bigger than \code{stay.ethical} value, patient has probability of 1 of staying on the same treatment in stage 2}
 
 \item{switch.safety}{numerical value, if stage 1 outcome is smaller than \code{switch.safety} value, patient has probability of 0 of staying on the same treatment in stage 2}
-
-\item{wideForm}{whether to output the simulated dataset in wide form}
 }
 \value{
 The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
@@ -51,7 +48,7 @@ nb<-100
 nc<-100
 n<-c(na,nb,nc)
 
-trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = TRUE)
+trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n)
 
 }
 \references{

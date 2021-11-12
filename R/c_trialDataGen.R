@@ -9,7 +9,6 @@
 #' @param n vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}
 #' @param stay.ethical numerical value, if stage 1 outcome is bigger than `stay.ethical` value, patient has probability of 1 of staying on the same treatment in stage 2
 #' @param switch.safety numerical value, if stage 1 outcome is smaller than `switch.safety` value, patient has probability of 0 of staying on the same treatment in stage 2
-#' @param wideForm whether to output the simulated dataset in wide form
 #'
 #' @return The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
 #'
@@ -27,7 +26,7 @@
 #' nc<-100
 #' n<-c(na,nb,nc)
 #'
-#' trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n, wideForm = TRUE)
+#' trialData = c_trialDataGen(stage1effects, stage2weights, stagecorrs, variance, n)
 #'
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
@@ -42,9 +41,8 @@
 
 
 c_trialDataGen = function(stage1effects, stage2weights, stagecorrs, variance, n,
-                          stay.ethical = NULL, switch.safety = NULL,
-                          wideForm = TRUE){
-
+                          stay.ethical = NULL, switch.safety = NULL){
+  wideForm = TRUE
   #number of treatments based on input values
   n.trt <- length(stage1effects)
 

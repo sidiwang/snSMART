@@ -24,7 +24,7 @@ BJSM_binary_dose(
 
 \item{prior_dist}{vector of two values ("prior distribution for \code{pi}", "prior distribution for \code{beta}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "gamma")}
 
-\item{pi_prior}{vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for \code{pi} (response rate) of placebo. \code{b} is the parameter \code{b} of the prior distribution for \code{pi} (response rate) of placebo. Please check the \code{Details} section for more explanation}
+\item{pi_prior}{vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for \code{pi} (response rate) of placebo. \code{b} is the parameter \code{b} of the prior distribution for \code{pi} of placebo. Please check the \code{Details} section for more explanation}
 
 \item{normal.par}{vector of two values (normal.mean, normal.var). our function assumes that the logarithm of treatment effect ratio follows a Gaussian prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)}, and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of this Gaussian prior. \code{normal.var} is the variance of this Gaussian prior distribution}
 
@@ -44,7 +44,7 @@ BJSM_binary_dose(
 \describe{
 \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
 \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
-\item{se_hat_bjsm}{standard error of the response rate}
+\item{se_hat_bjsm}{standard error of the estimated response rate}
 \item{ci_pi_P, ci_pi_L, ci_pi_H}{x\% credible intervals for treatment P, L, H}
 \item{diff_PL, diff_LH, diff_PH}{estimate of differences between treatment P and L, L and H, P and H}
 \item{se_PL, se_LH, se_PH}{standard error of the estimated differences between treatments}
@@ -62,9 +62,11 @@ For gamma distribution, \code{prior.a} is the shape parameter \code{r}, \code{pr
 For pareto distribution, \code{prior.a} is the scale parameter \code{alpha}, \code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
 
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
-second stage response probabilities through linkage parameters.
+second stage response probabilities through linkage parameters. The stage 1 response rate for treatment \eqn{k} is denoted as \eqn{\pi_k}. The stage 2 response rate for stage 1 responders to
+treatment \eqn{k} who receive treatment \eqn{k'} in stage 2 is equal to \eqn{\beta_{1k}\pi_k'}. For nonresponders to treatment \eqn{k} in stage 1 who receive treatment \eqn{k*} in stage 2, the stage
+2 response rate is equal to \eqn{\beta_{0k}\pi_k*}
 
-Please refer to the paper listed under \code{reference} section for detailed definition of parameters.
+Please refer to the paper listed under \code{reference} section for dose level snSMART design and detailed definition of parameters.
 }
 \examples{
 mydata = trial_dataset_dose(trt = c(30, 30, 30), resp = c(5, 10, 15), trt_rep_P = c(3, 2), trt_rep_L = c(5, 5),

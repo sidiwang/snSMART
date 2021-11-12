@@ -5,8 +5,8 @@
 #'``
 #'
 #' @param data trial data generated through function \code{\link{c_trialDataGen}}
-#' @param beta_prior.mean vector of mean of the prior distributions (normal distribution) for \code{beta} (treatment effect). Please check the `Details` section for more explaination
-#' @param beta_prior.sd vector of standard deviation of the prior distributions (normal distribution) for \code{beta} (treatment effect). Please check the `Details` section for more explaination
+#' @param beta_prior.mean a 3-element vector of mean of the prior distributions (normal distribution) for \code{beta}s (treatment effect). Please check the `Details` section for more explaination
+#' @param beta_prior.sd a 3-element vector of standard deviation of the prior distributions (normal distribution) for \code{beta}s (treatment effect). Please check the `Details` section for more explaination
 #' @param alpha3_prior.sd standard deviation of the prior distribution (folded normal distribution) of \code{alpha3} (if the patient stays on the same treatment, \code{alpha3} is the cumulative effect of stage 1 that occurs on the treatment longer term). Please check the `Details` section for more explaination
 #' @param n_MCMC_chain number of MCMC chains, default to 1
 #' @param n.adapt the number of iterations for adaptation. If \code{n.adapt = 0} then no adaptation takes place
@@ -18,7 +18,7 @@
 
 #'
 #' @details
-#' section 2.2.1 of the paper listed under `reference` provides a detailed description of the assumptions of the model.
+#' section 2.2.1 and 2.2.2 of the paper listed under `reference` provides a detailed description of the assumptions and prior distributions of the model.
 #'
 #' @return
 #' \describe{

@@ -60,7 +60,7 @@ c_trialSim = function(stage1effects, stage2weights, stagecorrs, variance, stay.e
   treatInfo = rbind(c(stage1effects[1], rep(0, 4)), c(stage1effects[2], rep(0, 4)), c(stage1effects[3], rep(0, 4)))
 
     for(i in 1:nsim){
-    trialData = c_trialDataGen(stage1effects = stage1effects, stage2weights = stage2weights, stagecorrs = stagecorrs, variance = variance, n = n, stay.ethical = stay.ethical, switch.safety = switch.safety, wideForm = T)
+    trialData = c_trialDataGen(stage1effects = stage1effects, stage2weights = stage2weights, stagecorrs = stagecorrs, variance = variance, n = n, stay.ethical = stay.ethical, switch.safety = switch.safety)
     stage1EFF = mean(trialData$stage1outcome)
     stage2EFF = mean(trialData$stage2outcome)
 
