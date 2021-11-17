@@ -28,7 +28,7 @@
 #'
 #'
 #' @details
-#' please check the paper provided in the reference section, section 2.2.2 Bayesian decision rules. `drop_threshold_large` and `drop_threshold_small` are corresponding to `\tau_l` and `\phi_l` respectively
+#' please check the paper provided in the reference section, section 2.2.2 Bayesian decision rules. `drop_threshold_large` and `drop_threshold_small` are corresponding to \eqn{\tau_l} and \eqn{\phi_l} respectively
 #'
 #' @return
 #' \describe{

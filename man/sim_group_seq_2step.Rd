@@ -100,7 +100,7 @@ generate data for the Group Sequential snSMART with a two-step rule, which is de
 Use BJSM (Bayesian Joint Stage Model) method to conduct interim and final analysis.
 }
 \details{
-please check the paper provided in the reference section, section 2.2.2 Bayesian decision rules. \code{drop_threshold_large} and \code{drop_threshold_small} are corresponding to \verb{\\tau_l} and \verb{\\phi_l} respectively
+please check the paper provided in the reference section, section 2.2.2 Bayesian decision rules. \code{drop_threshold_large} and \code{drop_threshold_small} are corresponding to \eqn{\tau_l} and \eqn{\phi_l} respectively
 }
 \examples{
 simu1 = sim_group_seq_2step(p_trt = c(0.25, 0.45, 0.65), discount_y = c(1.5,1.5,1.5),

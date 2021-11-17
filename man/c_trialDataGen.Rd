@@ -36,12 +36,12 @@ The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 o
 simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 }
 \examples{
-stage1effects<-c(50,60,70)
-stage2weights<-c(.2, .8, 5)
-stagecorrs<-c(.8,.3)
-variance<-10
-switch.safety<-NULL
-stay.ethical<- NULL
+stage1effects <- c(50, 60, 70)
+stage2weights <- c(.2, .8, 5)
+stagecorrs <- c(.8, .3)
+variance <- 10
+switch.safety <- NULL
+stay.ethical <- NULL
 #number of patients on each treatment
 na<-100
 nb<-100

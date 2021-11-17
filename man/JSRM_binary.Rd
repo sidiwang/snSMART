@@ -13,7 +13,7 @@ JSRM_binary(data, six = TRUE, DTR = TRUE)
 \method{print}{JSRM_binary}(object, digits = 5, ...)
 }
 \arguments{
-\item{data}{data format produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}}
+\item{data}{data produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}}
 
 \item{six}{if TRUE, will run the six beta model, if FALSE will run the two
 beta model. Default is \code{six = TRUE}}

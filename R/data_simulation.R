@@ -1,6 +1,6 @@
 #' Data Simulation (standard snSMART design)
 #'
-#' simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset}}
+#' simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for generating large number of simulations Not to be confused with \code{\link{trial_dataset}}
 #'
 #' @param p_trt vector of 3 values (first stage response rate of trt A, first stage response rate of trt B, first stage response rate of trt C). e.g. `p_trt = c(0.2, 0.3, 0.5)`
 #' @param discount_y0 linkage parameters, for nonresponders to treatment k in the first stage who received treatment `k'` in the second stage, the second stage response rate is equal to `discount_y0 * pi_IK'`
@@ -155,3 +155,4 @@ data_simulation <- function(p_trt, discount_y0, discount_y1, p_1nA_2B, p_1nB_2A,
 
   return(data_stageI_stageII)
 }
+

@@ -3,7 +3,7 @@
 #' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each dose level.
 #'
-#' @param data data format produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function
+#' @param data data produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function
 #' @param digits the number of significant digits to use when printing
 #'
 #' @return a `list` containing

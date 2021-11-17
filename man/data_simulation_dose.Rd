@@ -20,9 +20,9 @@ data_simulation_dose(
 \arguments{
 \item{p_trt}{vector of 3 values (first stage response rate of placebo, first stage response rate of low dose treatment, first stage response rate of high dose treatment)}
 
-\item{RESPONSE_RATE_DISCOUNT_P}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_P_Y_0}, \code{RESPONSE_RATE_DISCOUNT_P_Y_1}). \code{RESPONSE_RATE_DISCOUNT_P_Y_0} is the linkage parameter for nonresponders to placebo in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_0 * pi_IK'}. \code{RESPONSE_RATE_DISCOUNT_P_Y_1} is the linkage parameter for responders to placebo in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_1 * first stage response rate of trt K'}}
+\item{RESPONSE_RATE_DISCOUNT_P}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_P_Y_0}, \code{RESPONSE_RATE_DISCOUNT_P_Y_1}). \code{RESPONSE_RATE_DISCOUNT_P_Y_0} is the linkage parameter for nonresponders to placebo in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_0 * pi_IK'}. \code{RESPONSE_RATE_DISCOUNT_P_Y_1} is the linkage parameter for responders to placebo in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate is equal to \verb{RESPONSE_RATE_DISCOUNT_P_Y_1 * pi_IK'}}
 
-\item{RESPONSE_RATE_DISCOUNT_L}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_L_Y_0}, \code{RESPONSE_RATE_DISCOUNT_L_Y_1}). \code{RESPONSE_RATE_DISCOUNT_L_Y_0} is the linkage parameters for nonresponders to low dose treatment in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_0 * first stage response rate of trt K}. \code{RESPONSE_RATE_DISCOUNT_L_Y_1} is the linkage parameter for responders to low dose treatment in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate in the second stage is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_1 * first stage response rate of trt K}}
+\item{RESPONSE_RATE_DISCOUNT_L}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_L_Y_0}, \code{RESPONSE_RATE_DISCOUNT_L_Y_1}). \code{RESPONSE_RATE_DISCOUNT_L_Y_0} is the linkage parameters for nonresponders to low dose treatment in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_0 * pi_IK'}. \code{RESPONSE_RATE_DISCOUNT_L_Y_1} is the linkage parameter for responders to low dose treatment in the first stage who received treatment \verb{k'} in the second stage, the second stage response rate is equal to \verb{RESPONSE_RATE_DISCOUNT_L_Y_1 * pi_IK'}}
 
 \item{RESPONSE_RATE_DISCOUNT_H}{vector of 2 values (\code{RESPONSE_RATE_DISCOUNT_H_Y_0}, \code{RESPONSE_RATE_DISCOUNT_H_Y_1}). Similar to \code{RESPONSE_RATE_DISCOUNT_P} and \code{RESPONSE_RATE_DISCOUNT_L}}
 
@@ -42,7 +42,7 @@ data_simulation_dose(
 The simulated dataset with four columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}
 }
 \description{
-simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset_dose}}
+simulate data for the dose level design of snSMART (placebo, low, high dose; binary outcome) based on response rate of each treatment. Useful for generating large number of simulations. Not to be confused with \code{\link{trial_dataset_dose}}
 }
 \examples{
 data = data_simulation_dose(p_trt = c(0.15, 0.15, 0.15),

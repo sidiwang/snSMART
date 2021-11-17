@@ -31,9 +31,9 @@ group_seq(
 \code{trt.1st} (treatment arm for first treatment), \code{resp.1st} (response for first treatment), \code{trt.2nd} (treatment arm for second treatment), \code{resp.2nd} (response for second
 treatment) data yet to be observed should be marked as "\code{NA}"}
 
-\item{rule.type}{whether this trial is designed as a 1 step rule test  (\code{rule.type = 1}) or 2 step rule test (\code{rule.type = 2})}
+\item{rule.type}{indicates whether this trial is designed as a 1 step rule test  (\code{rule.type = 1}) or 2 step rule test (\code{rule.type = 2})}
 
-\item{interim}{whether user is analyzing an interim analysis via BJSM (\code{interim} = TRUE) or an final analysis via BJSM (\code{interim} = FALSE)}
+\item{interim}{indicates whether user is conducting an interim analysis via BJSM (\code{interim} = TRUE) or an final analysis via BJSM (\code{interim} = FALSE)}
 
 \item{drop_threshold}{a number between 0 and 1. Only assign value to this parameter when \code{rule.type = 1} and \code{interim = TRUE}. If the posteriors probability of a treatment having the smallest response rate is bigger than the \code{drop_threshold}, this treatment will be dropped at that update. Default value is 0.5}
 
@@ -88,7 +88,7 @@ if \code{interim = FALSE}, this function returns:
 }
 }
 \description{
-After obtain real trial data, this function can be used to decide which arm to drop for an interim analysis or provide a full final analysis
+After obtain real trial data, this function can be used to decide which arm to drop in an interim analysis or provide a full final analysis
 }
 \details{
 For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -97,7 +97,7 @@ For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alph
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 second stage response probabilities through linkage parameters.
 
-(paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small are corresponding to \eqn{tau_l} and \eqn{phi_l} respectively)
+(paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small correspond to \eqn{tau_l} and \eqn{phi_l} respectively)
 
 Please refer to the paper listed under \code{reference} section for detailed definition of parameters.
 }

@@ -13,7 +13,7 @@ JSRM_binary_dose(data)
 \method{print}{JSRM_binary_dose}(object, digits = 5, ...)
 }
 \arguments{
-\item{data}{data format produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function}
+\item{data}{data produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function}
 
 \item{digits}{the number of significant digits to use when printing}
 }

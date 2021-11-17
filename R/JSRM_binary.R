@@ -3,7 +3,7 @@
 #' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
 #'
-#' @param data data format produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}
+#' @param data data produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}
 #' @param six if TRUE, will run the six beta model, if FALSE will run the two
 #' beta model. Default is `six = TRUE`
 #' @param DTR if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens

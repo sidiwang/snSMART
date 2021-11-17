@@ -13,12 +13,12 @@
 #' @return The simulated dataset with 7 variables: \code{patient id, treatment 1, stage 1 outcome, probability of stay on the same treatment, realization of staying flag (1 = stay on the same treatment, 0 = rerandomization in stage 2), treatment 2, stage 2 outcome}
 #'
 #' @examples
-#' stage1effects<-c(50,60,70)
-#' stage2weights<-c(.2, .8, 5)
-#' stagecorrs<-c(.8,.3)
-#' variance<-10
-#' switch.safety<-NULL
-#' stay.ethical<- NULL
+#' stage1effects <- c(50, 60, 70)
+#' stage2weights <- c(.2, .8, 5)
+#' stagecorrs <- c(.8, .3)
+#' variance <- 10
+#' switch.safety <- NULL
+#' stay.ethical <- NULL
 
 #' #number of patients on each treatment
 #' na<-100
@@ -53,7 +53,7 @@ c_trialDataGen = function(stage1effects, stage2weights, stagecorrs, variance, n,
 
   #probability of staying on same trt for each patient
   pstay <- ifelse(stage1outcome/100 > 1, 1,
-                ifelse(stage1outcome/100 < 0, 0 ,
+                ifelse(stage1outcome/100 < 0, 0,
                        stage1outcome/100))
   if(!is.null(switch.safety)){
     pstay <- ifelse(stage1outcome < switch.safety, 0, pstay)
@@ -68,7 +68,7 @@ c_trialDataGen = function(stage1effects, stage2weights, stagecorrs, variance, n,
   rerand = c()
   trt.vect = 1:n.trt
   for(i in 1:n.trt){
-    rerand = c(rerand, sample(trt.vect[!trt.vect == i], n[i], replace=T))
+    rerand = c(rerand, sample(trt.vect[!trt.vect == i], n[i], replace = T))
   }
   trt1 <- c()
   for(i in 1:n.trt){

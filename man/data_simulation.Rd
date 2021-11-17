@@ -33,7 +33,7 @@ data_simulation(
 The simulated dataset with four columns: \code{response_stageI}, \code{treatment_stageI}, \code{response_stageII}, \code{treatment_stageII}
 }
 \description{
-simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for large number simulation analysis. Not to be confused with \code{\link{trial_dataset}}
+simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for generating large number of simulations Not to be confused with \code{\link{trial_dataset}}
 }
 \examples{
 data = data_simulation(p_trt = c(0.2, 0.3, 0.4),
