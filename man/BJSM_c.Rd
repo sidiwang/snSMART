@@ -18,9 +18,9 @@ BJSM_c(
   n.digits
 )
 
-\method{summary}{BJSM_c}(object, digits = 5)
+\method{summary}{BJSM_c}(object)
 
-\method{print}{BJSM_c}(object, digits = 5)
+\method{print}{BJSM_c}(object)
 }
 \arguments{
 \item{data}{trial data generated through function \code{\link{c_trialDataGen}}}
@@ -39,11 +39,9 @@ BJSM_c(
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
-\item{n.digits}{number of digits to keep in the final output}
+\item{n.digits}{number of digits to keep in the final estimation of treatment effect}
 
 \item{object}{an object of class "\code{BJSM_c}", usually, a result of a call to \code{\link{BJSM_c}}}
-
-\item{digits}{the number of significant digits to use when printing}
 }
 \value{
 \describe{

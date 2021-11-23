@@ -12,9 +12,8 @@
 #' @param n.adapt the number of iterations for adaptation. If \code{n.adapt = 0} then no adaptation takes place
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
-#' @param n.digits number of digits to keep in the final output
+#' @param n.digits number of digits to keep in the final estimation of treatment effect
 #' @param object an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
-#' @param digits the number of significant digits to use when printing
 
 #'
 #' @details
@@ -105,7 +104,7 @@ BJSM_c = function(data, beta_prior.mean, beta_prior.sd, alpha3_prior.sd, n_MCMC_
 #' @rdname BJSM_c
 #' @export
 #'
-summary.BJSM_c = function(object, digits = 5){
+summary.BJSM_c = function(object){
   cat("\nParameter Estimation:\n")
   out = cbind(object$mean_estimate, object$ci_estimate)
   colnames(out)[1] = "Estimate"
@@ -116,7 +115,7 @@ summary.BJSM_c = function(object, digits = 5){
 #' @rdname BJSM_c
 #' @export
 #'
-print.BJSM_c = function(object, digits = 5){
+print.BJSM_c = function(object){
   cat("\nTreatment Effect Estimation:\n")
   out = cbind(object$mean_estimate, object$ci_estimate)
   colnames(out)[1] = "Estimate"
