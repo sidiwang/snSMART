@@ -17,7 +17,7 @@ c_trialDataGen(
 \arguments{
 \item{stage1effects}{a vector of 3 values (\verb{mean effect of treatment A}, \verb{mean effect of treatment B}, \verb{main effect of treatment C}). e.g. \code{stage1effects = c(40, 50, 70)}}
 
-\item{stage2weights}{a vector of 3 values (\verb{weight of stage I}, \verb{weight of stage II}, \verb{weight of staying on the same treatment}). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. \code{stage2weights = c(0.2, 0.7, 0.3)}}
+\item{stage2weights}{a vector of 3 values (\verb{weight of stage I}, \verb{weight of stage II}, \verb{cumulative long term effect of staying on the same treatment}). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. \code{stage2weights = c(0.2, 0.7, 0.3)}}
 
 \item{stagecorrs}{a vector of 2 values (\verb{correlations between two stages if patient stays on the same treatment}, \verb{correlations between two stages if patent doesn't stay on the same treatment}). This allows those who stay on the same treatmetn to have a different correlation between stage one and stage two outcomes than those who switch treatments.}
 
