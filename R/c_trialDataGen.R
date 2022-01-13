@@ -3,7 +3,7 @@
 #' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 #'
 #' @param stage1effects a vector of 3 values (`mean effect of treatment A`, `mean effect of treatment B`, `main effect of treatment C`). e.g. `stage1effects = c(40, 50, 70)`
-#' @param stage2weights a vector of 3 values (`weight of stage I`, `weight of stage II`, `weight of staying on the same treatment`). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. `stage2weights = c(0.2, 0.7, 0.3)`
+#' @param stage2weights a vector of 3 values (`weight of stage I`, `weight of stage II`, `cumulative long term effect of staying on the same treatment`). The second stage mean outcome is a weighted average of the treatment effects from stage one and stage two with an additional effect if the patient stays on the same treatment. e.g. `stage2weights = c(0.2, 0.7, 0.3)`
 #' @param stagecorrs a vector of 2 values (`correlations between two stages if patient stays on the same treatment`, `correlations between two stages if patent doesn't stay on the same treatment`). This allows those who stay on the same treatmetn to have a different correlation between stage one and stage two outcomes than those who switch treatments.
 #' @param variance the variance of the treatment effects
 #' @param n vector of number of patients on each treatment, e.g. \code{n <- c(100, 100, 100)}

@@ -84,6 +84,8 @@ trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
                            treatment_stageII = rep(3, trtAC_II),
                            response_stageII = c(rep(1, respAC_II),rep(0, trtAC_II - respAC_II)))
 
+  data_A = NULL
+
   if (trtA_I != sum(trtAA_II, trtAB_II, trtAC_II)){
     data_A <- data.frame(treatment_stageI = rep(1, trtA_I - trtAA_II - trtAB_II - trtAC_II),
                          response_stageI = c(rep(1, respA_I - trtAA_II),
@@ -95,7 +97,7 @@ trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
   data_B.B.Y <- data.frame(treatment_stageI = rep(2, trtBB_II),
                            response_stageI = rep(1, trtBB_II),
                            treatment_stageII = rep(2, trtBB_II),
-                           response_stageII = c(rep(1, trtBB_II),rep(0, trtBB_II - respB_II)))
+                           response_stageII = c(rep(1, respB_II),rep(0, trtBB_II - respB_II)))
   data_B.A.Y <- data.frame(treatment_stageI = rep(2, trtBA_II),
                            response_stageI = rep(0, trtBA_II),
                            treatment_stageII = rep(1, trtBA_II),
@@ -104,6 +106,7 @@ trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
                            response_stageI = rep(0, trtBC_II),
                            treatment_stageII = rep(3, trtBC_II),
                            response_stageII = c(rep(1, respBC_II),rep(0, trtBC_II - respBC_II)))
+  data_B = NULL
 
   if (trtB_I != sum(trtBB_II, trtBA_II, trtBC_II)){
     data_B <- data.frame(treatment_stageI = rep(2, trtB_I - trtBB_II - trtBA_II - trtBC_II),
@@ -116,7 +119,7 @@ trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
   data_C.C.Y <- data.frame(treatment_stageI = rep(3, trtCC_II),
                            response_stageI = rep(1, trtCC_II),
                            treatment_stageII = rep(3, trtCC_II),
-                           response_stageII = c(rep(1, trtCC_II),rep(0, trtCC_II - respC_II)))
+                           response_stageII = c(rep(1, respC_II),rep(0, trtCC_II - respC_II)))
   data_C.A.Y <- data.frame(treatment_stageI = rep(3, trtCA_II),
                            response_stageI = rep(0, trtCA_II),
                            treatment_stageII = rep(1, trtCA_II),
@@ -125,6 +128,8 @@ trial_dataset <- function(trt, resp, trt_same_II, resp_same_II,
                            response_stageI = rep(0, trtCB_II),
                            treatment_stageII = rep(2, trtCB_II),
                            response_stageII = c(rep(1, respCB_II),rep(0, trtCB_II - respCB_II)))
+
+  data_C = NULL
 
   if (trtC_I != sum(trtCC_II, trtCA_II, trtCB_II)){
     data_C <- data.frame(treatment_stageI = rep(3, trtC_I - trtCC_II - trtCA_II - trtCB_II),
