@@ -37,6 +37,11 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
   piB = pi[2]
   piC = pi[3]
 
+  sortT = sort(c(piA, piB, piC))
+  if (sortT[-1][1] == sortT[-1][2]){
+    stop("Top 2 treatments have the same expected response rate, only a unique best treatment is allowed")
+  }
+
   muA = mu[1]
   muB = mu[2]
   muC = mu[3]
