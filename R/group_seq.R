@@ -123,25 +123,22 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold = 0.5, 
 
   if (interim == TRUE){
 
-    file_path <- 'inst'
-    jags.model.name.update <- 'Bayes_AR_new.bug'
-
     #pi_hat <- matrix(NA,nrow=n.update,ncol=3)
     patient_entry = data
 
     patient_entry$disc <- 2 * patient_entry$trt.1st - (patient_entry$resp.1st == 0)
 
-    bugfile  <- readLines("inst/Bayes_AR.bug")
+    bugfile  <- readLines(system.file("Bayes_AR.bug", package = "snSMART"))
     bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con = "inst/Bayes_AR_new.bug")
+    writeLines(bugfile2, con = system.file("Bayes_AR_new.bug", package = "snSMART"))
 
     error_ind <- 0
     error_count = 0
     tryCatch({
-      jags <- rjags::jags.model(file.path(file_path, jags.model.name.update),
+      jags <- rjags::jags.model(file.path(system.file("Bayes_AR_new.bug", package = "snSMART")),
                                 data=list(n1 = nrow(patient_entry[!is.na(patient_entry$resp.1st),]),
                                           n2 = nrow(patient_entry[!is.na(patient_entry$resp.2nd),]),
                                           num_arms = NUM_ARMS,
@@ -247,17 +244,15 @@ group_seq = function(data, rule.type = 1, interim = TRUE, drop_threshold = 0.5, 
     mydata <- data
     mydata$disc <- 2 * mydata$trt.1st - (mydata$resp.1st == 0)
 
-    bugfile  <- readLines("inst/Bayes.bug")
+    bugfile  <- readLines(system.file("Bayes.bug", package = "snSMART"))
     bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con = "inst/Bayes_new.bug")
-    file_path <- 'inst'
-    jags.model.name <- 'Bayes_new.bug'
+    writeLines(bugfile2, con = system.file("Bayes_new.bug", package = "snSMART"))
     error_ind <- 0
     tryCatch({
-      jags <- rjags::jags.model(file.path(file_path, jags.model.name),
+      jags <- rjags::jags.model(file.path(system.file("Bayes_new.bug", package = "snSMART")),
                                 data=list(n = nrow(mydata),
                                           num_arms = NUM_ARMS,
                                           Y1 = mydata$resp.1st,

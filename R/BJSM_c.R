@@ -72,7 +72,7 @@ BJSM_c = function(data, beta_prior.mean, beta_prior.sd, alpha3_prior.sd, n_MCMC_
 
   NUM_ARMS = length(unique(trialData$trt1[!is.na(trialData$trt1)]))
 
-  jag <- rjags::jags.model(file = "inst/csnSMART.bugs",
+  jag <- rjags::jags.model(file = system.file("csnSMART.bugs", package = "snSMART"),
                     data = list(n = length(unique(trialData$id)),
                               ntrt = NUM_ARMS,
                               Y = cbind(trialData$stage1outcome, trialData$stage2outcome),

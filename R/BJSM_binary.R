@@ -269,15 +269,15 @@ BJSM_binary = function(data, prior_dist, pi_prior.a, pi_prior.b, beta0_prior, be
 
   if (six == TRUE){
     # If using 6-betas model
-    bugfile  <- readLines("inst/BJSM_6betas_missing.bug")
+    bugfile  <- readLines(system.file("BJSM_6betas_missing.bug", package = "snSMART"))
     bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con="inst/BJSM_6betas_missing_new.bug")
-    jag.model.name <- "BJSM_6betas_missing_new.bug"
+    writeLines(bugfile2, con = system.file("BJSM_6betas_missing_new.bug", package = "snSMART"))
+    jag.model.name <- system.file("BJSM_6betas_missing_new.bug", package = "snSMART")
     tryCatch({
-      jag <- rjags::jags.model(file.path("inst",jag.model.name),
+      jag <- rjags::jags.model(file.path(jag.model.name),
                         data=list(n1 = nrow(mydata),
                                   n2 = nrow(mydata[!is.na(mydata$response_stageII),]),
                                   num_arms = NUM_ARMS,
@@ -305,17 +305,17 @@ BJSM_binary = function(data, prior_dist, pi_prior.a, pi_prior.b, beta0_prior, be
     )
 
   } else {
-    bugfile  <- readLines("inst/BJSM_2beta_missing.bug")
+    bugfile  <- readLines(system.file("BJSM_2beta_missing.bug", package = "snSMART"))
     bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con="inst/BJSM_2beta_missing_new.bug")
+    writeLines(bugfile2, con=system.file("BJSM_2beta_missing_new.bug", package = "snSMART"))
 
     # If using 2-betas model
-    jag.model.name <- "BJSM_2beta_missing_new.bug"  # beta1 ~ pareto
+    jag.model.name <- system.file("BJSM_2beta_missing_new.bug", package = "snSMART")  # beta1 ~ pareto
     tryCatch({
-      jag <- rjags::jags.model(file.path("inst",jag.model.name),
+      jag <- rjags::jags.model(file.path(jag.model.name),
                         data = list(n1 = nrow(mydata),
                                   n2 = nrow(mydata[!is.na(mydata$response_stageII),]),
                                   num_arms = NUM_ARMS,

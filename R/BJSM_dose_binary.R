@@ -230,14 +230,14 @@ BJSM_binary_dose = function(data, prior_dist, pi_prior, normal.par, beta_prior, 
   mydata = data
   mydata$response_status_stageI = mydata$response_stageI + 1
 
-  bugfile <- readLines("inst/BJSM_dose.bug")
+  bugfile <- readLines(system.file("BJSM_dose.bug", package = "snSMART"))
   bugfile <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
   bugfile2 <- gsub(pattern = "beta_prior_dist", replacement = beta_prior_dist, x = bugfile)
 
-  writeLines(bugfile2, con = "inst/BJSM_dose_new.bug")
-  jag.model.name <- "BJSM_dose_new.bug"
+  writeLines(bugfile2, con = system.file("BJSM_dose_new.bug", package = "snSMART"))
+  jag.model.name <- system.file("BJSM_dose_new.bug", package = "snSMART")
   tryCatch({
-    jag <- rjags::jags.model(file.path("inst", jag.model.name),
+    jag <- rjags::jags.model(file.path(jag.model.name),
                              data = list(overall_sample_size = nrow(mydata),
                                        num_arms = NUM_ARMS,
                                        response_stageI = mydata$response_stageI,
