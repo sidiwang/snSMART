@@ -3,7 +3,7 @@
 \name{BJSM_binary}
 \alias{BJSM_binary}
 \alias{print.BJSM_binary}
-\title{BJSM binary (standard snSMART design)}
+\title{BJSM binary (with 3 active treatments and a binary outcome)}
 \usage{
 BJSM_binary(
   data,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/BJSM_binary.R
 \name{trial_dataset}
 \alias{trial_dataset}
-\title{Trial dataset}
+\title{Trial dataset generation (snSMART with 3 active treatments and a binary outcome)}
 \usage{
 trial_dataset(
   trt,

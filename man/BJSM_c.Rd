@@ -4,7 +4,7 @@
 \alias{BJSM_c}
 \alias{summary.BJSM_c}
 \alias{print.BJSM_c}
-\title{BJSM continuous (continuous outcome design)}
+\title{BJSM continuous (snSMART with three active treatments and a continuous outcome design)}
 \usage{
 BJSM_c(
   data,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_size.R
 \name{sample_size}
 \alias{sample_size}
-\title{Standard snSMART Design Sample Size Calculation}
+\title{Sample Size Calculation for snSMART with 3 active treatments and a binary outcome}
 \usage{
 sample_size(pi, beta1, beta0, coverage, power, mu, n)
 }

@@ -4,7 +4,7 @@
 \alias{JSRM_binary}
 \alias{summary.JSRM_binary}
 \alias{print.JSRM_binary}
-\title{JSRM for standard snSMART}
+\title{JSRM for snSMART with 3 active treatments and a binary outcome}
 \usage{
 JSRM_binary(data, six = TRUE, DTR = TRUE)
 

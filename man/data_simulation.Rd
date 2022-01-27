@@ -2,7 +2,7 @@
 % Please edit documentation in R/data_simulation.R
 \name{data_simulation}
 \alias{data_simulation}
-\title{Data Simulation (standard snSMART design)}
+\title{Data Simulation ((snSMART with 3 active treatments and a binary outcome))}
 \usage{
 data_simulation(
   p_trt,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/c_trialDataGen.R
 \name{c_trialDataGen}
 \alias{c_trialDataGen}
-\title{Data Simulation (continuous snSMART design)}
+\title{Data Simulation (snSMART with three active treatments and a continuous outcome design)}
 \usage{
 c_trialDataGen(
   stage1effects,
