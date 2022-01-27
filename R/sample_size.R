@@ -169,7 +169,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
   bA = nA_input-aA
   # aA = 0.25*2
   # bA = 2-aA
-  system.file("functions.R", package = "snSMART")
+  source(system.file("functions.R", package = "snSMART"))
 
   cA = cFunc(aA, bA, beta1)
   dA = dFunc(aA, bA, beta1)
