@@ -1,4 +1,4 @@
-#' Data Simulation (continuous snSMART design)
+#' Data Simulation (snSMART with three active treatments and a continuous outcome design)
 #'
 #' simulate data for snSMART with continuous outcome (3 active treatments, re-randomization depends on continuous outcome at stage 1). This function generates only 1 dataset. Not to be confused with \code{\link{c_trialSim}}
 #'

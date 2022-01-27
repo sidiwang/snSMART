@@ -1,4 +1,4 @@
-#' Data Simulation (standard snSMART design)
+#' Data Simulation ((snSMART with 3 active treatments and a binary outcome))
 #'
 #' simulate data for the standard design of snSMART (3 active treatments, non-responders re-randomized; binary outcome) based on response rate of each treatment. Useful for generating large number of simulations Not to be confused with \code{\link{trial_dataset}}
 #'

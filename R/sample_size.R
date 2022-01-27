@@ -1,4 +1,4 @@
-#' Standard snSMART Design Sample Size Calculation
+#' Sample Size Calculation for snSMART with 3 active treatments and a binary outcome
 #'
 #' conduct Bayesian sample size calculation for a standard snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
 #'

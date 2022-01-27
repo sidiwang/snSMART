@@ -1,4 +1,4 @@
-#' JSRM for standard snSMART
+#' JSRM for snSMART with 3 active treatments and a binary outcome
 #'
 #' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
