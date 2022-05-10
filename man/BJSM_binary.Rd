@@ -23,7 +23,7 @@ BJSM_binary(
 \method{print}{BJSM_binary}(object, digits = 5, ...)
 }
 \arguments{
-\item{data}{trial data generated through function \code{\link{trial_dataset}} or \code{\link{data_simulation}}}
+\item{data}{trial data generated through function \code{\link{trial_dataset}} or \code{\link{data_simulation}}. Missing data is allowed in the second stage.}
 
 \item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
 
