@@ -404,6 +404,9 @@ sim_group_seq_1step <- function(p_trt, discount_y, discount_n1, discount_n2, rat
 summary.sim_group_seq_1step = function(object, digits = 5, ...){
   cat("\nInterim Analysis Outcome:\n")
   cat("Arm ", object$dropped.arm, "was dropped in round ", object$dropped.round, "\n")
+  cat("\nRandomization Probabilities:\n")
+  rand = object$randomization.probabilities
+  print(rand)
   cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
   rownames(trteff) = c("trtA", "trtB", "trtC")
@@ -431,6 +434,9 @@ summary.sim_group_seq_1step = function(object, digits = 5, ...){
 print.sim_group_seq_1step = function(object, digits = 5, ...){
   cat("\nInterim Analysis Outcome:\n")
   cat("Arm ", object$dropped.arm, "was dropped in round ", object$dropped.round, "\n")
+  cat("\nRandomization Probabilities:\n")
+  rand = object$randomization.probabilities
+  print(rand)
   cat("\nTreatment Effects Estimate:\n")
   print(object$pi_hat_bjsm)
   cat("\nDifferences between Treatments:\n")
