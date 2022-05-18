@@ -1,6 +1,6 @@
-#' JSRM for snSMART with 3 active treatments and a binary outcome
+#' LPJSM for snSMART with 3 active treatments and a binary outcome
 #'
-#' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
+#' A joint-stage regression model (LPJSM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
 #'
 #' @param data data produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}
@@ -23,9 +23,9 @@
 #'     resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
 #'     resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
 #'
-#' JSRM_result = JSRM_binary(data = data, six = TRUE, DTR = TRUE)
+#' LPJSM_result = LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
 #'
-#' summary(JSRM_result)
+#' summary(LPJSM_result)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -40,10 +40,10 @@
 #' \code{\link{BJSM_binary}} \cr
 #' \code{\link{sample_size}}
 #'
-#' @rdname JSRM_binary
+#' @rdname LPJSM_binary
 #' @export
 #'
-JSRM_binary = function(data, six = TRUE, DTR = TRUE){
+LPJSM_binary = function(data, six = TRUE, DTR = TRUE){
 
   # data, same format as the bjsm_binary.R file trial dataset format
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
@@ -207,15 +207,15 @@ JSRM_binary = function(data, six = TRUE, DTR = TRUE){
 
   }
 
-  class(result) = "JSRM_binary"
+  class(result) = "LPJSM_binary"
   return(result)
 }
 
 
 
-#' @rdname JSRM_binary
+#' @rdname LPJSM_binary
 #' @export
-summary.JSRM_binary = function(object, digits = 5, ...){
+summary.LPJSM_binary = function(object, digits = 5, ...){
   cat("\nGEE output:\n")
   print(summary(object$GEE_output))
   cat("\nTreatment Effect Estimate:\n")
@@ -236,9 +236,9 @@ summary.JSRM_binary = function(object, digits = 5, ...){
 
 
 
-#' @rdname JSRM_binary
+#' @rdname LPJSM_binary
 #' @export
-print.JSRM_binary = function(object, digits = 5, ...){
+print.LPJSM_binary = function(object, digits = 5, ...){
   cat("\nTreatment Effect Estimate\n")
   trteff = cbind(object$pi_hat, object$sd_pi_hat)
   rownames(trteff) = c("trtA", "trtB", "trtC")

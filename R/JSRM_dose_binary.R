@@ -1,6 +1,6 @@
-#' JSRM for dose level snSMART
+#' LPJSM for dose level snSMART
 #'
-#' A joint-stage regression model (JSRM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
+#' A joint-stage regression model (LPJSM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each dose level.
 #'
 #' @param data data produced by the  \code{\link{trial_dataset_dose}} and \code{\link{data_simulation_dose}} function
@@ -18,9 +18,9 @@
 #'      trt_rep_H = c(8, 7), resp_rep_P = c(1, 2), resp_rep_L = c(2, 3), resp_rep_H = c(4, 6), trt_nrep_P = c(10, 15),
 #'      trt_nrep_L = c(10, 10), trt_nrep_H = 15, resp_nrep_P = c(7, 8), resp_nrep_L = c(7, 6), resp_nrep_H = 10)
 #'
-#' JSRM_result = JSRM_binary_dose(data = mydata)
+#' LPJSM_result = LPJSM_binary_dose(data = mydata)
 #'
-#' summary(JSRM_result)
+#' summary(LPJSM_result)
 #'
 #' @references
 #' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
@@ -31,10 +31,10 @@
 #' \code{\link{trial_dataset_dose}} \cr
 #' \code{\link{BJSM_binary_dose}}
 #'
-#' @rdname JSRM_binary_dose
+#' @rdname LPJSM_binary_dose
 #' @export
 #'
-JSRM_binary_dose = function(data){
+LPJSM_binary_dose = function(data){
 
   # data, same format as the bjsm_binary.R file trial dataset format
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
@@ -82,15 +82,15 @@ JSRM_binary_dose = function(data){
                 "sd_pi_hat" = sd_pi_hat) # standard error of the response rate
 
 
-  class(result) = "JSRM_binary_dose"
+  class(result) = "LPJSM_binary_dose"
   return(result)
 }
 
 
 
-#' @rdname JSRM_binary_dose
+#' @rdname LPJSM_binary_dose
 #' @export
-summary.JSRM_binary_dose = function(object, digits = 5, ...){
+summary.LPJSM_binary_dose = function(object, digits = 5, ...){
   cat("\nGEE output:\n")
   print(summary(object$GEE_output))
   cat("\nTreatment Effect Estimate:\n")
@@ -103,10 +103,10 @@ summary.JSRM_binary_dose = function(object, digits = 5, ...){
 
 
 
-#' @rdname JSRM_binary_dose
+#' @rdname LPJSM_binary_dose
 #' @export
 #'
-print.JSRM_binary_dose = function(object, digits = 5, ...){
+print.LPJSM_binary_dose = function(object, digits = 5, ...){
   cat("\nTreatment Effect Estimate:\n")
   trteff = cbind(object$pi_hat, object$sd_pi_hat)
   rownames(trteff) = c("trtP", "trtL", "trtH")
