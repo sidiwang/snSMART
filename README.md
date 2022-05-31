@@ -35,26 +35,16 @@ library(snSMART)
 
 ## snSMART designs and functions covered in this package
 
--   Standard snSMART (3 active treatments, non-responders re-randomized;
-    binary outcome)
-    -   data simulation function - `data_simulation`
+-   snSMART with binary outcome (3 active treatments or placebo and 2
+    dose level, non-responders re-randomized)
     -   Bayesian Joint Stage Model (BJSM) analysis function -
         `BJSM_binary`
     -   Log Poisson Joint Stage Model (JSRM) analysis function -
         `JSRM_binary`
     -   sample size calculation function - `sample_size`
-    -   Group Sequential snSMART simulation function -
-        `sim_group_seq_1step` `sim_group_seq_2step` and BJSM analysis
-        function - `group_seq`
--   Dose level snSMART (3 dose level: placebo, low, high dose; binary
-    outcome)
-    -   data simulation function - `data_simulation_dose`
-    -   BJSM analysis function - `BJSM_dose_binary`
-    -   Log Poisson Joint Stage Model analysis function -
-        `JSRM_dose_binary`
+    -   Group Sequential snSMART BJSM analysis function - `group_seq`
 -   snSMART with mapping function (3 active treatments, re-randomization
     depends on continuous outcome at stage 1; continuous outcomes)
-    -   data simulation function - `c_trialDataGen` `c_trialSim`
     -   BJSM analysis function - `BJSM_c`
 
 ## References
