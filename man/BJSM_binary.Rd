@@ -3,15 +3,15 @@
 \name{BJSM_binary}
 \alias{BJSM_binary}
 \alias{print.BJSM_binary}
-\title{BJSM binary (with 3 active treatments and a binary outcome)}
+\alias{print.BJSM_dose_binary}
+\title{BJSM for snSMART (3 active treatments/placebo and 2 dose level) with binary outcome}
 \usage{
 BJSM_binary(
   data,
   prior_dist,
-  pi_prior.a,
-  pi_prior.b,
-  beta0_prior,
-  beta1_prior,
+  pi_prior,
+  normal.par,
+  beta_prior,
   n_MCMC_chain,
   BURN.IN,
   MCMC_SAMPLE,
@@ -21,19 +21,19 @@ BJSM_binary(
 )
 
 \method{print}{BJSM_binary}(object, digits = 5, ...)
+
+\method{print}{BJSM_dose_binary}(object, digits = 5, ...)
 }
 \arguments{
-\item{data}{trial data generated through function \code{\link{trial_dataset}} or \code{\link{data_simulation}}. Missing data is allowed in the second stage.}
+\item{data}{trial data with 4 columns: \code{treatment_stageI, response_stageI, treatment_stageII} and \code{response_stageII}. Missing data is allowed in stage 2.}
 
 \item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
 
-\item{pi_prior.a}{parameter \code{a} of the prior distribution for \code{pi_1K}, where K = treatment A, treatment B, or treatment C. a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
+\item{pi_prior}{for 3 active treatment design: vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}. for dose level design: vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for \code{pi} (response rate) of placebo. \code{b} is the parameter \code{b} of the prior distribution for \code{pi} of placebo. Please check the \code{Details} section for more explanation}
 
-\item{pi_prior.b}{parameter \code{b} of the prior distribution  for \code{pi_1K}, where K = treatment A, treatment B, or treatment C. a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
+\item{normal.par}{for dose level design: vector of two values (normal.mean, normal.var). our function assumes that the logarithm of treatment effect ratio follows a Gaussian prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)}, and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of this Gaussian prior. \code{normal.var} is the variance of this Gaussian prior distribution}
 
-\item{beta0_prior}{vector of two values (a, b). \code{a} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta0}, \code{b} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta0}. Please check the \code{Details} section for more explanation}
-
-\item{beta1_prior}{vector of two values (a, b). \code{a} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. \code{b} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explanation}
+\item{beta_prior}{for 3 active treatment design: vector of four values (a, b, c, d). \code{a} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta0}, \code{b} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta0}. \code{c} is the value of parameter \code{a} of the prior distribution for linkage parameter \code{beta1}. \code{d} is the value of parameter \code{b} of the prior distribution for linkage parameter \code{beta1}. for dose level design: vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for linkage parameter \code{beta}. \code{b} is the parameter b of the prior distribution  for linkage parameter \code{beta}. Please check the \code{Details} section for more explanation}
 
 \item{n_MCMC_chain}{number of MCMC chains, default to 1.}
 
@@ -43,9 +43,9 @@ BJSM_binary(
 
 \item{ci}{coverage probability for credible intervals, default = 0.95}
 
-\item{six}{TRUE or FALSE. If TRUE, will run the six beta model (allow for estimating \code{beta_0k} and \code{beta_1k} values that differ among different treatments k), if FALSE will run the two beta model. default = TRUE.}
+\item{six}{TRUE or FALSE. If TRUE, will run the six beta model (allow for estimating \code{beta_0m} and \code{beta_1m} values that differ among different treatments m), if FALSE will run the two beta model. default = TRUE. Only need to specify this for 3 active treatment design.}
 
-\item{DTR}{TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE}
+\item{DTR}{TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active treatment design.}
 
 \item{digits}{the number of significant digits to use when printing}
 }
@@ -56,13 +56,13 @@ BJSM_binary(
 
 \item{se_hat_bjsm}{standard error of the response rate}
 
-\item{ci_pi_A, ci_pi_B, ci_pi_C}{x\% credible intervals for treatment A, B, C}
+\item{ci_pi_A(P), ci_pi_B(L), ci_pi_C(H)}{x\% credible intervals for treatment A(P), B(L), C(H)}
 
-\item{diff_AB, diff_BC. diff_AC}{estimate of differences between treatments A and B, B and C, A and C}
+\item{diff_AB(PL), diff_BC(LH). diff_AC(PH)}{estimate of differences between treatments A(P) and B(L), B(L) and C(H), A(P) and C(H)}
 
-\item{ci_diff_AB, ci_diff_BC, ci_diff_AC}{x\% credible intervals for the estimated differences between treatments A and B, B and C, A and C}
+\item{ci_diff_AB(PL), ci_diff_BC(LH), ci_diff_AC(PH)}{x\% credible intervals for the estimated differences between treatments A(P) and B(L), B(L) and C(H), A(P) and C(H)}
 
-\item{se_AB, se_BC, se_AC}{standard error for the estimated differences between treatments A and B, B and C, A and C}
+\item{se_AB(PL), se_BC(LH), se_AC(PH)}{standard error for the estimated differences between treatments A(P) and B(L), B(L) and C(H), A(P) and C(H)}
 
 \item{beta0_hat, beta1_hat}{linkage parameter \code{beta0} and \code{beta1} estimates}
 
@@ -74,37 +74,40 @@ BJSM_binary(
 }
 }
 \description{
-This function implements the BJSM (Bayesian Joint Stage Modeling) method which borrows information across both stages to estimate the individual response rate of each treatment in a standard snSMART design (different active treatments, non-responders re-randomized; binary outcome) based on trial dataset
-generated by function \code{\link{trial_dataset}} or \code{\link{data_simulation}}
+This function implements the BJSM (Bayesian Joint Stage Modeling) method which borrows information across both stages to estimate the individual response rate of each treatment/dose level in a snSMART design with binary outcomes.
 }
 \details{
 For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
 For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha}, \code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
 
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
-second stage response probabilities through linkage parameters. The first stage response rate is denoted as \eqn{\pi_k} for treatment \eqn{k}. In the two \eqn{\beta} model, the second stage response rate for first stage responders is equal to \eqn{\beta_1\pi_k}. For nonresponders to treatment \eqn{k} in the first stage who
-receive treatment \eqn{k'} in the second the stage, the second stage response rate in the second stage is equal to \eqn{\beta_0\pi_{k'}}. In the six \eqn{\beta} model, the second stage response rate of the first stage responders to treatment k is denoted by \eqn{\beta_{1k}\pi_k}, and the second stage response rate of the non-responders
-to first stage treatment $k$ who receive treatment \eqn{k'} in the second stage is denoted by \eqn{\beta_{0k}\pi_{k'}}. All the \eqn{\beta}s are linkage parameters.
+second stage response probabilities through linkage parameters. The first stage response rate is denoted as \eqn{\pi_m} for treatment \eqn{m}. In the two \eqn{\beta} model, the second stage response rate for first stage responders is equal to \eqn{\beta_1\pi_m}. For nonresponders to treatment \eqn{m} in the first stage who
+receive treatment \eqn{m'} in the second the stage, the second stage response rate in the second stage is equal to \eqn{\beta_0\pi_{m'}}. In the six \eqn{\beta} model, the second stage response rate of the first stage responders to treatment m is denoted by \eqn{\beta_{1m}\pi_m}, and the second stage response rate of the non-responders
+to first stage treatment $m$ who receive treatment \eqn{m'} in the second stage is denoted by \eqn{\beta_{0m}\pi_{m'}}. All the \eqn{\beta}s are linkage parameters.
 
 Please refer to the paper listed under \code{reference} section for standard snSMART trial design and detailed definition of parameters.
 }
 \examples{
-mydata = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
-    resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
-    resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
+mydata = data_binary
 
 BJSM_result = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
-    pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-    beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
+    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
     MCMC_SAMPLE = 60000, ci = 0.95, six = TRUE, DTR = TRUE)
 
 BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
-    pi_prior.a = c(0.4, 0.4, 0.4), pi_prior.b = c(1.6, 1.6, 1.6),
-    beta0_prior = c(1.6, 0.4), beta1_prior = c(3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
+    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+    beta_prior = c(1.6, 0.4, 3, 1), n_MCMC_chain = 1, BURN.IN = 10000,
     MCMC_SAMPLE = 60000, ci = 0.95, six = FALSE, DTR = FALSE)
 
 summary(BJSM_result)
 summary(BJSM_result2)
+
+data = data_dose
+BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
+    pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
+    n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+
+summary(BJSM_dose_result)
 
 }
 \references{
@@ -112,10 +115,11 @@ Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis 
 Statistics in medicine, 37(26), pp.3723-3732.
 
 Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment, randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+
+Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
+sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
 }
 \seealso{
-\code{\link{data_simulation}} \cr
-\code{\link{trial_dataset}} \cr
 \code{\link{JSRM_binary}} \cr
 \code{\link{sample_size}}
 }

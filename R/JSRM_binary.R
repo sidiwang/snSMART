@@ -1,9 +1,9 @@
-#' LPJSM for snSMART with 3 active treatments and a binary outcome
+#' LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two dose level)
 #'
 #' A joint-stage regression model (LPJSM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
 #' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
 #'
-#' @param data data produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}
+#' @param data dataset with columns named as \code{treatment_stageI}, \code{response_stageI}, \code{treatment_stageII} and \code{response_stageII}
 #' @param six if TRUE, will run the six beta model, if FALSE will run the two
 #' beta model. Default is `six = TRUE`
 #' @param DTR if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens
@@ -19,9 +19,7 @@
 #' }
 #'
 #' @examples
-#' data = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
-#'     resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
-#'     resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
+#' data = data_binary
 #'
 #' LPJSM_result = LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
 #'
@@ -34,9 +32,10 @@
 #' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
 #' randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
 #'
+#' Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
+#' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
+#'
 #' @seealso
-#' \code{\link{data_simulation}} \cr
-#' \code{\link{trial_dataset}} \cr
 #' \code{\link{BJSM_binary}} \cr
 #' \code{\link{sample_size}}
 #'
@@ -53,29 +52,29 @@ LPJSM_binary = function(data, six = TRUE, DTR = TRUE){
   mydata$disc <- 2 * mydata$treatment_stageI - (mydata$response_stageI == 0)
 
   Y <- c(mydata$response_stageI, mydata$response_stageII)
-  XA1 <- as.numeric(mydata$treatment_stageI == 1)
-  XB1 <- as.numeric(mydata$treatment_stageI == 2)
-  XC1 <- as.numeric(mydata$treatment_stageI == 3)
-  XA2 <- as.numeric(mydata$treatment_stageII == 1)
-  XB2 <- as.numeric(mydata$treatment_stageII == 2)
-  XC2 <- as.numeric(mydata$treatment_stageII == 3)
-  XA <- c(XA1, XA2)
-  XB <- c(XB1, XB2)
-  XC <- c(XC1, XC2)
-  Z1A <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 1, mydata$response_stageI ,0))
-  Z2A <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 1, 1 - mydata$response_stageI ,0))
-  Z1B <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 2, mydata$response_stageI ,0))
-  Z2B <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 2, 1 - mydata$response_stageI ,0))
-  Z1C <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 3, mydata$response_stageI ,0))
-  Z2C <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 3, 1 - mydata$response_stageI ,0))
+  alphaA1 <- as.numeric(mydata$treatment_stageI == 1)
+  alphaB1 <- as.numeric(mydata$treatment_stageI == 2)
+  alphaC1 <- as.numeric(mydata$treatment_stageI == 3)
+  alphaA2 <- as.numeric(mydata$treatment_stageII == 1)
+  alphaB2 <- as.numeric(mydata$treatment_stageII == 2)
+  alphaC2 <- as.numeric(mydata$treatment_stageII == 3)
+  alphaA <- c(alphaA1, alphaA2)
+  alphaB <- c(alphaB1, alphaB2)
+  alphaC <- c(alphaC1, alphaC2)
+  gamma1A <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 1, mydata$response_stageI ,0))
+  gamma2A <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 1, 1 - mydata$response_stageI ,0))
+  gamma1B <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 2, mydata$response_stageI ,0))
+  gamma2B <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 2, 1 - mydata$response_stageI ,0))
+  gamma1C <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 3, mydata$response_stageI ,0))
+  gamma2C <- c(rep(0, nrow(mydata)), ifelse(mydata$treatment_stageI == 3, 1 - mydata$response_stageI ,0))
   ptid <- rep(1:nrow(mydata), 2)
 
   if (six == TRUE){
-    geedata <- data.frame(ptid, XA, XB, XC, Z1A, Z2A, Z1B, Z2B, Z1C, Z2C, Y)
+    geedata <- data.frame(ptid, alphaA, alphaB, alphaC, gamma1A, gamma2A, gamma1B, gamma2B, gamma1C, gamma2C, Y)
     geedata <- geedata[order(geedata$ptid),]
-    rm(ptid, Y, Z1A, Z2A, Z1B, Z2B, Z1C, Z2C, XA, XB, XC)
+    rm(ptid, Y, gamma1A, gamma2A, gamma1B, gamma2B, gamma1C, gamma2C, alphaA, alphaB, alphaC)
     try({
-      mod1 <- geepack::geeglm(Y ~ XA + XB + XC + Z1A + Z2A + Z1B + Z2B + Z1C + Z2C - 1, family = poisson(link = "log"), data = geedata, id = ptid,corstr = "independence")
+      mod1 <- geepack::geeglm(Y ~ alphaA + alphaB + alphaC + gamma1A + gamma2A + gamma1B + gamma2B + gamma1C + gamma2C - 1, family = poisson(link = "log"), data = geedata, id = ptid,corstr = "independence")
       beta_hat <- mod1$coefficients[1:3];
       sd_beta_hat <- summary(mod1)$coef[1:3, 2];
       pi_hat <- exp(beta_hat);
@@ -129,13 +128,13 @@ LPJSM_binary = function(data, six = TRUE, DTR = TRUE){
     })
 
   } else {
-    Z1 = Z1A + Z1B + Z1C
-    Z2 = Z2A + Z2B + Z2C
-    geedata <- data.frame(ptid, XA, XB, XC, Z1, Z2, Y)
+    gamma1 = gamma1A + gamma1B + gamma1C
+    gamma2 = gamma2A + gamma2B + gamma2C
+    geedata <- data.frame(ptid, alphaA, alphaB, alphaC, gamma1, gamma2, Y)
     geedata <- geedata[order(geedata$ptid),]
-    rm(ptid, Y, Z1A, Z2A, Z1B, Z2B, Z1C, Z2C, XA, XB, XC, Z1, Z2)
+    rm(ptid, Y, gamma1A, gamma2A, gamma1B, gamma2B, gamma1C, gamma2C, alphaA, alphaB, alphaC, gamma1, gamma2)
     try({
-      mod1 <- geepack::geeglm(Y ~ XA + XB + XC + Z1 + Z2 - 1, family = poisson(link = "log"), data = geedata, id = ptid,corstr = "independence")
+      mod1 <- geepack::geeglm(Y ~ alphaA + alphaB + alphaC + gamma1 + gamma2 - 1, family = poisson(link = "log"), data = geedata, id = ptid,corstr = "independence")
       beta_hat <- mod1$coefficients[1:3];
       sd_beta_hat <- summary(mod1)$coef[1:3,2];
       pi_hat <- exp(beta_hat);

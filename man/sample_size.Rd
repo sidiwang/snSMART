@@ -25,7 +25,7 @@ sample_size(pi, beta1, beta0, coverage, power, mu, n)
 the estimated sample size per arm for an snSMART
 }
 \description{
-conduct Bayesian sample size calculation for a standard snSMART design to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
+conduct Bayesian sample size calculation for a snSMART design with 3 active treatments and a binary outcome to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
 }
 \examples{
 sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
@@ -38,8 +38,6 @@ Statistics in medicine, 37(26), pp.3723-3732.
 Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination for Bayesian analysis of small n sequential, multiple assignment, randomized trials (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
 }
 \seealso{
-\code{\link{data_simulation}} \cr
-\code{\link{trial_dataset}} \cr
 \code{\link{JSRM_binary}} \cr
 \code{\link{BJSM_binary}}
 }

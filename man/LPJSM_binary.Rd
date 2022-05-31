@@ -4,7 +4,7 @@
 \alias{LPJSM_binary}
 \alias{summary.LPJSM_binary}
 \alias{print.LPJSM_binary}
-\title{LPJSM for snSMART with 3 active treatments and a binary outcome}
+\title{LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two dose level)}
 \usage{
 LPJSM_binary(data, six = TRUE, DTR = TRUE)
 
@@ -13,7 +13,7 @@ LPJSM_binary(data, six = TRUE, DTR = TRUE)
 \method{print}{LPJSM_binary}(object, digits = 5, ...)
 }
 \arguments{
-\item{data}{data produced by \code{\link{trial_dataset}} or \code{\link{data_simulation}}}
+\item{data}{dataset with columns named as \code{treatment_stageI}, \code{response_stageI}, \code{treatment_stageII} and \code{response_stageII}}
 
 \item{six}{if TRUE, will run the six beta model, if FALSE will run the two
 beta model. Default is \code{six = TRUE}}
@@ -37,9 +37,7 @@ A joint-stage regression model (LPJSM) is a frequentist modeling approach that i
 Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
 }
 \examples{
-data = trial_dataset(trt = c(9, 12, 9), resp = c(3, 3, 5), trt_same_II = c(2, 2, 4),
-    resp_same_II = c(2, 2, 4), trt_negA = c(3, 2), trt_negB = c(3, 2), trt_negc = c(1, 2),
-    resp_negA = c(3, 1), resp_negB = c(2, 2), resp_negC = c(0, 0))
+data = data_binary
 
 LPJSM_result = LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
 
@@ -52,10 +50,11 @@ Statistics in medicine, 37(26), pp.3723-3732.
 
 Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
 randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
+
+Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. Bayesian methods to compare dose levels with placebo in a small n,
+sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
 }
 \seealso{
-\code{\link{data_simulation}} \cr
-\code{\link{trial_dataset}} \cr
 \code{\link{BJSM_binary}} \cr
 \code{\link{sample_size}}
 }
