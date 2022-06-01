@@ -102,5 +102,5 @@ print.BJSM_c = function(object){
   cat("\nTreatment Effect Estimation:\n")
   out = cbind(object$mean_estimate, object$ci_estimate)
   colnames(out)[1] = "Estimate"
-  print(out[-c(1, 2, seq(6, 13, 1)),-2])
+  print(out[-c(seq(1, 10, 1)),-2])
 }
