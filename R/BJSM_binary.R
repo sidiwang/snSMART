@@ -484,8 +484,8 @@ print.BJSM_binary = function(object, digits = 5, ...){
   rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
   print(trtdiff)
   cat("\nLinkage Parameter Estimate:\n")
-  ret = cbind(object$beta0_hat, object$beta1_hat)
-  colnames(ret) = c("Estimate", "Std. Error")
+  ret = t(c(object$beta0_hat, object$beta1_hat))
+  rownames(ret) = c("Estimate")
   print(ret)
   cat("\n")
 }
