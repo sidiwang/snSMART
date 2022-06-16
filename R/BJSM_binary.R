@@ -10,7 +10,7 @@
 #' @param BURN.IN number of burn-in iterations for MCMC
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
-#' @param prior_dist vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")
+#' @param prior_dist for 3 active treatment design: vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto"); for dose level design: vector of two values ("prior distribution for \code{pi_P}", "prior distribution for \code{beta}")
 #' @param six TRUE or FALSE. If TRUE, will run the six beta model (allow for estimating `beta_0m` and `beta_1m` values that differ among different treatments m), if FALSE will run the two beta model. default = TRUE. Only need to specify this for 3 active treatment design.
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active treatment design.
 #' @param digits the number of significant digits to use when printing

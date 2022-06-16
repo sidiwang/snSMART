@@ -27,7 +27,7 @@ BJSM_binary(
 \arguments{
 \item{data}{trial data with 4 columns: \code{treatment_stageI, response_stageI, treatment_stageII} and \code{response_stageII}. Missing data is allowed in stage 2.}
 
-\item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
+\item{prior_dist}{for 3 active treatment design: vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"). User can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto"); for dose level design: vector of two values ("prior distribution for \code{pi_P}", "prior distribution for \code{beta}")}
 
 \item{pi_prior}{for 3 active treatment design: vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}. for dose level design: vector of two values (a, b). \code{a} is the parameter \code{a} of the prior distribution for \code{pi} (response rate) of placebo. \code{b} is the parameter \code{b} of the prior distribution for \code{pi} of placebo. Please check the \code{Details} section for more explanation}
 
