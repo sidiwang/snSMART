@@ -405,7 +405,7 @@ print.group_seq = function(object, digits = 5, ...){
     rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
     print(trtdiff)
     cat("\nLinkage Parameter Estimate:\n")
-    print(cbind(object$beta0_hat, object$beta1_hat))
+    print(c(object$beta0_hat, object$beta1_hat))
     cat("\n")
   } else {
     print(object)
