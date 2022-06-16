@@ -31,14 +31,14 @@
 #' Please refer to the paper listed under `reference` section for detailed definition of parameters.
 
 #' @examples
-#' mydata = patient_entry
+#' mydata = groupseqDATA_look1
 #'
 #' result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
 #' beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
 #'
 #' result1
 #'
-#' mydata = patient_entry_full
+#' mydata = groupseqDATA_full
 #' result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
 #' beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'

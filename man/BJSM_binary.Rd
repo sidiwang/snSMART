@@ -120,6 +120,6 @@ Fang, F., Hochstedler, K.A., Tamura, R.N., Braun, T.M. and Kidwell, K.M., 2021. 
 sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
 }
 \seealso{
-\code{\link{JSRM_binary}} \cr
+\code{\link{LPJSM_binary}} \cr
 \code{\link{sample_size}}
 }

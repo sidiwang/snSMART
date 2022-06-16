@@ -82,7 +82,7 @@
 #' sequential, multiple assignment, randomized trial. Statistics in Medicine, 40(4), pp.963-977.
 #'
 #' @seealso
-#' \code{\link{JSRM_binary}} \cr
+#' \code{\link{LPJSM_binary}} \cr
 #' \code{\link{sample_size}}
 #'
 #' @rdname BJSM_binary

@@ -64,7 +64,7 @@ BJSM (Bayesian Joint Stage Modeling) method that borrows information across both
 section 2.2.1 and 2.2.2 of the paper listed under \code{reference} provides a detailed description of the assumptions and prior distributions of the model.
 }
 \examples{
-trialData = data_c
+trialData = trialDataMF
 
 BJSM_result = BJSM_c(data = trialData, xi_prior.mean = c(50, 50, 50),
     xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
