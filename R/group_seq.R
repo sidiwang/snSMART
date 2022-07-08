@@ -8,8 +8,7 @@
 #' treatment) data yet to be observed should be marked as "`NA`"
 #' @param interim indicates whether user is conducting an interim analysis via BJSM (`interim` = TRUE) or an final analysis via BJSM (`interim` = FALSE)
 #' @param drop_threshold_pair a vector of 2 values (`drop_threshold_large`, `drop_threshold_small`). Both `drop_threshold_large` and `drop_threshold_small` should be between 0 and 1. only assign value to this parameter when `rule.type = 2` and `interim = TRUE`. See the details section for more explanation
-#' @param pi_prior.a parameter a of the prior distribution for `pi_1m`, a vector with three values, one for each treatment. Please check the `Details` section for more explanation
-#' @param pi_prior.b parameter b of the prior distribution  for `pi_1m`, a vector with three values, one for each treatment. Please check the `Details` section for more explanation
+#' @param pi_prior vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1C}. Please check the `Details` section for more explanation
 #' @param beta_prior vector of four values (`beta0_prior.a`, `beta0_prior.b`, `beta1_prior.a`, `beta1_prior.c`).  `beta0_prior.a` is the parameter a of the prior distribution for linkage parameter `beta0`. `beta0_prior.b` is the parameter b of the prior distribution  for linkage parameter `beta0`. `beta1_prior.a` is the parameter a of the prior distribution for linkage parameter `beta1`. `beta1_prior.c` is the parameter b of the prior distribution for linkage parameter `beta1`. Please check the `Details` section for more explanation
 #' @param n_MCMC_chain number of MCMC chains, default to 1
 #' @param BURN.IN number of burn-in iterations for MCMC
@@ -33,13 +32,13 @@
 #' @examples
 #' mydata = groupseqDATA_look1
 #'
-#' result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+#' result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
 #' beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
 #'
 #' result1
 #'
 #' mydata = groupseqDATA_full
-#' result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+#' result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
 #' beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
 #' summary(result2)
@@ -82,8 +81,8 @@
 #' @export
 #'
 #' @rdname group_seq
-group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_pair = NULL, prior_dist, pi_prior.a,
-                     pi_prior.b, beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
+group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_pair = NULL, prior_dist, pi_prior,
+                     beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
 
   if (!is.null(drop_threshold_pair)){
     drop_threshold_large = drop_threshold_pair[1]
@@ -144,8 +143,8 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
                                           treatment_stageII = patient_entry$trt.2nd[!is.na(patient_entry$resp.2nd)],
                                           response_stageI_disc = patient_entry$disc[!is.na(patient_entry$resp.2nd)],
                                           #prior
-                                          pi_prior.a = pi_prior.a,
-                                          pi_prior.b = pi_prior.b,
+                                          pi_prior.a = pi_prior[c(1, 3, 5)],
+                                          pi_prior.b = pi_prior[c(2, 4, 6)],
                                           beta0_prior.a = beta0_prior.a,
                                           beta0_prior.b = beta0_prior.b,
                                           beta1_prior.a = beta1_prior.a,
@@ -257,8 +256,8 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
                                           treatment_stageII = mydata$trt.2nd,
                                           response_stageI_disc = mydata$disc,
                                           #prior
-                                          pi_prior.a = pi_prior.a,
-                                          pi_prior.b = pi_prior.b,
+                                          pi_prior.a = pi_prior[c(1, 3, 5)],
+                                          pi_prior.b = pi_prior[c(2, 4, 6)],
                                           beta0_prior.a = beta0_prior.a,
                                           beta0_prior.b = beta0_prior.b,
                                           beta1_prior.a = beta1_prior.a,
