@@ -11,8 +11,7 @@ group_seq(
   drop_threshold = 0.5,
   drop_threshold_pair = NULL,
   prior_dist,
-  pi_prior.a,
-  pi_prior.b,
+  pi_prior,
   beta_prior,
   MCMC_SAMPLE,
   BURN.IN,
@@ -34,9 +33,7 @@ treatment) data yet to be observed should be marked as "\code{NA}"}
 
 \item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"), user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
 
-\item{pi_prior.a}{parameter a of the prior distribution for \code{pi_1m}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
-
-\item{pi_prior.b}{parameter b of the prior distribution  for \code{pi_1m}, a vector with three values, one for each treatment. Please check the \code{Details} section for more explanation}
+\item{pi_prior}{vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1C}. Please check the \code{Details} section for more explanation}
 
 \item{beta_prior}{vector of four values (\code{beta0_prior.a}, \code{beta0_prior.b}, \code{beta1_prior.a}, \code{beta1_prior.c}).  \code{beta0_prior.a} is the parameter a of the prior distribution for linkage parameter \code{beta0}. \code{beta0_prior.b} is the parameter b of the prior distribution  for linkage parameter \code{beta0}. \code{beta1_prior.a} is the parameter a of the prior distribution for linkage parameter \code{beta1}. \code{beta1_prior.c} is the parameter b of the prior distribution for linkage parameter \code{beta1}. Please check the \code{Details} section for more explanation}
 
@@ -95,13 +92,13 @@ Please refer to the paper listed under \code{reference} section for detailed def
 \examples{
 mydata = groupseqDATA_look1
 
-result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
 beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
 
 result1
 
 mydata = groupseqDATA_full
-result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6),
+result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
 beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 
 summary(result2)
