@@ -17,6 +17,7 @@
 #' @details
 #' section 2.2.1 and 2.2.2 of the paper listed under `reference` provides a detailed description of the assumptions and prior distributions of the model.
 #'
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
 #' @return
 #' \describe{
 #'     \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}

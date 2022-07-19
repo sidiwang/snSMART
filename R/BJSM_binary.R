@@ -26,6 +26,7 @@
 #'
 #' Please refer to the paper listed under `reference` section for standard snSMART trial design and detailed definition of parameters.
 #'
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
 #' @return
 #' \describe{
 #'    \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}

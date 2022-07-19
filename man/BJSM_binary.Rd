@@ -86,6 +86,8 @@ receive treatment \eqn{m'} in the second the stage, the second stage response ra
 to first stage treatment $m$ who receive treatment \eqn{m'} in the second stage is denoted by \eqn{\beta_{0m}\pi_{m'}}. All the \eqn{\beta}s are linkage parameters.
 
 Please refer to the paper listed under \code{reference} section for standard snSMART trial design and detailed definition of parameters.
+
+Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
 }
 \examples{
 mydata = data_binary

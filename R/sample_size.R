@@ -10,6 +10,9 @@
 #' @param mu a vector with 3 values (`muA`, `muB`, `muC`). `muA` is the prior mean (ranges from 0.01 to 0.99) for treatment A, `muB` is the prior mean (ranges from 0.01 to 0.99) for treatment B, `muC` is the prior mean (ranges from 0.01 to 0.99) for treatment C
 #' @param n a vector with 3 values (`nA`, `nB`, `nC`). `nA` is the prior sample size (larger than 0) for treatment A. `nB` is the prior sample size (larger than 0) for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
 #'
+#' @details
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+#'
 #' @return the estimated sample size per arm for an snSMART
 #'
 #' @examples

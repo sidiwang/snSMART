@@ -28,6 +28,7 @@
 #' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small correspond to \eqn{tau_l} and \eqn{phi_l} respectively)
 #'
 #' Please refer to the paper listed under `reference` section for detailed definition of parameters.
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
 
 #' @examples
 #' mydata = groupseqDATA_look1
