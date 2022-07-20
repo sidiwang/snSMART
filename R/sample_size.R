@@ -13,6 +13,8 @@
 #' @details
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
 #'
+#' This function may take a few minutes to run
+#'
 #' @return the estimated sample size per arm for an snSMART
 #'
 #' @examples
@@ -198,14 +200,16 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
   ciZ=qnorm(1-(1-COVRAGE)/2) # critical value of coverage
 
   # i=0
+  pb = txtProgressBar(min = 0, max = 1, initial = 0, style = 3)
+  setTxtProgressBar(pb, 0.3)
 
   for(CIL_I in seq(CIL_MAX,CIL_MIN,by=-CIL_STEP_I)){
     # i=i+1
     # print(CIL_I)
-    # print(CIL_I)
     # get sample size solved
     # print(CIL_I)
     # CIL_I=0.26
+
     if(CIL_I/2==(max(c(piA,piB,piC))-min(c(piA,piB,piC)))){
       next
     }
@@ -258,8 +262,13 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
 
       # total_process=length(seq(CIL_MAX,CIL_MIN,by=-CIL_STEP_I))
 
+      setTxtProgressBar(pb, pow_pair1/POW)
 
-      if(pow_pair1>POW) break
+
+      if(pow_pair1>POW) {
+        setTxtProgressBar(pb, 1)
+        break
+      }
     },
     error = function(c) {
       # error_round_tmp_pair1=cbind(i,beta1,beta0,CIL_I)
@@ -285,6 +294,8 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
 
 
   }
+
+  close(pb)
 
   cat(paste0("With given settings, the estimated sample size per arm for an snSMART is: ", sample_size_tmp_pair1, "\n",
                "This implies that for an snSMART with sample size of ", sample_size_tmp_pair1, " per arm (", 3*sample_size_tmp_pair1, " in total for three agents):", "\n",
