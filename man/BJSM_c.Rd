@@ -63,7 +63,7 @@ BJSM (Bayesian Joint Stage Modeling) method that borrows information across both
 \details{
 section 2.2.1 and 2.2.2 of the paper listed under \code{reference} provides a detailed description of the assumptions and prior distributions of the model.
 
-Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
 trialData = trialDataMF

@@ -92,7 +92,7 @@ second stage response probabilities through linkage parameters.
 (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_tau_l and drop_threshold_psi_l correspond to \eqn{tau_l} and \eqn{psi_l} respectively)
 
 Please refer to the paper listed under \code{reference} section for detailed definition of parameters.
-Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
 mydata = groupseqDATA_look1

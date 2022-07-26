@@ -28,7 +28,7 @@ the estimated sample size per arm for an snSMART
 conduct Bayesian sample size calculation for a snSMART design with 3 active treatments and a binary outcome to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
 }
 \details{
-Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 
 This function may take a few minutes to run
 }
