@@ -8,7 +8,6 @@
 group_seq(
   data,
   interim = TRUE,
-  drop_threshold = 0.5,
   drop_threshold_pair = NULL,
   prior_dist,
   pi_prior,
@@ -29,7 +28,7 @@ treatment) data yet to be observed should be marked as "\code{NA}"}
 
 \item{interim}{indicates whether user is conducting an interim analysis via BJSM (\code{interim} = TRUE) or an final analysis via BJSM (\code{interim} = FALSE)}
 
-\item{drop_threshold_pair}{a vector of 2 values (\code{drop_threshold_large}, \code{drop_threshold_small}). Both \code{drop_threshold_large} and \code{drop_threshold_small} should be between 0 and 1. only assign value to this parameter when \code{rule.type = 2} and \code{interim = TRUE}. See the details section for more explanation}
+\item{drop_threshold_pair}{a vector of 2 values (\code{drop_threshold_tau_l}, \code{drop_threshold_psi_l}). Both \code{drop_threshold_tau_l} and \code{drop_threshold_psi_l} should be between 0 and 1. only assign value to this parameter when \code{interim = TRUE}. See the details section for more explanation}
 
 \item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"), user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
 
@@ -73,6 +72,11 @@ if \code{interim = FALSE}, this function returns:
 \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
 
 \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
+
+\item{pi_DTR_se}{standard error for the estimated DTR response rate}
+
+\item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x\% credible intervals for the estimated DTR response rate}
+
 }
 }
 \description{
@@ -85,7 +89,7 @@ For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alph
 The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 second stage response probabilities through linkage parameters.
 
-(paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small correspond to \eqn{tau_l} and \eqn{phi_l} respectively)
+(paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_tau_l and drop_threshold_psi_l correspond to \eqn{tau_l} and \eqn{psi_l} respectively)
 
 Please refer to the paper listed under \code{reference} section for detailed definition of parameters.
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}

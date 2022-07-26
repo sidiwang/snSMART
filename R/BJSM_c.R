@@ -17,7 +17,7 @@
 #' @details
 #' section 2.2.1 and 2.2.2 of the paper listed under `reference` provides a detailed description of the assumptions and prior distributions of the model.
 #'
-#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #' @return
 #' \describe{
 #'     \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
@@ -25,7 +25,7 @@
 #'     \enumerate{
 #'          \item \code{phi1} - lingering effect of the first treatment
 #'          \item `phi3` - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
-#'          \item `xi_j` - \code{xi_j} parameters are the expected effect of treat j, j = A, B, C, in the first stage
+#'          \item `xi_j` - the expected effect of treatment j, j = 1, 2, 3 in the first stage
 #'          \item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
 #' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
 #'    }
@@ -90,7 +90,7 @@ BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain,
 #'
 summary.BJSM_c = function(object){
   cat("\nParameter Estimation:\n")
-  out = cbind(object$mean_estimate, object$ci_estimate)
+  out = as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
   colnames(out)[1] = "Estimate"
   print(out[-2])
 }
@@ -101,7 +101,8 @@ summary.BJSM_c = function(object){
 #'
 print.BJSM_c = function(object){
   cat("\nTreatment Effect Estimation:\n")
-  out = cbind(object$mean_estimate, object$ci_estimate)
+  out = as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
   colnames(out)[1] = "Estimate"
+  rownames(out)[11:13] = c("trtA", "trtB", "trtC")
   print(out[-c(seq(1, 10, 1)),-2])
 }

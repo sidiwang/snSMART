@@ -7,7 +7,7 @@
 #' `trt.1st` (treatment arm for first treatment), `resp.1st` (response for first treatment), `trt.2nd` (treatment arm for second treatment), `resp.2nd` (response for second
 #' treatment) data yet to be observed should be marked as "`NA`"
 #' @param interim indicates whether user is conducting an interim analysis via BJSM (`interim` = TRUE) or an final analysis via BJSM (`interim` = FALSE)
-#' @param drop_threshold_pair a vector of 2 values (`drop_threshold_large`, `drop_threshold_small`). Both `drop_threshold_large` and `drop_threshold_small` should be between 0 and 1. only assign value to this parameter when `rule.type = 2` and `interim = TRUE`. See the details section for more explanation
+#' @param drop_threshold_pair a vector of 2 values (`drop_threshold_tau_l`, `drop_threshold_psi_l`). Both `drop_threshold_tau_l` and `drop_threshold_psi_l` should be between 0 and 1. only assign value to this parameter when `interim = TRUE`. See the details section for more explanation
 #' @param pi_prior vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1C}. Please check the `Details` section for more explanation
 #' @param beta_prior vector of four values (`beta0_prior.a`, `beta0_prior.b`, `beta1_prior.a`, `beta1_prior.c`).  `beta0_prior.a` is the parameter a of the prior distribution for linkage parameter `beta0`. `beta0_prior.b` is the parameter b of the prior distribution  for linkage parameter `beta0`. `beta1_prior.a` is the parameter a of the prior distribution for linkage parameter `beta1`. `beta1_prior.c` is the parameter b of the prior distribution for linkage parameter `beta1`. Please check the `Details` section for more explanation
 #' @param n_MCMC_chain number of MCMC chains, default to 1
@@ -25,10 +25,10 @@
 #' The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
 #' second stage response probabilities through linkage parameters.
 #'
-#' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_large and drop_threshold_small correspond to \eqn{tau_l} and \eqn{phi_l} respectively)
+#' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_tau_l and drop_threshold_psi_l correspond to \eqn{tau_l} and \eqn{psi_l} respectively)
 #'
 #' Please refer to the paper listed under `reference` section for detailed definition of parameters.
-#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 
 #' @examples
 #' mydata = groupseqDATA_look1
@@ -70,6 +70,11 @@
 #' \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
 #'
 #' \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
+#'
+#' \item{pi_DTR_se}{standard error for the estimated DTR response rate}
+#'
+#' \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x% credible intervals for the estimated DTR response rate}
+#'
 #' }
 #'
 #'
@@ -82,7 +87,7 @@
 #' @export
 #'
 #' @rdname group_seq
-group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_pair = NULL, prior_dist, pi_prior,
+group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
                      beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
 
   if (!is.null(drop_threshold_pair)){
@@ -178,9 +183,9 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
       drop_C <- (min_C > drop_threshold)   # decide if C needs to be removed
       dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
       cat("\nInterim Analysis Outcome:\n")
-      if(sum(drop_A,drop_B,drop_C) == 0){     # if none of the arm is removed, move on to next update
+      if(sum(drop_A, drop_B, drop_C) == 0){     # if none of the arm is removed, move on to next update
         cat("none of the arm is removed, move on to next update\n")
-      } else if(sum(drop_A,drop_B,drop_C) == 1){  # if one of the arms is removed, move on to last assignment
+      } else if(sum(drop_A, drop_B, drop_C) == 1){  # if one of the arms is removed, move on to last assignment
         if (drop_A == 1){
           cat("Arm A is dropped\n")
         } else if (drop_B == 1){
@@ -198,8 +203,28 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
         max_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == max(x)}))  # posterior probability that B has largest response rate
         max_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == max(x)}))  # posterior probability that C has largest response rate
         keep_A <- (max_A > drop_threshold_large)
+        cat("\nInterim Analysis Outcome:\n")
+        cat("Threshold tau_l is set to: ")
+        cat(drop_threshold_large)
+        cat("\nThreshold psi_l is set to: ")
+        cat(drop_threshold_small)
+        if (keep_A == 1){
+          cat("\nStep 1: Arm A's interim posterior probability of having the greatest response is bigger than threshold ")
+          cat(drop_threshold_large)
+          cat("\n")
+        }
         keep_B <- (max_B > drop_threshold_large)
+        if (keep_B == 1){
+          cat("\nStep 1: Arm B's interim posterior probability of having the greatest response is bigger than threshold ")
+          cat(drop_threshold_large)
+          cat("\n")
+        }
         keep_C <- (max_C > drop_threshold_large)
+        if (keep_C == 1){
+          cat("\nStep 1: Arm C's interim posterior probability of having the greatest response is bigger than threshold ")
+          cat(drop_threshold_large)
+          cat("\n")
+        }
         if(any(c(keep_A, keep_B, keep_C) > 0)){
           drop_A <- ((keep_A == 0)*(min_A == max(min_A, min_B, min_C)) == 1)
           drop_B <- ((keep_B == 0)*(min_B == max(min_A, min_B, min_C)) == 1)
@@ -210,31 +235,52 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
             drop_B <- (randompick == 2)
             drop_C <- (randompick == 3)
           }
-        } else {
-          drop_A <- (min_A > drop_threshold_small[k])
-          drop_B <- (min_B > drop_threshold_small[k])
-          drop_C <- (min_C > drop_threshold_small[k])
-        }
-
-        dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
-        cat("\nInterim Analysis Outcome:\n")
-
-        if(all(c(drop_A,drop_B,drop_C) == 0)){     # if none of the arm is dropped, move on to next update
-          cat("none of the arm is removed, move on to next update\n")
-        } else if(sum(drop_A,drop_B,drop_C) == 1){  # if one of the arms is dropped, move on to last assignment
           if (drop_A == 1){
+            cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher\n")
             cat("Arm A is dropped\n")
           } else if (drop_B == 1){
+            cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher\n")
             cat("Arm B is dropped\n")
-          } else {
-            cat("Arm C is dropped\n")
+          } else if (drop_C == 1){
+            cat("Step 2: Arm C's interim posterior probability of having the lowest response is higher\n")
+            cat("Arm B is dropped\n")
+          }
+        } else {
+          cat("Step 1: No treatment has P_{m,l} bigger than threshold ")
+          cat(drop_threshold_large)
+          cat("\n")
+          drop_A <- (min_A > drop_threshold_small)
+          if (drop_A == 1){
+            cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher than threshold ")
+            cat(drop_threshold_small)
+            cat("\n")
+            cat("Arm A is dropped\n")
+          }
+          drop_B <- (min_B > drop_threshold_small)
+          if (drop_B == 1){
+            cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
+            cat(drop_threshold_small)
+            cat("\n")
+            cat("Arm B is dropped\n")
+          }
+          drop_C <- (min_C > drop_threshold_small)
+          if (drop_A == 1){
+            cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
+            cat(drop_threshold_small)
+            cat("\n")
+            cat("Arm B is dropped\n")
           }
         }
 
+        dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
+        if(all(c(drop_A,drop_B,drop_C) == 0)){     # if none of the arm is dropped, move on to next update
+          cat("none of the arm is removed, move on to next update\n")
+        }
       }
     cat("\n")
-
-    return(list("dropped_arm" = dropped_arm))
+    result = list("dropped_arm" = dropped_arm)
+    class(result) = "group_seq"
+    return(result)
   } else {
 
     mydata <- data
@@ -276,16 +322,14 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
     out_post <- as.data.frame(posterior_sample[[1]])
     colnames(out_post) = c("beta0A", "beta1A", "beta0B", "beta1B", "beta0C", "beta1C", "pi_A", "pi_B", "pi_C")
 
-    pi_DTR_est = c()
     pi_AB_tt <- out_post[, 7]^2 * out_post[, 2] + (1 - out_post[, 7]) * out_post[, 8] * out_post[, 1]
     pi_AC_tt <- out_post[, 7]^2 * out_post[, 2] + (1 - out_post[, 7]) * out_post[, 9] * out_post[, 1]
     pi_BA_tt <- out_post[, 8]^2 * out_post[, 4] + (1 - out_post[, 8]) * out_post[, 7] * out_post[, 3]
     pi_BC_tt <- out_post[, 8]^2 * out_post[, 4] + (1 - out_post[, 8]) * out_post[, 9] * out_post[, 3]
     pi_CA_tt <- out_post[, 9]^2 * out_post[, 6] + (1 - out_post[, 9]) * out_post[, 7] * out_post[, 5]
     pi_CB_tt <- out_post[, 9]^2 * out_post[, 6] + (1 - out_post[, 9]) * out_post[, 8] * out_post[, 5]
-    pi_DTR_est <- rbind(pi_DTR_est, c(mean(pi_AB_tt), mean(pi_AC_tt), mean(pi_BA_tt), mean(pi_BC_tt), mean(pi_CA_tt), mean(pi_CB_tt)))
-    colnames(pi_DTR_est) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
-    rownames(pi_DTR_est) = c("result")
+    pi_DTR <- cbind(pi_AB_tt, pi_AC_tt, pi_BA_tt, pi_BC_tt, pi_CA_tt, pi_CB_tt)
+    colnames(pi_DTR) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
 
     if (DTR == TRUE){
 
@@ -310,7 +354,15 @@ group_seq = function(data, interim = TRUE, drop_threshold = 0.5, drop_threshold_
                     "se_beta1_hat" = apply(out_post[, c(2, 4, 6)], 2, stats::sd),
                     "ci_beta0_hat" = HDInterval::hdi(out_post[, c(1, 3, 5)], ci), # linkage parameter beta0 credible interval
                     "ci_beta1_hat" = HDInterval::hdi(out_post[, c(2, 4, 6)], ci), # linkage parameter beta1 credible interval
-                    "pi_DTR_est" = t(pi_DTR_est)) # expected response rate of dynamic treatment regimens (DTRs)
+                    "pi_DTR_est" = apply(pi_DTR, 2, mean), # expected response rate of dynamic treatment regimens (DTRs)
+                    "pi_DTR_se" = apply(pi_DTR, 2, stats::sd),
+                    "ci_pi_AB" = bayestestR::ci(pi_DTR[, 1], ci = ci, method = "HDI"),
+                    "ci_pi_AC" = bayestestR::ci(pi_DTR[, 2], ci = ci, method = "HDI"),
+                    "ci_pi_BA" = bayestestR::ci(pi_DTR[, 3], ci = ci, method = "HDI"),
+                    "ci_pi_BC" = bayestestR::ci(pi_DTR[, 4], ci = ci, method = "HDI"),
+                    "ci_pi_CA" = bayestestR::ci(pi_DTR[, 5], ci = ci, method = "HDI"),
+                    "ci_pi_CB" = bayestestR::ci(pi_DTR[, 6], ci = ci, method = "HDI")
+      )
     }else{
       result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
@@ -383,12 +435,22 @@ summary.group_seq = function(object, digits = 5, ...){
 
     print(betaest, digits = digits)
     if (!is.null(object$pi_DTR_est)){
-      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR)\n")
-      print(object$pi_DTR_est, digits = digits)
+      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+      dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
+      colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+      print(dtreff, digits = digits)
     }
     cat("\n")
   } else {
-    print(object)
+    if(object$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
+      cat("none of the arm is removed, move on to next update\n")
+      } else if  (object$dropped_arm == 1){
+        cat("Arm A is dropped\n")
+      } else if (object$dropped_arm == 2){
+        cat("Arm B is dropped\n")
+      } else {
+        cat("Arm C is dropped\n")
+      }
   }
 }
 
@@ -398,16 +460,42 @@ summary.group_seq = function(object, digits = 5, ...){
 print.group_seq = function(object, digits = 5, ...){
   if (length(object) != 1){
     cat("\nTreatment Effects Estimate:\n")
-    print(object$pi_hat_bjsm)
+    trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
+    rownames(trteff) = c("trtA", "trtB", "trtC")
+    colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    print(trteff, digits = digits)
     cat("\nDifferences between Treatments:\n")
-    trtdiff = rbind(object$diff_AB, object$diff_BC, object$diff_AC)
-    colnames(trtdiff) = c("estimate")
+    trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
     rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
-    print(trtdiff)
+    colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
+    print(trtdiff, digits = digits)
     cat("\nLinkage Parameter Estimate:\n")
-    print(c(object$beta0_hat, object$beta1_hat))
+    if (length(object$beta0_hat) == 1){
+      betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
+      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+      rownames(betaest) = c("beta0", "beta1")
+    } else {
+      betaest = rbind(cbind(object$beta0_hat, object$se_beta0_hat, c(rep(trteff$C.I.[1], length(object$beta0_hat))), t(object$ci_beta0_hat)), cbind(object$beta1_hat, object$se_beta1_hat, c(rep(trteff$C.I.[1], length(object$beta1_hat))), t(object$ci_beta1_hat)))
+      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    }
+
+    print(betaest, digits = digits)
+    if (!is.null(object$pi_DTR_est)){
+      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+      dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
+      colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+      print(dtreff, digits = digits)
+    }
     cat("\n")
   } else {
-    print(object)
+    if(object$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
+      cat("none of the arm is removed, move on to next update\n")
+    } else if  (object$dropped_arm == 1){
+      cat("Arm A is dropped\n")
+    } else if (object$dropped_arm == 2){
+      cat("Arm B is dropped\n")
+    } else {
+      cat("Arm C is dropped\n")
+    }
   }
 }

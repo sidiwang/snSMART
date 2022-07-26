@@ -26,7 +26,7 @@
 #'
 #' Please refer to the paper listed under `reference` section for standard snSMART trial design and detailed definition of parameters.
 #'
-#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #' @return
 #' \describe{
 #'    \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
@@ -49,6 +49,10 @@
 #' \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
 #'
 #' \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
+#'
+#' \item{pi_DTR_se}{standard error for the estimated DTR response rate}
+#'
+#' \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x% credible intervals for the estimated DTR response rate}
 #' }
 #'
 #' @examples
@@ -209,16 +213,14 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 
       colnames(out_post) = c("beta0A", "beta1A", "beta0B", "beta1B", "beta0C", "beta1C", "pi_A", "pi_B", "pi_C")
 
-      pi_DTR_est = c()
       pi_AB_tt <- out_post[, 7]^2 * out_post[, 2] + (1 - out_post[, 7]) * out_post[, 8] * out_post[, 1]
       pi_AC_tt <- out_post[, 7]^2 * out_post[, 2] + (1 - out_post[, 7]) * out_post[, 9] * out_post[, 1]
       pi_BA_tt <- out_post[, 8]^2 * out_post[, 4] + (1 - out_post[, 8]) * out_post[, 7] * out_post[, 3]
       pi_BC_tt <- out_post[, 8]^2 * out_post[, 4] + (1 - out_post[, 8]) * out_post[, 9] * out_post[, 3]
       pi_CA_tt <- out_post[, 9]^2 * out_post[, 6] + (1 - out_post[, 9]) * out_post[, 7] * out_post[, 5]
       pi_CB_tt <- out_post[, 9]^2 * out_post[, 6] + (1 - out_post[, 9]) * out_post[, 8] * out_post[, 5]
-      pi_DTR_est <- rbind(pi_DTR_est, c(mean(pi_AB_tt), mean(pi_AC_tt), mean(pi_BA_tt), mean(pi_BC_tt), mean(pi_CA_tt), mean(pi_CB_tt)))
-      colnames(pi_DTR_est) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
-      rownames(pi_DTR_est) = c("result")
+      pi_DTR <- cbind(pi_AB_tt, pi_AC_tt, pi_BA_tt, pi_BC_tt, pi_CA_tt, pi_CB_tt)
+      colnames(pi_DTR) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
 
       if (DTR == TRUE){
 
@@ -243,7 +245,16 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                       "se_beta1_hat" = apply(out_post[, c(2, 4, 6)], 2, stats::sd),
                       "ci_beta0_hat" = HDInterval::hdi(out_post[, c(1, 3, 5)], ci), # linkage parameter beta0 credible interval
                       "ci_beta1_hat" = HDInterval::hdi(out_post[, c(2, 4, 6)], ci), # linkage parameter beta1 credible interval
-                      "pi_DTR_est" = t(pi_DTR_est)) # expected response rate of dynamic treatment regimens (DTRs)
+                      "pi_DTR_est" = apply(pi_DTR, 2, mean), # expected response rate of dynamic treatment regimens (DTRs)
+                      "pi_DTR_se" = apply(pi_DTR, 2, stats::sd),
+                      "ci_pi_AB" = bayestestR::ci(pi_DTR[, 1], ci = ci, method = "HDI"),
+                      "ci_pi_AC" = bayestestR::ci(pi_DTR[, 2], ci = ci, method = "HDI"),
+                      "ci_pi_BA" = bayestestR::ci(pi_DTR[, 3], ci = ci, method = "HDI"),
+                      "ci_pi_BC" = bayestestR::ci(pi_DTR[, 4], ci = ci, method = "HDI"),
+                      "ci_pi_CA" = bayestestR::ci(pi_DTR[, 5], ci = ci, method = "HDI"),
+                      "ci_pi_CB" = bayestestR::ci(pi_DTR[, 6], ci = ci, method = "HDI")
+                        )
+
       }else{
         result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                       "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
@@ -272,16 +283,14 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 
       colnames(out_post) = c("beta0", "beta1", "pi_A", "pi_B", "pi_C")
 
-      pi_DTR_est = c()
       pi_AB_tt <- out_post[, 3]^2 * out_post[, 2] + (1 - out_post[, 3]) * out_post[, 4] * out_post[, 1]
       pi_AC_tt <- out_post[, 3]^2 * out_post[, 2] + (1 - out_post[, 3]) * out_post[, 5] * out_post[, 1]
       pi_BA_tt <- out_post[, 4]^2 * out_post[, 2] + (1 - out_post[, 4]) * out_post[, 3] * out_post[, 1]
       pi_BC_tt <- out_post[, 4]^2 * out_post[, 2] + (1 - out_post[, 4]) * out_post[, 5] * out_post[, 1]
       pi_CA_tt <- out_post[, 5]^2 * out_post[, 2] + (1 - out_post[, 5]) * out_post[, 3] * out_post[, 1]
       pi_CB_tt <- out_post[, 5]^2 * out_post[, 2] + (1 - out_post[, 5]) * out_post[, 4] * out_post[, 1]
-      pi_DTR_est <- rbind(pi_DTR_est, c(mean(pi_AB_tt), mean(pi_AC_tt), mean(pi_BA_tt), mean(pi_BC_tt), mean(pi_CA_tt), mean(pi_CB_tt)))
-      colnames(pi_DTR_est) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
-      rownames(pi_DTR_est) = c("result")
+      pi_DTR <- cbind(pi_AB_tt, pi_AC_tt, pi_BA_tt, pi_BC_tt, pi_CA_tt, pi_CB_tt)
+      colnames(pi_DTR) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
 
       if (DTR == TRUE){
         result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
@@ -305,7 +314,15 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                       "se_beta1_hat" = stats::sd(out_post[, 2]),
                       "ci_beta0_hat" = bayestestR::ci(out_post[, 1], ci = ci, method = "HDI"), # linkage parameter beta0 credible interval
                       "ci_beta1_hat"  = bayestestR::ci(out_post[, 2], ci = ci, method = "HDI"),
-                      "pi_DTR_est" = t(pi_DTR_est)) # expected response rate of dynamic treatment regimens (DTRs)
+                      "pi_DTR_est" = apply(pi_DTR, 2, mean), # expected response rate of dynamic treatment regimens (DTRs)
+                      "pi_DTR_se" = apply(pi_DTR, 2, stats::sd),
+                      "ci_pi_AB" = bayestestR::ci(pi_DTR[, 1], ci = ci, method = "HDI"),
+                      "ci_pi_AC" = bayestestR::ci(pi_DTR[, 2], ci = ci, method = "HDI"),
+                      "ci_pi_BA" = bayestestR::ci(pi_DTR[, 3], ci = ci, method = "HDI"),
+                      "ci_pi_BC" = bayestestR::ci(pi_DTR[, 4], ci = ci, method = "HDI"),
+                      "ci_pi_CA" = bayestestR::ci(pi_DTR[, 5], ci = ci, method = "HDI"),
+                      "ci_pi_CB" = bayestestR::ci(pi_DTR[, 6], ci = ci, method = "HDI")
+        )
       }else{
         result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
                       "pi_hat_bjsm" = apply(out_post[, 3:5], 2, mean), # estimate of treatment response rate
@@ -468,7 +485,9 @@ summary.BJSM_binary = function(object, digits = 5, ...){
   print(betaest, digits = digits)
   if (!is.null(object$pi_DTR_est) == TRUE){
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
-    print(object$pi_DTR_est, digits = digits)
+    dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
+    colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    print(dtreff, digits = digits)
   }
   cat("\n")
 }
@@ -478,22 +497,32 @@ summary.BJSM_binary = function(object, digits = 5, ...){
 #' @export
 print.BJSM_binary = function(object, digits = 5, ...){
   cat("\nTreatment Effects Estimate:\n")
-  print(object$pi_hat_bjsm)
+  trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
+  rownames(trteff) = c("trtA", "trtB", "trtC")
+  colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(trteff, digits = digits)
   cat("\nDifferences between Treatments:\n")
-  trtdiff = rbind(object$diff_AB, object$diff_BC, object$diff_AC)
-  colnames(trtdiff) = c("estimate")
+  trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
   rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
-  print(trtdiff)
+  colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
+  print(trtdiff, digits = digits)
   cat("\nLinkage Parameter Estimate:\n")
-  if (length(object$beta0_hat) != 1){
-    ret = t(c(object$beta0_hat, object$beta1_hat))
-    rownames(ret) = c("Estimate")
+  if (length(object$beta0_hat) == 1){
+    betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
+    colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    rownames(betaest) = c("beta0", "beta1")
   } else {
-    ret = t(c(object$beta0_hat, object$beta1_hat))
-    rownames(ret) = c("Estimate")
-    colnames(ret) = c("beta0_hat", "beta1_hat")
+    betaest = rbind(cbind(object$beta0_hat, object$se_beta0_hat, c(rep(trteff$C.I.[1], length(object$beta0_hat))), t(object$ci_beta0_hat)), cbind(object$beta1_hat, object$se_beta1_hat, c(rep(trteff$C.I.[1], length(object$beta1_hat))), t(object$ci_beta1_hat)))
+    colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
   }
-  print(ret)
+
+  print(betaest, digits = digits)
+  if (!is.null(object$pi_DTR_est) == TRUE){
+    cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+    dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
+    colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    print(dtreff, digits = digits)
+  }
   cat("\n")
 }
 

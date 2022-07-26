@@ -71,6 +71,10 @@ BJSM_binary(
 \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
 
 \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
+
+\item{pi_DTR_se}{standard error for the estimated DTR response rate}
+
+\item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x\% credible intervals for the estimated DTR response rate}
 }
 }
 \description{

@@ -50,7 +50,7 @@ BJSM_c(
 \enumerate{
 \item \code{phi1} - lingering effect of the first treatment
 \item \code{phi3} - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
-\item \code{xi_j} - \code{xi_j} parameters are the expected effect of treat j, j = A, B, C, in the first stage
+\item \code{xi_j} - the expected effect of treatment j, j = 1, 2, 3 in the first stage
 \item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
 indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
 }
