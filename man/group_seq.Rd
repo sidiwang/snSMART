@@ -34,7 +34,10 @@ treatment) data yet to be observed should be marked as "\code{NA}"}
 
 \item{drop_threshold_pair}{a vector of 2 values (\code{drop_threshold_tau_l}, \code{drop_threshold_psi_l}). Both \code{drop_threshold_tau_l} and \code{drop_threshold_psi_l} should be between 0 and 1. only assign value to this parameter when \code{interim = TRUE}. See the details section for more explanation}
 
-\item{prior_dist}{vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"), user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")}
+\item{prior_dist}{vector of three values ("prior distribution for \code{pi}",
+"prior distribution for \code{beta0}", "prior distribution for \code{beta1}"),
+user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta",
+"beta", "pareto")}
 
 \item{pi_prior}{vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1C}. Please check the \code{Details} section for more explanation}
 
@@ -145,7 +148,4 @@ summary(result2)
 Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group
 sequential small n sequential multiple‐assignment randomized trial. Journal of
 the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
-}
-\seealso{
-\code{\link{sim_group_seq}}
 }

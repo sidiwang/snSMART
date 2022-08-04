@@ -62,6 +62,5 @@ for Bayesian analysis of small n sequential, multiple assignment, randomized tri
 (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
 }
 \seealso{
-\code{\link{JSRM_binary}} \cr
 \code{\link{BJSM_binary}}
 }

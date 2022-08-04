@@ -46,7 +46,7 @@
 #' (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
 #'
 #' @seealso
-#' \code{\link{JSRM_binary}} \cr
+# #' \code{\link{JSRM_binary}} \cr
 #' \code{\link{BJSM_binary}}
 #'
 #' @export
@@ -161,7 +161,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
   # load functions
   #require(rmutil)
   CIL_MAX=(piA-piB)*magic_Z
-  require(EnvStats)
+  # require(EnvStats)
   beta1_sample=round(mean(truncdist::rtrunc(99999, spec="pareto",a=1,b=1/max(c(piA,piB,piC)),1,pareto_beta)),3)
   beta0_sample=rep(beta0_mean,1)
 
@@ -191,7 +191,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
   bA = nA_input-aA
   # aA = 0.25*2
   # bA = 2-aA
-  source(system.file("functions.R", package = "snSMART"))
+  # source(system.file("functions.R", package = "snSMART"))
 
   cA = cFunc(aA, bA, beta1)
   dA = dFunc(aA, bA, beta1)

@@ -7,7 +7,7 @@
 \method{summary}{BJSM_dose_binary}(object, digits = 5, ...)
 }
 \arguments{
-\item{object}{an object of class "\code{BJSM_dose_binary}", usually, a result of a call to \code{\link{BJSM_dose_binary}}}
+\item{object}{an object of class \code{BJSM_dose_binary}, usually, a result of a call to \code{\link{BJSM_binary}}}
 
 \item{digits}{the number of significant digits to use when printing}
 
@@ -21,5 +21,5 @@
 }
 }
 \description{
-\code{summary} method for class "\code{BJSM_dose_binary}"
+\code{summary} method for class \code{BJSM_dose_binary}
 }

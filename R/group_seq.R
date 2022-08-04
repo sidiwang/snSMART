@@ -111,8 +111,8 @@
 #' sequential small n sequential multiple‐assignment randomized trial. Journal of
 #' the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
 #'
-#' @seealso
-#' \code{\link{sim_group_seq}}
+# #' @seealso
+# #' \code{\link{sim_group_seq}}
 #'
 #' @export
 #'

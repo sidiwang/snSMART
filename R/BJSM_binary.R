@@ -576,9 +576,9 @@ print.BJSM_binary = function(object, digits = 5, ...){
 
 #' Summarizing BJSM fits
 #'
-#' `summary` method for class "`BJSM_dose_binary`"
+#' `summary` method for class `BJSM_dose_binary`
 #'
-#' @param object an object of class "`BJSM_dose_binary`", usually, a result of a call to \code{\link{BJSM_dose_binary}}
+#' @param object an object of class `BJSM_dose_binary`, usually, a result of a call to \code{\link{BJSM_binary}}
 #' @param digits the number of significant digits to use when printing
 #' @param ... further arguments. Not currently used.
 #'
