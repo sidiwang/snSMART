@@ -4,7 +4,8 @@
 \alias{LPJSM_binary}
 \alias{summary.LPJSM_binary}
 \alias{print.LPJSM_binary}
-\title{LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two dose level)}
+\title{LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two
+dose level)}
 \usage{
 LPJSM_binary(data, six = TRUE, DTR = TRUE)
 
@@ -13,14 +14,20 @@ LPJSM_binary(data, six = TRUE, DTR = TRUE)
 \method{print}{LPJSM_binary}(object, digits = 5, ...)
 }
 \arguments{
-\item{data}{dataset with columns named as \code{treatment_stageI}, \code{response_stageI}, \code{treatment_stageII} and \code{response_stageII}}
+\item{data}{dataset with columns named as \code{treatment_stageI}, \code{response_stageI},
+\code{treatment_stageII} and \code{response_stageII}}
 
 \item{six}{if TRUE, will run the six beta model, if FALSE will run the two
 beta model. Default is \code{six = TRUE}}
 
-\item{DTR}{if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens}
+\item{DTR}{if TRUE, will also return the expected response rate and its standard
+error of dynamic treatment regimens}
 
-\item{digits}{the number of significant digits to use when printing}
+\item{object}{object to summarize.}
+
+\item{digits}{number of digits to print.}
+
+\item{...}{further arguments. Not currently used.}
 }
 \value{
 a \code{list} containing
@@ -33,8 +40,11 @@ a \code{list} containing
 }
 }
 \description{
-A joint-stage regression model (LPJSM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
-Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
+A joint-stage regression model (LPJSM) is a frequentist modeling approach that
+incorporates the responses of both stages as repeated measurements for each subject.
+Generalized estimating equations (GEE) are used to estimate the response rates of
+each treatment. The marginal response rates for each DTR can also be obtained based
+on the GEE results
 }
 \examples{
 data = data_binary
@@ -45,7 +55,8 @@ summary(LPJSM_result)
 
 }
 \references{
-Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis
+of small n sequential multiple assignment randomized trials (snSMARTs).
 Statistics in medicine, 37(26), pp.3723-3732.
 
 Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,

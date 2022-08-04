@@ -1,26 +1,41 @@
 #' BJSM continuous (snSMART with three active treatments and a continuous outcome design)
 #'
-#' BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages to estimate the individual response rate of each treatment (with continuous outcome and a mapping function).
+#' BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages
+#' to estimate the individual response rate of each treatment (with continuous
+#' outcome and a mapping function).
 #'
-#' @param data trial ddatset with columns: \code{id, trt1} (treatment 1), \code{stage1outcome, stay} (stay = 1 if patient stay on the same treatment in stage 2, otherwise stay = 0), \code{trt2} (treatment 2), \code{stage2outcome}
-#' @param xi_prior.mean a 3-element vector of mean of the prior distributions (normal distribution) for \code{xi}s (treatment effect). Please check the `Details` section for more explaination
-#' @param xi_prior.sd a 3-element vector of standard deviation of the prior distributions (normal distribution) for \code{xi}s (treatment effect). Please check the `Details` section for more explaination
-#' @param phi3_prior.sd standard deviation of the prior distribution (folded normal distribution) of \code{phi3} (if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term). Please check the `Details` section for more explaination
+#' @param data trial ddatset with columns: \code{id, trt1} (treatment 1), \code{stage1outcome, stay}
+#' (stay = 1 if patient stay on the same treatment in stage 2, otherwise stay = 0),
+#' \code{trt2} (treatment 2), \code{stage2outcome}
+#' @param xi_prior.mean a 3-element vector of mean of the prior distributions
+#' (normal distribution) for \code{xi}s (treatment effect). Please check the `Details`
+#' section for more explaination
+#' @param xi_prior.sd a 3-element vector of standard deviation of the prior distributions
+#' (normal distribution) for \code{xi}s (treatment effect). Please check the `Details`
+#' section for more explaination
+#' @param phi3_prior.sd standard deviation of the prior distribution (folded normal
+#' distribution) of \code{phi3} (if the patient stays on the same treatment, \code{phi3}
+#' is the cumulative effect of stage 1 that occurs on the treatment longer term).
+#' Please check the `Details` section for more explaination
 #' @param n_MCMC_chain number of MCMC chains, default to 1
-#' @param n.adapt the number of iterations for adaptation. If \code{n.adapt = 0} then no adaptation takes place
+#' @param n.adapt the number of iterations for adaptation. If \code{n.adapt = 0}
+#' then no adaptation takes place
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
-#' @param n.digits number of digits to keep in the final estimation of treatment effect
+#' @param n.digits number of digits to keep in the final estimation of treatment
+#' effect
 #' @param object an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
 
 #'
 #' @details
-#' section 2.2.1 and 2.2.2 of the paper listed under `reference` provides a detailed description of the assumptions and prior distributions of the model.
+#' section 2.2.1 and 2.2.2 of the paper listed under `reference` provides a detailed
+#' description of the assumptions and prior distributions of the model.
 #'
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #' @return
 #' \describe{
-#'     \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+#'     \item{posterior_sample}{posterior samples of the link parameters and response
+#'     rates generated through the MCMC process}
 #'     \item{mean_estimate}{BJSM estimate of each parameter:
 #'     \enumerate{
 #'          \item \code{phi1} - lingering effect of the first treatment
@@ -29,7 +44,9 @@
 #'          \item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
 #' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
 #'    }
-#'     \item{ci_estimate}{x% credible interval for each parameter. By default round to 2 decimal places, if more decimals are needed, please access the results by `[YourResultName]$ci_estimates$CI_low` or `[YourResultName]$ci_estimates$CI_high` }
+#'     \item{ci_estimate}{x% credible interval for each parameter. By default round to
+#'     2 decimal places, if more decimals are needed, please access the results by
+#'     `[YourResultName]$ci_estimates$CI_low` or `[YourResultName]$ci_estimates$CI_high` }
 #' }
 #'
 #' @examples
@@ -86,6 +103,7 @@ BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain,
 }
 
 #' @rdname BJSM_c
+#' @param object object to summarize.
 #' @export
 #'
 summary.BJSM_c = function(object){
@@ -97,6 +115,7 @@ summary.BJSM_c = function(object){
 
 
 #' @rdname BJSM_c
+#' @param object object to summarize.
 #' @export
 #'
 print.BJSM_c = function(object){

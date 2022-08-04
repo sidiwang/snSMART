@@ -1,10 +1,15 @@
 #' BJSM Method for interim analysis and final analysis of group sequential trial design
 #'
-#' After obtain real trial data, this function can be used to decide which arm to drop in an interim analysis or provide a full final analysis
+#' After obtain real trial data, this function can be used to decide which arm to
+#' drop in an interim analysis or provide a full final analysis
 #'
 #'
-#' @param data dataset should include 8 columns: `time.1st.trt` (first treatment starts time), `time.1st.resp` (first response time), `time.2nd.trt` (second treatment starts time), `time.2nd.resp` (second response time),
-#' `trt.1st` (treatment arm for first treatment), `resp.1st` (response for first treatment), `trt.2nd` (treatment arm for second treatment), `resp.2nd` (response for second
+#' @param data dataset should include 8 columns: `time.1st.trt` (first treatment
+#' starts time), `time.1st.resp` (first response time), `time.2nd.trt` (second
+#' treatment starts time), `time.2nd.resp` (second response time),
+#' `trt.1st` (treatment arm for first treatment), `resp.1st` (response for first
+#' treatment), `trt.2nd` (treatment arm for second treatment), `resp.2nd` (response
+#' for second
 #' treatment) data yet to be observed should be marked as "`NA`"
 #' @param interim indicates whether user is conducting an interim analysis via BJSM (`interim` = TRUE) or an final analysis via BJSM (`interim` = FALSE)
 #' @param drop_threshold_pair a vector of 2 values (`drop_threshold_tau_l`, `drop_threshold_psi_l`). Both `drop_threshold_tau_l` and `drop_threshold_psi_l` should be between 0 and 1. only assign value to this parameter when `interim = TRUE`. See the details section for more explanation
@@ -13,16 +18,28 @@
 #' @param n_MCMC_chain number of MCMC chains, default to 1
 #' @param BURN.IN number of burn-in iterations for MCMC
 #' @param MCMC_SAMPLE number of iterations for MCMC
-#' @param prior_dist vector of three values ("prior distribution for \code{pi}", "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"), user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta", "beta", "pareto")
-#' @param ci coverage probability for credible intervals, default = 0.95. only assign value to this parameter when `interim = FALSE`.
-#' @param DTR, if TRUE, will also return the expected response rate of dynamic treatment regimens. default = TRUE. only assign value to this parameter when `interim = FALSE`.
-
+#' @param prior_dist vector of three values ("prior distribution for \code{pi}",
+#' "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"),
+#' user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta",
+#' "beta", "pareto")
+#' @param ci coverage probability for credible intervals, default = 0.95. only
+#' assign value to this parameter when `interim = FALSE`.
+#' @param DTR, if TRUE, will also return the expected response rate of dynamic
+#' treatment regimens. default = TRUE. only assign value to this parameter when
+#' `interim = FALSE`.
 #'
 #' @details
-#' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
-#' For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha}, \code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
+#' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
+#' \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution,
+#' \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter
+#' \code{b}.
+#' For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha},
+#' \code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual
+#' version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
 #'
-#' The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
+#' The individual response rate is regarded as a permanent feature of the treatment.
+#' The second stage outcome is modeled conditionally on the first stage results
+#' linking the first and
 #' second stage response probabilities through linkage parameters.
 #'
 #' (paper provided in the reference section, section 2.2.2 Bayesian decision rules. drop_threshold_tau_l and drop_threshold_psi_l correspond to \eqn{tau_l} and \eqn{psi_l} respectively)
@@ -33,41 +50,52 @@
 #' @examples
 #' mydata = groupseqDATA_look1
 #'
-#' result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4), prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-#' beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1)
+#' result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
+#'   prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, BURN.IN = 1000, n_MCMC_chain = 1)
 #'
 #' result1
 #'
+#'
 #' mydata = groupseqDATA_full
-#' result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-#' beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+#' result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta",
+#'   "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, BURN.IN = 1000,
+#'   n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
 #' summary(result2)
 #'
 #' @return
-#' if `interim = TRUE`, this function returns either 0 - no arm is dropped, or A/B/C - arm A/B/C is dropped \cr
+#' if `interim = TRUE`, this function returns either 0 - no arm is dropped,
+#' or A/B/C - arm A/B/C is dropped \cr
 #'
 #' if `interim = FALSE`, this function returns:
 #'
 #' \describe{
-#'    \item{posterior_sample}{posterior samples of the link parameters and response rates generated through the MCMC process}
+#'    \item{posterior_sample}{posterior samples of the link parameters and response
+#'    rates generated through the MCMC process}
 #'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'
 #' \item{se_hat_bjsm}{standard error of the response rate}
 #'
 #' \item{ci_pi_A, ci_pi_B, ci_pi_C}{x% credible intervals for treatment A, B, C}
 #'
-#' \item{diff_AB, diff_BC. diff_AC}{estimate of differences between treatments A and B, B and C, A and C}
+#' \item{diff_AB, diff_BC. diff_AC}{estimate of differences between treatments A
+#' and B, B and C, A and C}
 #'
-#' \item{ci_diff_AB, ci_diff_BC, ci_diff_AC}{x% credible intervals for the differences between treatments A and B, B and C, A and C}
+#' \item{ci_diff_AB, ci_diff_BC, ci_diff_AC}{x% credible intervals for the differences
+#' between treatments A and B, B and C, A and C}
 #'
-#' \item{se_AB, se_BC, se_AC}{standard error for the differences between treatments A and B, B and C, A and C}
+#' \item{se_AB, se_BC, se_AC}{standard error for the differences between treatments
+#' A and B, B and C, A and C}
 #'
 #' \item{beta0_hat, beta1_hat}{linkage parameter \code{beta0} and \code{beta1} estimates}
 #'
-#' \item{se_beta0_hat, se_beta1_hat}{standard error of the estimated value of linkage parameter \code{beta0} and \code{beta1}}
+#' \item{se_beta0_hat, se_beta1_hat}{standard error of the estimated value of linkage
+#' parameter \code{beta0} and \code{beta1}}
 #'
-#' \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1} credible interval}
+#' \item{ci_beta0_hat, ci_beta1_hat}{linkage parameter \code{beta0} and \code{beta1}
+#' credible interval}
 #'
 #' \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
 #'
@@ -79,7 +107,9 @@
 #'
 #'
 #' @references
-#' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group sequential small n sequential multiple‐assignment randomized trial. Journal of the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
+#' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group
+#' sequential small n sequential multiple‐assignment randomized trial. Journal of
+#' the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
 #'
 #' @seealso
 #' \code{\link{sim_group_seq}}
@@ -400,6 +430,7 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
 #'
 #' @param object an object of class "`group_seq`", usually, a result of a call to \code{\link{group_seq}}
 #' @param digits the number of significant digits to use when printing
+#' @param ... further arguments. Not currently used.
 #'
 #' @returns
 #' \describe{
@@ -456,6 +487,9 @@ summary.group_seq = function(object, digits = 5, ...){
 
 
 #' @rdname group_seq
+#' @param object object to summarize.
+#' @param digits number of digits to print.
+#' @param ... further arguments. Not currently used.
 #' @export
 print.group_seq = function(object, digits = 5, ...){
   if (length(object) != 1){

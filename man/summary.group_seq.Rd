@@ -10,6 +10,8 @@
 \item{object}{an object of class "\code{group_seq}", usually, a result of a call to \code{\link{group_seq}}}
 
 \item{digits}{the number of significant digits to use when printing}
+
+\item{...}{further arguments. Not currently used.}
 }
 \value{
 \describe{
