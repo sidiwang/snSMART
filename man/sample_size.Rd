@@ -7,40 +7,60 @@
 sample_size(pi, beta1, beta0, coverage, power, mu, n)
 }
 \arguments{
-\item{pi}{a vector with 3 values (\code{piA}, \code{piB}, \code{piC}). \code{piA} is the the response rate (ranges from 0.01 to 0.99) for treatment A, \code{piB} is the response rate (ranges from 0.01 to 0.99) for treatment B, \code{piC} is the response rate (ranges from 0.01 to 0.99) for treatment C}
+\item{pi}{a vector with 3 values (\code{piA}, \code{piB}, \code{piC}). \code{piA} is the the response
+rate (ranges from 0.01 to 0.99) for treatment A, \code{piB} is the response rate
+(ranges from 0.01 to 0.99) for treatment B, \code{piC} is the response rate (ranges
+from 0.01 to 0.99) for treatment C}
 
-\item{beta1}{the linkage parameter (ranges from 1.00 to 1/largest response rate) for first stage responders. (A smaller value leads to more conservative sample size calculation because two stages are less correlated)}
+\item{beta1}{the linkage parameter (ranges from 1.00 to 1/largest response rate)
+for first stage responders. (A smaller value leads to more conservative sample
+size calculation because two stages are less correlated)}
 
-\item{beta0}{the linkage parameter (ranges from 0.01 to 0.99) for first stage non-responders. A larger value leads to a more conservative sample size calculation because two stages are less correlated}
+\item{beta0}{the linkage parameter (ranges from 0.01 to 0.99) for first stage
+non-responders. A larger value leads to a more conservative sample size calculation
+because two stages are less correlated}
 
-\item{coverage}{the coverage rate (ranges from 0.01 to 0.99) for the posterior difference of top two treatments}
+\item{coverage}{the coverage rate (ranges from 0.01 to 0.99) for the posterior
+difference of top two treatments}
 
 \item{power}{the probability (ranges from 0.01 to 0.99) for identify the best treatment}
 
-\item{mu}{a vector with 3 values (\code{muA}, \code{muB}, \code{muC}). \code{muA} is the prior mean (ranges from 0.01 to 0.99) for treatment A, \code{muB} is the prior mean (ranges from 0.01 to 0.99) for treatment B, \code{muC} is the prior mean (ranges from 0.01 to 0.99) for treatment C}
+\item{mu}{a vector with 3 values (\code{muA}, \code{muB}, \code{muC}). \code{muA} is the prior mean
+(ranges from 0.01 to 0.99) for treatment A, \code{muB} is the prior mean (ranges from
+0.01 to 0.99) for treatment B, \code{muC} is the prior mean (ranges from 0.01 to 0.99)
+for treatment C}
 
-\item{n}{a vector with 3 values (\code{nA}, \code{nB}, \code{nC}). \code{nA} is the prior sample size (larger than 0) for treatment A. \code{nB} is the prior sample size (larger than 0) for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
+\item{n}{a vector with 3 values (\code{nA}, \code{nB}, \code{nC}). \code{nA} is the prior sample size
+(larger than 0) for treatment A. \code{nB} is the prior sample size (larger than 0)
+for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
 }
 \value{
 the estimated sample size per arm for an snSMART
 }
 \description{
-conduct Bayesian sample size calculation for a snSMART design with 3 active treatments and a binary outcome to distinguish the best treatment from the second-best treatment using the Bayesian joint stage model
+conduct Bayesian sample size calculation for a snSMART design with 3 active
+treatments and a binary outcome to distinguish the best treatment from the second-best
+treatment using the Bayesian joint stage model
 }
 \details{
-Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+Note that this package does not include the JAGS library, users need to install
+JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
 
 This function may take a few minutes to run
 }
 \examples{
-sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
+sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
+power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
 
 }
 \references{
-Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of
+small n sequential multiple assignment randomized trials (snSMARTs).
 Statistics in medicine, 37(26), pp.3723-3732.
 
-Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination for Bayesian analysis of small n sequential, multiple assignment, randomized trials (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination
+for Bayesian analysis of small n sequential, multiple assignment, randomized trials
+(snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
 }
 \seealso{
 \code{\link{JSRM_binary}} \cr

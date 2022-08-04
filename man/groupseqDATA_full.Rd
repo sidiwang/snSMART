@@ -9,9 +9,12 @@ sample dataset of group sequential trial design snSMART, can be used for final a
 }
 \examples{
 mydata = groupseqDATA_full
-result3 = group_seq(data = mydata, rule.type = 2, interim = FALSE, NUM_ARMS = 3, pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4), pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
-beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto", beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 60000, BURN.IN = 10000,
-n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+result3 = group_seq(data = mydata, rule.type = 2, interim = FALSE, NUM_ARMS = 3,
+  pi_prior_dist = "beta", pi_prior.a =  c(0.4,0.4,0.4),
+  pi_prior.b = c(1.6, 1.6, 1.6), beta0_prior_dist = "beta",
+  beta0_prior.a = 1.6, beta0_prior.b = 0.4, beta1_prior_dist = "pareto",
+  beta1_prior.a = 3, beta1_prior.c = 1, MCMC_SAMPLE = 600, BURN.IN = 100,
+  n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 
 }
 \keyword{data}

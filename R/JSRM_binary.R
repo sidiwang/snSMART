@@ -1,12 +1,18 @@
-#' LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two dose level)
+#' LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two
+#' dose level)
 #'
-#' A joint-stage regression model (LPJSM) is a frequentist modeling approach that incorporates the responses of both stages as repeated measurements for each subject.
-#' Generalized estimating equations (GEE) are used to estimate the response rates of each treatment. The marginal response rates for each DTR can also be obtained based on the GEE results
+#' A joint-stage regression model (LPJSM) is a frequentist modeling approach that
+#' incorporates the responses of both stages as repeated measurements for each subject.
+#' Generalized estimating equations (GEE) are used to estimate the response rates of
+#' each treatment. The marginal response rates for each DTR can also be obtained based
+#' on the GEE results
 #'
-#' @param data dataset with columns named as \code{treatment_stageI}, \code{response_stageI}, \code{treatment_stageII} and \code{response_stageII}
+#' @param data dataset with columns named as \code{treatment_stageI}, \code{response_stageI},
+#' \code{treatment_stageII} and \code{response_stageII}
 #' @param six if TRUE, will run the six beta model, if FALSE will run the two
 #' beta model. Default is `six = TRUE`
-#' @param DTR if TRUE, will also return the expected response rate and its standard error of dynamic treatment regimens
+#' @param DTR if TRUE, will also return the expected response rate and its standard
+#' error of dynamic treatment regimens
 #' @param digits the number of significant digits to use when printing
 #'
 #' @return a `list` containing
@@ -26,7 +32,8 @@
 #' summary(LPJSM_result)
 #'
 #' @references
-#' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
+#' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis
+#' of small n sequential multiple assignment randomized trials (snSMARTs).
 #' Statistics in medicine, 37(26), pp.3723-3732.
 #'
 #' Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment,
@@ -213,6 +220,9 @@ LPJSM_binary = function(data, six = TRUE, DTR = TRUE){
 
 
 #' @rdname LPJSM_binary
+#' @param object object to summarize
+#' @param digits number of summary digits
+#' @param ... not currently used
 #' @export
 summary.LPJSM_binary = function(object, digits = 5, ...){
   cat("\nGEE output:\n")
@@ -236,6 +246,9 @@ summary.LPJSM_binary = function(object, digits = 5, ...){
 
 
 #' @rdname LPJSM_binary
+#' @param object object to summarize.
+#' @param digits number of digits to print.
+#' @param ... further arguments. Not currently used.
 #' @export
 print.LPJSM_binary = function(object, digits = 5, ...){
   cat("\nTreatment Effect Estimate\n")
