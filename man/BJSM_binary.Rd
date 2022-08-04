@@ -113,6 +113,10 @@ parameter \code{beta0} and \code{beta1}}
 credible interval}
 
 \item{pi_DTR_est}{expected response rate of dynamic treatment regimens (DTRs)}
+
+\item{pi_DTR_se}{standard error for the estimated DTR response rate}
+
+\item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x\% credible intervals for the estimated DTR response rate}
 }
 }
 \description{
@@ -121,34 +125,17 @@ borrows information across both stages to estimate the individual response rate
 of each treatment/dose level in a snSMART design with binary outcomes.
 }
 \details{
-For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
-\code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution,
-\code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape
-parameter \code{b}.
-For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha},
-\code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual
-version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
+For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
+For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha}, \code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
 
-The individual response rate is regarded as a permanent feature of the treatment.
-The second stage outcome is modeled conditionally on the first stage results linking
-the first and
-second stage response probabilities through linkage parameters. The first stage
-response rate is denoted as \eqn{\pi_m} for treatment \eqn{m}. In the two \eqn{\beta}
-model, the second stage response rate for first stage responders is equal to
-\eqn{\beta_1\pi_m}. For nonresponders to treatment \eqn{m} in the first stage who
-receive treatment \eqn{m'} in the second the stage, the second stage response
-rate in the second stage is equal to \eqn{\beta_0\pi_{m'}}. In the six \eqn{\beta}
-model, the second stage response rate of the first stage responders to treatment m
-is denoted by \eqn{\beta_{1m}\pi_m}, and the second stage response rate of the
-non-responders
-to first stage treatment $m$ who receive treatment \eqn{m'} in the second stage
-is denoted by \eqn{\beta_{0m}\pi_{m'}}. All the \eqn{\beta}s are linkage parameters.
+The individual response rate is regarded as a permanent feature of the treatment. The second stage outcome is modeled conditionally on the first stage results linking the first and
+second stage response probabilities through linkage parameters. The first stage response rate is denoted as \eqn{\pi_m} for treatment \eqn{m}. In the two \eqn{\beta} model, the second stage response rate for first stage responders is equal to \eqn{\beta_1\pi_m}. For nonresponders to treatment \eqn{m} in the first stage who
+receive treatment \eqn{m'} in the second the stage, the second stage response rate in the second stage is equal to \eqn{\beta_0\pi_{m'}}. In the six \eqn{\beta} model, the second stage response rate of the first stage responders to treatment m is denoted by \eqn{\beta_{1m}\pi_m}, and the second stage response rate of the non-responders
+to first stage treatment $m$ who receive treatment \eqn{m'} in the second stage is denoted by \eqn{\beta_{0m}\pi_{m'}}. All the \eqn{\beta}s are linkage parameters.
 
-Please refer to the paper listed under \code{reference} section for standard snSMART
-trial design and detailed definition of parameters.
+Please refer to the paper listed under \code{reference} section for standard snSMART trial design and detailed definition of parameters.
 
-Note that this package does not include the JAGS library, users need to install
-JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
 mydata = data_binary

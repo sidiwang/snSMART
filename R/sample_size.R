@@ -26,8 +26,7 @@
 #' for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
 #'
 #' @details
-#' Note that this package does not include the JAGS library, users need to install
-#' JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+#' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #'
 #' This function may take a few minutes to run
 #'

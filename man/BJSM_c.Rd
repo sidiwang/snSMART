@@ -61,15 +61,10 @@ rates generated through the MCMC process}
 \item{mean_estimate}{BJSM estimate of each parameter:
 \enumerate{
 \item \code{phi1} - lingering effect of the first treatment
-\item \code{phi3} - if the patient stays on the same treatment, \code{phi3}
-is the cumulative effect of stage 1 that occurs on the treatment longer term
-\item \code{xi_j} - \code{xi_j} parameters are the expected effect of treat
-j, j = A, B, C, in the first stage
-\item \code{rho} is the inverse of the variance-covariance matrix of
-the multivariate distribution, first parameter indicates whether patient
-stayed on the same treatment (2) or not (1), second parameter
-indicates the row number of the inverse of variance-covariance matrix, and the
-third parameter indicates the column number of the inverse of the variance-covariance matrix}
+\item \code{phi3} - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
+\item \code{xi_j} - the expected effect of treatment j, j = 1, 2, 3 in the first stage
+\item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
+indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
 }
 \item{ci_estimate}{x\% credible interval for each parameter. By default round to
 2 decimal places, if more decimals are needed, please access the results by
@@ -85,8 +80,7 @@ outcome and a mapping function).
 section 2.2.1 and 2.2.2 of the paper listed under \code{reference} provides a detailed
 description of the assumptions and prior distributions of the model.
 
-Note that this package does not include the JAGS library, users need to install
-JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/files/}
+Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
 trialData = trialDataMF
