@@ -20,7 +20,6 @@ Imports:
     condMVNorm,
     pracma,
     cubature,
-    rmutil,
     magrittr,
     tidyr,
     EnvStats

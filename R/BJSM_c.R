@@ -24,7 +24,7 @@
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param n.digits number of digits to keep in the final estimation of treatment
 #' effect
-#' @param object an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
+#' @param x an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
 
 #'
 #' @details
@@ -104,9 +104,10 @@ BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain,
 
 #' @rdname BJSM_c
 #' @param object object to summarize.
+#' @param ... further arguments. Not currently used.
 #' @export
 #'
-summary.BJSM_c = function(object){
+summary.BJSM_c = function(object, ...){
   cat("\nParameter Estimation:\n")
   out = as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
   colnames(out)[1] = "Estimate"
@@ -115,12 +116,13 @@ summary.BJSM_c = function(object){
 
 
 #' @rdname BJSM_c
-#' @param object object to summarize.
+#' @param x object to summarize.
+#' @param ... further arguments. Not currently used.
 #' @export
 #'
-print.BJSM_c = function(object){
+print.BJSM_c = function(x, ...){
   cat("\nTreatment Effect Estimation:\n")
-  out = as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
+  out = as.data.frame(cbind(x$mean_estimate, x$ci_estimate))
   colnames(out)[1] = "Estimate"
   rownames(out)[11:13] = c("trtA", "trtB", "trtC")
   print(out[-c(seq(1, 10, 1)),-2])

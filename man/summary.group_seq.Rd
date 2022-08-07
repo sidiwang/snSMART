@@ -4,12 +4,10 @@
 \alias{summary.group_seq}
 \title{Summarizing BJSM fits}
 \usage{
-\method{summary}{group_seq}(object, digits = 5, ...)
+\method{summary}{group_seq}(object, ...)
 }
 \arguments{
 \item{object}{an object of class "\code{group_seq}", usually, a result of a call to \code{\link{group_seq}}}
-
-\item{digits}{the number of significant digits to use when printing}
 
 \item{...}{further arguments. Not currently used.}
 }

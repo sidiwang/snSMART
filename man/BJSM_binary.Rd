@@ -20,9 +20,9 @@ BJSM_binary(
   DTR = TRUE
 )
 
-\method{print}{BJSM_binary}(object, digits = 5, ...)
+\method{print}{BJSM_binary}(x, ...)
 
-\method{print}{BJSM_dose_binary}(object, digits = 5, ...)
+\method{print}{BJSM_dose_binary}(x, ...)
 }
 \arguments{
 \item{data}{trial data with 4 columns: \code{treatment_stageI, response_stageI,
@@ -79,9 +79,7 @@ treatment design.}
 dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 treatment design.}
 
-\item{object}{object to summarize.}
-
-\item{digits}{number of digits to print.}
+\item{x}{object to summarize.}
 
 \item{...}{further arguments. Not currently used.}
 }

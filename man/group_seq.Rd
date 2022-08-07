@@ -19,7 +19,7 @@ group_seq(
   DTR = TRUE
 )
 
-\method{print}{group_seq}(object, digits = 5, ...)
+\method{print}{group_seq}(x, ...)
 }
 \arguments{
 \item{data}{dataset should include 8 columns: \code{time.1st.trt} (first treatment
@@ -56,9 +56,7 @@ assign value to this parameter when \code{interim = FALSE}.}
 treatment regimens. default = TRUE. only assign value to this parameter when
 \code{interim = FALSE}.}
 
-\item{object}{object to summarize.}
-
-\item{digits}{number of digits to print.}
+\item{x}{object to summarize.}
 
 \item{...}{further arguments. Not currently used.}
 }

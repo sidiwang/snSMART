@@ -18,9 +18,9 @@ BJSM_c(
   n.digits
 )
 
-\method{summary}{BJSM_c}(object)
+\method{summary}{BJSM_c}(object, ...)
 
-\method{print}{BJSM_c}(object)
+\method{print}{BJSM_c}(x, ...)
 }
 \arguments{
 \item{data}{trial ddatset with columns: \code{id, trt1} (treatment 1), \code{stage1outcome, stay}
@@ -53,6 +53,10 @@ then no adaptation takes place}
 effect}
 
 \item{object}{object to summarize.}
+
+\item{...}{further arguments. Not currently used.}
+
+\item{x}{object to summarize.}
 }
 \value{
 \describe{

@@ -4,12 +4,10 @@
 \alias{summary.BJSM_dose_binary}
 \title{Summarizing BJSM fits}
 \usage{
-\method{summary}{BJSM_dose_binary}(object, digits = 5, ...)
+\method{summary}{BJSM_dose_binary}(object, ...)
 }
 \arguments{
 \item{object}{an object of class \code{BJSM_dose_binary}, usually, a result of a call to \code{\link{BJSM_binary}}}
-
-\item{digits}{the number of significant digits to use when printing}
 
 \item{...}{further arguments. Not currently used.}
 }

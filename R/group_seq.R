@@ -125,8 +125,6 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
     drop_threshold_small = drop_threshold_pair[2]
   }
 
-  rule.type = 2
-
   NUM_ARMS = length(unique(data$trt.1st[!is.na(data$trt.1st)]))
 
   beta0_prior.a = beta_prior[1]
@@ -204,109 +202,87 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
     )
     out_post <- posterior_sample[[1]]
 
-    if (rule.type == 1){
-      min_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == min(x)})) # posterior probability that A has smallest response rate
-      min_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == min(x)})) # posterior probability that B has smallest response rate
-      min_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == min(x)})) # posterior probability that C has smallest response rate
-      drop_A <- (min_A > drop_threshold)   # decide if A needs to be removed
-      drop_B <- (min_B > drop_threshold)   # decide if B needs to be removed
-      drop_C <- (min_C > drop_threshold)   # decide if C needs to be removed
-      dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
-      cat("\nInterim Analysis Outcome:\n")
-      if(sum(drop_A, drop_B, drop_C) == 0){     # if none of the arm is removed, move on to next update
-        cat("none of the arm is removed, move on to next update\n")
-      } else if(sum(drop_A, drop_B, drop_C) == 1){  # if one of the arms is removed, move on to last assignment
-        if (drop_A == 1){
-          cat("Arm A is dropped\n")
-        } else if (drop_B == 1){
-          cat("Arm B is dropped\n")
-        } else {
-          cat("Arm C is dropped\n")
-        }
-        cat("\n")
-
-      }}else{
-        min_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == min(x)}))  # posterior probability that A has smallest response rate
-        min_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == min(x)}))  # posterior probability that B has smallest response rate
-        min_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == min(x)}))  # posterior probability that C has smallest response rate
-        max_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == max(x)}))  # posterior probability that A has largest response rate
-        max_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == max(x)}))  # posterior probability that B has largest response rate
-        max_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == max(x)}))  # posterior probability that C has largest response rate
-        keep_A <- (max_A > drop_threshold_large)
-        cat("\nInterim Analysis Outcome:\n")
-        cat("Threshold tau_l is set to: ")
-        cat(drop_threshold_large)
-        cat("\nThreshold psi_l is set to: ")
-        cat(drop_threshold_small)
-        if (keep_A == 1){
-          cat("\nStep 1: Arm A's interim posterior probability of having the greatest response is bigger than threshold ")
-          cat(drop_threshold_large)
-          cat("\n")
-        }
-        keep_B <- (max_B > drop_threshold_large)
-        if (keep_B == 1){
-          cat("\nStep 1: Arm B's interim posterior probability of having the greatest response is bigger than threshold ")
-          cat(drop_threshold_large)
-          cat("\n")
-        }
-        keep_C <- (max_C > drop_threshold_large)
-        if (keep_C == 1){
-          cat("\nStep 1: Arm C's interim posterior probability of having the greatest response is bigger than threshold ")
-          cat(drop_threshold_large)
-          cat("\n")
-        }
-        if(any(c(keep_A, keep_B, keep_C) > 0)){
-          drop_A <- ((keep_A == 0)*(min_A == max(min_A, min_B, min_C)) == 1)
-          drop_B <- ((keep_B == 0)*(min_B == max(min_A, min_B, min_C)) == 1)
-          drop_C <- ((keep_C == 0)*(min_C == max(min_A, min_B, min_C)) == 1)
-          if (sum(drop_A, drop_B, drop_C)>1){    # if more than one arm is dropped
-            randompick <- sample(1:3,1,prob = c(drop_A, drop_B, drop_C)/sum(drop_A, drop_B, drop_C))
-            drop_A <- (randompick == 1)
-            drop_B <- (randompick == 2)
-            drop_C <- (randompick == 3)
-          }
-          if (drop_A == 1){
-            cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher\n")
-            cat("Arm A is dropped\n")
-          } else if (drop_B == 1){
-            cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher\n")
-            cat("Arm B is dropped\n")
-          } else if (drop_C == 1){
-            cat("Step 2: Arm C's interim posterior probability of having the lowest response is higher\n")
-            cat("Arm B is dropped\n")
-          }
-        } else {
-          cat("Step 1: No treatment has P_{m,l} bigger than threshold ")
-          cat(drop_threshold_large)
-          cat("\n")
-          drop_A <- (min_A > drop_threshold_small)
-          if (drop_A == 1){
-            cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher than threshold ")
-            cat(drop_threshold_small)
-            cat("\n")
-            cat("Arm A is dropped\n")
-          }
-          drop_B <- (min_B > drop_threshold_small)
-          if (drop_B == 1){
-            cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
-            cat(drop_threshold_small)
-            cat("\n")
-            cat("Arm B is dropped\n")
-          }
-          drop_C <- (min_C > drop_threshold_small)
-          if (drop_A == 1){
-            cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
-            cat(drop_threshold_small)
-            cat("\n")
-            cat("Arm B is dropped\n")
-          }
-        }
-
-        dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
-        if(all(c(drop_A,drop_B,drop_C) == 0)){     # if none of the arm is dropped, move on to next update
-          cat("none of the arm is removed, move on to next update\n")
-        }
+    min_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == min(x)}))  # posterior probability that A has smallest response rate
+    min_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == min(x)}))  # posterior probability that B has smallest response rate
+    min_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == min(x)}))  # posterior probability that C has smallest response rate
+    max_A <- mean(apply(out_post[, 7:9], 1, function(x) {x[1] == max(x)}))  # posterior probability that A has largest response rate
+    max_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == max(x)}))  # posterior probability that B has largest response rate
+    max_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == max(x)}))  # posterior probability that C has largest response rate
+    keep_A <- (max_A > drop_threshold_large)
+    cat("\nInterim Analysis Outcome:\n")
+    cat("Threshold tau_l is set to: ")
+    cat(drop_threshold_large)
+    cat("\nThreshold psi_l is set to: ")
+    cat(drop_threshold_small)
+    if (keep_A == 1){
+      cat("\nStep 1: Arm A's interim posterior probability of having the greatest response is bigger than threshold ")
+      cat(drop_threshold_large)
+      cat("\n")
+    }
+    keep_B <- (max_B > drop_threshold_large)
+    if (keep_B == 1){
+      cat("\nStep 1: Arm B's interim posterior probability of having the greatest response is bigger than threshold ")
+      cat(drop_threshold_large)
+      cat("\n")
+    }
+    keep_C <- (max_C > drop_threshold_large)
+    if (keep_C == 1){
+      cat("\nStep 1: Arm C's interim posterior probability of having the greatest response is bigger than threshold ")
+      cat(drop_threshold_large)
+      cat("\n")
+    }
+    if(any(c(keep_A, keep_B, keep_C) > 0)){
+      drop_A <- ((keep_A == 0)*(min_A == max(min_A, min_B, min_C)) == 1)
+      drop_B <- ((keep_B == 0)*(min_B == max(min_A, min_B, min_C)) == 1)
+      drop_C <- ((keep_C == 0)*(min_C == max(min_A, min_B, min_C)) == 1)
+      if (sum(drop_A, drop_B, drop_C)>1){    # if more than one arm is dropped
+        randompick <- sample(1:3,1,prob = c(drop_A, drop_B, drop_C)/sum(drop_A, drop_B, drop_C))
+        drop_A <- (randompick == 1)
+        drop_B <- (randompick == 2)
+        drop_C <- (randompick == 3)
       }
+      if (drop_A == 1){
+        cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher\n")
+        cat("Arm A is dropped\n")
+      } else if (drop_B == 1){
+        cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher\n")
+        cat("Arm B is dropped\n")
+      } else if (drop_C == 1){
+        cat("Step 2: Arm C's interim posterior probability of having the lowest response is higher\n")
+        cat("Arm B is dropped\n")
+      }
+    } else {
+      cat("Step 1: No treatment has P_{m,l} bigger than threshold ")
+      cat(drop_threshold_large)
+      cat("\n")
+      drop_A <- (min_A > drop_threshold_small)
+      if (drop_A == 1){
+        cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher than threshold ")
+        cat(drop_threshold_small)
+        cat("\n")
+        cat("Arm A is dropped\n")
+      }
+      drop_B <- (min_B > drop_threshold_small)
+      if (drop_B == 1){
+        cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
+        cat(drop_threshold_small)
+        cat("\n")
+        cat("Arm B is dropped\n")
+      }
+      drop_C <- (min_C > drop_threshold_small)
+      if (drop_A == 1){
+        cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
+        cat(drop_threshold_small)
+        cat("\n")
+        cat("Arm B is dropped\n")
+      }
+    }
+
+    dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
+    if(all(c(drop_A,drop_B,drop_C) == 0)){     # if none of the arm is dropped, move on to next update
+      cat("none of the arm is removed, move on to next update\n")
+    }
+
     cat("\n")
     result = list("dropped_arm" = dropped_arm)
     class(result) = "group_seq"
@@ -429,7 +405,6 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
 #' `summary` method for class "`group_seq`"
 #'
 #' @param object an object of class "`group_seq`", usually, a result of a call to \code{\link{group_seq}}
-#' @param digits the number of significant digits to use when printing
 #' @param ... further arguments. Not currently used.
 #'
 #' @returns
@@ -442,18 +417,18 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
 #'
 #'
 #' @export
-summary.group_seq = function(object, digits = 5, ...){
+summary.group_seq = function(object, ...){
   if (length(object) != 1){
     cat("\nTreatment Effects Estimate:\n")
     trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
     rownames(trteff) = c("trtA", "trtB", "trtC")
     colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(trteff, digits = digits)
+    print(trteff)
     cat("\nDifferences between Treatments:\n")
     trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
     rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
     colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-    print(trtdiff, digits = digits)
+    print(trtdiff)
     cat("\nLinkage Parameter Estimate:\n")
     if (length(object$beta0_hat) == 1){
       betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
@@ -464,61 +439,12 @@ summary.group_seq = function(object, digits = 5, ...){
       colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
     }
 
-    print(betaest, digits = digits)
+    print(betaest)
     if (!is.null(object$pi_DTR_est)){
       cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
       dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
       colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-      print(dtreff, digits = digits)
-    }
-    cat("\n")
-  } else {
-    if(object$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
-      cat("none of the arm is removed, move on to next update\n")
-      } else if  (object$dropped_arm == 1){
-        cat("Arm A is dropped\n")
-      } else if (object$dropped_arm == 2){
-        cat("Arm B is dropped\n")
-      } else {
-        cat("Arm C is dropped\n")
-      }
-  }
-}
-
-
-#' @rdname group_seq
-#' @param object object to summarize.
-#' @param digits number of digits to print.
-#' @param ... further arguments. Not currently used.
-#' @export
-print.group_seq = function(object, digits = 5, ...){
-  if (length(object) != 1){
-    cat("\nTreatment Effects Estimate:\n")
-    trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
-    rownames(trteff) = c("trtA", "trtB", "trtC")
-    colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(trteff, digits = digits)
-    cat("\nDifferences between Treatments:\n")
-    trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
-    rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
-    colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-    print(trtdiff, digits = digits)
-    cat("\nLinkage Parameter Estimate:\n")
-    if (length(object$beta0_hat) == 1){
-      betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
-      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-      rownames(betaest) = c("beta0", "beta1")
-    } else {
-      betaest = rbind(cbind(object$beta0_hat, object$se_beta0_hat, c(rep(trteff$C.I.[1], length(object$beta0_hat))), t(object$ci_beta0_hat)), cbind(object$beta1_hat, object$se_beta1_hat, c(rep(trteff$C.I.[1], length(object$beta1_hat))), t(object$ci_beta1_hat)))
-      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    }
-
-    print(betaest, digits = digits)
-    if (!is.null(object$pi_DTR_est)){
-      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
-      dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
-      colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-      print(dtreff, digits = digits)
+      print(dtreff)
     }
     cat("\n")
   } else {
@@ -527,6 +453,54 @@ print.group_seq = function(object, digits = 5, ...){
     } else if  (object$dropped_arm == 1){
       cat("Arm A is dropped\n")
     } else if (object$dropped_arm == 2){
+      cat("Arm B is dropped\n")
+    } else {
+      cat("Arm C is dropped\n")
+    }
+  }
+}
+
+
+#' @rdname group_seq
+#' @param x object to summarize.
+#' @param ... further arguments. Not currently used.
+#' @export
+print.group_seq = function(x, ...){
+  if (length(x) != 1){
+    cat("\nTreatment Effects Estimate:\n")
+    trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_A, x$ci_pi_B, x$ci_pi_C))
+    rownames(trteff) = c("trtA", "trtB", "trtC")
+    colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    print(trteff)
+    cat("\nDifferences between Treatments:\n")
+    trtdiff = cbind(rbind(x$diff_AB, x$diff_BC, x$diff_AC), rbind(x$se_AB, x$se_BC, x$se_AC), rbind(x$ci_diff_AB, x$ci_diff_BC, x$ci_diff_AC))
+    rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
+    colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
+    print(trtdiff)
+    cat("\nLinkage Parameter Estimate:\n")
+    if (length(x$beta0_hat) == 1){
+      betaest = rbind(as.matrix(cbind(x$beta0_hat, x$se_beta0_hat, x$ci_beta0_hat)), as.matrix(cbind(x$beta1_hat, x$se_beta1_hat, x$ci_beta1_hat)))
+      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+      rownames(betaest) = c("beta0", "beta1")
+    } else {
+      betaest = rbind(cbind(x$beta0_hat, x$se_beta0_hat, c(rep(trteff$C.I.[1], length(x$beta0_hat))), t(x$ci_beta0_hat)), cbind(x$beta1_hat, x$se_beta1_hat, c(rep(trteff$C.I.[1], length(x$beta1_hat))), t(x$ci_beta1_hat)))
+      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+    }
+
+    print(betaest)
+    if (!is.null(x$pi_DTR_est)){
+      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+      dtreff = cbind(x$pi_DTR_est, x$pi_DTR_se, rbind(x$ci_pi_AB, x$ci_pi_AC, x$ci_pi_BA, x$ci_pi_BC, x$ci_pi_CA, x$ci_pi_CB))
+      colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+      print(dtreff)
+    }
+    cat("\n")
+  } else {
+    if(x$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
+      cat("none of the arm is removed, move on to next update\n")
+    } else if  (x$dropped_arm == 1){
+      cat("Arm A is dropped\n")
+    } else if (x$dropped_arm == 2){
       cat("Arm B is dropped\n")
     } else {
       cat("Arm C is dropped\n")
