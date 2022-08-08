@@ -44,7 +44,7 @@ treatment using the Bayesian joint stage model
 }
 \details{
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
-Please load the \code{EnvStats} package before calculating the sample size.
+Please load the \code{EnvStats} package before calculating sample size.
 This function may take a few minutes to run
 }
 \examples{
