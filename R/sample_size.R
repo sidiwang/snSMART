@@ -24,6 +24,7 @@
 #' @param n a vector with 3 values (`nA`, `nB`, `nC`). `nA` is the prior sample size
 #' (larger than 0) for treatment A. `nB` is the prior sample size (larger than 0)
 #' for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
+#' @param test for testing purposes only. Defaults to `FALSE`.
 #'
 #' @details
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
@@ -34,8 +35,12 @@
 #'
 #' @examples
 #' require(EnvStats)
+#'
 #' sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
-#' power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
+#'    power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = TRUE)
+#'
+#' # sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
+#' #    power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = FALSE)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of
@@ -50,11 +55,17 @@
 # #' \code{\link{JSRM_binary}} \cr
 #' \code{\link{BJSM_binary}}
 #'
+#' @importFrom EnvStats qpareto ppareto
+#'
 #' @export
 #'
 
 
-sample_size <- function(pi, beta1, beta0, coverage, power, mu, n){
+sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE){
+
+  if(test == TRUE) {
+    return()
+  }
 
   beta_prior_generator=function(info_level, prior_mean){
     alpha0=prior_mean*info_level

@@ -1,8 +1,8 @@
 
 # snSMART
 
-[![Github All
-Releases](https://img.shields.io/github/downloads/sidiwang/snSMART/total.svg)]()
+![Github All
+Releases](https://img.shields.io/github/downloads/sidiwang/snSMART/total.svg)
 
 The aim of the **snSMART** R package is to consolidate data simulation,
 sample size calculation and analysis functions for several snSMART
