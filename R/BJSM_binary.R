@@ -612,14 +612,19 @@ summary.BJSM_dose_binary = function(object, ...){
 #' @export
 print.BJSM_dose_binary = function(x, ...){
   cat("\nTreatment Effects Estimate:\n")
-  print(x$pi_hat_bjsm)
+  trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_P, x$ci_pi_L, x$ci_pi_H))
+  rownames(trteff) = c("trtP", "trtL", "trtH")
+  colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(trteff)
   cat("\nDifferences between Treatments:\n")
-  trtdiff = rbind(x$diff_PL, x$diff_LH, x$diff_PH)
-  colnames(trtdiff) = c("estimate")
+  trtdiff = cbind(rbind(x$diff_PL, x$diff_LH, x$diff_PH), rbind(x$se_PL, x$se_LH, x$se_PH), rbind(x$ci_diff_PL, x$ci_diff_LH, x$ci_diff_PH))
   rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
+  colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
   print(trtdiff)
   cat("\nLinkage Parameter Estimate:\n")
-  print(x$beta_hat)
+  betaest = t(rbind(x$beta_hat, x$se_beta, c(rep(trteff[, 3][1], length(x$beta_hat))), x$ci_beta_hat))
+  colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(betaest)
   cat("\n")
 }
 
