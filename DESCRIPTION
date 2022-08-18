@@ -1,7 +1,6 @@
 Package: snSMART
 Type: Package
-Title: Small Sample Sequential, Multiple Assignment, Randomized Trial (snSMART) 
-    Sample Size Calculation
+Title: snSMART Data Analysis
 Version: 0.1.0
 Authors@R: c(
     person(given = "Sidi", family = "Wang", role = c("aut"), email = "sidiwang@umich.edu"),
