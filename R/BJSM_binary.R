@@ -47,7 +47,6 @@
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of
 #' dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 #' treatment design.
-#' @param digits the number of significant digits to use when printing
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -100,23 +99,23 @@
 #'
 #' BJSM_result = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #'     pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-#'     n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+#'     n_MCMC_chain = 1, BURN.IN = 1000, MCMC_SAMPLE = 2000, ci = 0.95,
 #'     six = TRUE, DTR = TRUE)
 #'
-#' BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
-#'     pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-#'     n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
-#'     six = FALSE, DTR = FALSE)
+#' # BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
+#' #    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
+#' #    n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+#' #    six = FALSE, DTR = FALSE)
 #'
-#' summary(BJSM_result)
-#' summary(BJSM_result2)
+#' # summary(BJSM_result)
+#' # summary(BJSM_result2)
 #'
-#' data = data_dose
-#' BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
-#'     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
-#'     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+#' # data = data_dose
+#' # BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
+#' #     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
+#' #     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 #'
-#' summary(BJSM_dose_result)
+#' # summary(BJSM_dose_result)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -490,7 +489,6 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 #' `summary` method for class "`BJSM_binary`"
 #'
 #' @param object an object of class "`BJSM_binary`", usually, a result of a call to \code{\link{BJSM_binary}}
-#' @param digits the number of significant digits to use when printing
 #' @param ... further arguments. Not currently used.
 #'
 #' @returns
@@ -503,17 +501,17 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 #'
 #'
 #' @export
-summary.BJSM_binary = function(object, digits = 5, ...){
+summary.BJSM_binary = function(object, ...){
   cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
   rownames(trteff) = c("trtA", "trtB", "trtC")
   colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(trteff, digits = digits)
+  print(trteff)
   cat("\nDifferences between Treatments:\n")
   trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
   rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-  print(trtdiff, digits = digits)
+  print(trtdiff)
   cat("\nLinkage Parameter Estimate:\n")
   if (length(object$beta0_hat) == 1){
     betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
@@ -524,49 +522,48 @@ summary.BJSM_binary = function(object, digits = 5, ...){
     colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
   }
 
-  print(betaest, digits = digits)
+  print(betaest)
   if (!is.null(object$pi_DTR_est) == TRUE){
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
     dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
     colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(dtreff, digits = digits)
+    print(dtreff)
   }
   cat("\n")
 }
 
 
 #' @rdname BJSM_binary
-#' @param object object to summarize.
-#' @param digits number of digits to print.
+#' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
-print.BJSM_binary = function(object, digits = 5, ...){
+print.BJSM_binary = function(x, ...){
   cat("\nTreatment Effects Estimate:\n")
-  trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
+  trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_A, x$ci_pi_B, x$ci_pi_C))
   rownames(trteff) = c("trtA", "trtB", "trtC")
   colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(trteff, digits = digits)
+  print(trteff)
   cat("\nDifferences between Treatments:\n")
-  trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
+  trtdiff = cbind(rbind(x$diff_AB, x$diff_BC, x$diff_AC), rbind(x$se_AB, x$se_BC, x$se_AC), rbind(x$ci_diff_AB, x$ci_diff_BC, x$ci_diff_AC))
   rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-  print(trtdiff, digits = digits)
+  print(trtdiff)
   cat("\nLinkage Parameter Estimate:\n")
-  if (length(object$beta0_hat) == 1){
-    betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
+  if (length(x$beta0_hat) == 1){
+    betaest = rbind(as.matrix(cbind(x$beta0_hat, x$se_beta0_hat, x$ci_beta0_hat)), as.matrix(cbind(x$beta1_hat, x$se_beta1_hat, x$ci_beta1_hat)))
     colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
     rownames(betaest) = c("beta0", "beta1")
   } else {
-    betaest = rbind(cbind(object$beta0_hat, object$se_beta0_hat, c(rep(trteff$C.I.[1], length(object$beta0_hat))), t(object$ci_beta0_hat)), cbind(object$beta1_hat, object$se_beta1_hat, c(rep(trteff$C.I.[1], length(object$beta1_hat))), t(object$ci_beta1_hat)))
+    betaest = rbind(cbind(x$beta0_hat, x$se_beta0_hat, c(rep(trteff$C.I.[1], length(x$beta0_hat))), t(x$ci_beta0_hat)), cbind(x$beta1_hat, x$se_beta1_hat, c(rep(trteff$C.I.[1], length(x$beta1_hat))), t(x$ci_beta1_hat)))
     colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
   }
 
-  print(betaest, digits = digits)
-  if (!is.null(object$pi_DTR_est) == TRUE){
+  print(betaest)
+  if (!is.null(x$pi_DTR_est) == TRUE){
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
-    dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
+    dtreff = cbind(x$pi_DTR_est, x$pi_DTR_se, rbind(x$ci_pi_AB, x$ci_pi_AC, x$ci_pi_BA, x$ci_pi_BC, x$ci_pi_CA, x$ci_pi_CB))
     colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(dtreff, digits = digits)
+    print(dtreff)
   }
   cat("\n")
 }
@@ -576,10 +573,9 @@ print.BJSM_binary = function(object, digits = 5, ...){
 
 #' Summarizing BJSM fits
 #'
-#' `summary` method for class "`BJSM_dose_binary`"
+#' `summary` method for class `BJSM_dose_binary`
 #'
-#' @param object an object of class "`BJSM_dose_binary`", usually, a result of a call to \code{\link{BJSM_dose_binary}}
-#' @param digits the number of significant digits to use when printing
+#' @param object an object of class `BJSM_dose_binary`, usually, a result of a call to \code{\link{BJSM_binary}}
 #' @param ... further arguments. Not currently used.
 #'
 #' @returns
@@ -591,40 +587,44 @@ print.BJSM_binary = function(object, digits = 5, ...){
 #'
 #'
 #' @export
-summary.BJSM_dose_binary = function(object, digits = 5, ...){
+summary.BJSM_dose_binary = function(object, ...){
   cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_P, object$ci_pi_L, object$ci_pi_H))
   rownames(trteff) = c("trtP", "trtL", "trtH")
   colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(trteff, digits = digits)
+  print(trteff)
   cat("\nDifferences between Treatments:\n")
   trtdiff = cbind(rbind(object$diff_PL, object$diff_LH, object$diff_PH), rbind(object$se_PL, object$se_LH, object$se_PH), rbind(object$ci_diff_PL, object$ci_diff_LH, object$ci_diff_PH))
   rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-  print(trtdiff, digits = digits)
+  print(trtdiff)
   cat("\nLinkage Parameter Estimate:\n")
   betaest = t(rbind(object$beta_hat, object$se_beta, c(rep(trteff[, 3][1], length(object$beta_hat))), object$ci_beta_hat))
   colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(betaest, digits = digits)
+  print(betaest)
   cat("\n")
 }
 
 
 #' @rdname BJSM_binary
-#' @param object object to summarize.
-#' @param digits number of digits to print.
+#' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
-print.BJSM_dose_binary = function(object, digits = 5, ...){
+print.BJSM_dose_binary = function(x, ...){
   cat("\nTreatment Effects Estimate:\n")
-  print(object$pi_hat_bjsm)
+  trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_P, x$ci_pi_L, x$ci_pi_H))
+  rownames(trteff) = c("trtP", "trtL", "trtH")
+  colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(trteff)
   cat("\nDifferences between Treatments:\n")
-  trtdiff = rbind(object$diff_PL, object$diff_LH, object$diff_PH)
-  colnames(trtdiff) = c("estimate")
+  trtdiff = cbind(rbind(x$diff_PL, x$diff_LH, x$diff_PH), rbind(x$se_PL, x$se_LH, x$se_PH), rbind(x$ci_diff_PL, x$ci_diff_LH, x$ci_diff_PH))
   rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
+  colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
   print(trtdiff)
   cat("\nLinkage Parameter Estimate:\n")
-  print(object$beta_hat)
+  betaest = t(rbind(x$beta_hat, x$se_beta, c(rep(trteff[, 3][1], length(x$beta_hat))), x$ci_beta_hat))
+  colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
+  print(betaest)
   cat("\n")
 }
 

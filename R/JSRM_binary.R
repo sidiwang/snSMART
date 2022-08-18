@@ -13,7 +13,6 @@
 #' beta model. Default is `six = TRUE`
 #' @param DTR if TRUE, will also return the expected response rate and its standard
 #' error of dynamic treatment regimens
-#' @param digits the number of significant digits to use when printing
 #'
 #' @return a `list` containing
 #' \itemize{
@@ -221,24 +220,23 @@ LPJSM_binary = function(data, six = TRUE, DTR = TRUE){
 
 #' @rdname LPJSM_binary
 #' @param object object to summarize
-#' @param digits number of summary digits
 #' @param ... not currently used
 #' @export
-summary.LPJSM_binary = function(object, digits = 5, ...){
+summary.LPJSM_binary = function(object, ...){
   cat("\nGEE output:\n")
   print(summary(object$GEE_output))
   cat("\nTreatment Effect Estimate:\n")
   trteff = cbind(object$pi_hat, object$sd_pi_hat)
   rownames(trteff) = c("trtA", "trtB", "trtC")
   colnames(trteff) = c("Estimate", "Std. Error")
-  print(trteff, digits = digits)
+  print(trteff)
 
   if (!is.null(object$pi_DTR_hat) == TRUE){
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
     DTRest = t(rbind(object$pi_DTR_hat, object$pi_DTR_se))
     colnames(DTRest) = c("Estimate", "Std. Error")
     rownames(DTRest) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
-    print(DTRest, digits = digits)
+    print(DTRest)
   }
   cat("\n")
 }
@@ -246,16 +244,15 @@ summary.LPJSM_binary = function(object, digits = 5, ...){
 
 
 #' @rdname LPJSM_binary
-#' @param object object to summarize.
-#' @param digits number of digits to print.
+#' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
-print.LPJSM_binary = function(object, digits = 5, ...){
+print.LPJSM_binary = function(x, ...){
   cat("\nTreatment Effect Estimate\n")
-  trteff = cbind(object$pi_hat, object$sd_pi_hat)
+  trteff = cbind(x$pi_hat, x$sd_pi_hat)
   rownames(trteff) = c("trtA", "trtB", "trtC")
   colnames(trteff) = c("Estimate", "Std. Error")
-  print(trteff, digits = digits)
+  print(trteff)
   cat("\n")
 }
 

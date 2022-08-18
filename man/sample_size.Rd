@@ -4,7 +4,7 @@
 \alias{sample_size}
 \title{Sample Size Calculation for snSMART with 3 active treatments and a binary outcome}
 \usage{
-sample_size(pi, beta1, beta0, coverage, power, mu, n)
+sample_size(pi, beta1, beta0, coverage, power, mu, n, test = FALSE)
 }
 \arguments{
 \item{pi}{a vector with 3 values (\code{piA}, \code{piB}, \code{piC}). \code{piA} is the the response
@@ -33,6 +33,8 @@ for treatment C}
 \item{n}{a vector with 3 values (\code{nA}, \code{nB}, \code{nC}). \code{nA} is the prior sample size
 (larger than 0) for treatment A. \code{nB} is the prior sample size (larger than 0)
 for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
+
+\item{test}{for testing purposes only. Defaults to \code{FALSE}.}
 }
 \value{
 the estimated sample size per arm for an snSMART
@@ -44,12 +46,17 @@ treatment using the Bayesian joint stage model
 }
 \details{
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
-
+Please load the \code{EnvStats} package before calculating sample size.
 This function may take a few minutes to run
 }
 \examples{
+require(EnvStats)
+
 sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
-power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3))
+   power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = TRUE)
+
+# sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
+#    power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = FALSE)
 
 }
 \references{
@@ -62,6 +69,5 @@ for Bayesian analysis of small n sequential, multiple assignment, randomized tri
 (snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
 }
 \seealso{
-\code{\link{JSRM_binary}} \cr
 \code{\link{BJSM_binary}}
 }

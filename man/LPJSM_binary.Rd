@@ -9,9 +9,9 @@ dose level)}
 \usage{
 LPJSM_binary(data, six = TRUE, DTR = TRUE)
 
-\method{summary}{LPJSM_binary}(object, digits = 5, ...)
+\method{summary}{LPJSM_binary}(object, ...)
 
-\method{print}{LPJSM_binary}(object, digits = 5, ...)
+\method{print}{LPJSM_binary}(x, ...)
 }
 \arguments{
 \item{data}{dataset with columns named as \code{treatment_stageI}, \code{response_stageI},
@@ -23,11 +23,11 @@ beta model. Default is \code{six = TRUE}}
 \item{DTR}{if TRUE, will also return the expected response rate and its standard
 error of dynamic treatment regimens}
 
-\item{object}{object to summarize.}
-
-\item{digits}{number of digits to print.}
+\item{object}{object to summarize}
 
 \item{...}{further arguments. Not currently used.}
+
+\item{x}{object to summarize.}
 }
 \value{
 a \code{list} containing

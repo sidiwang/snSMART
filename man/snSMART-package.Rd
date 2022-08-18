@@ -4,9 +4,9 @@
 \name{snSMART-package}
 \alias{snSMART}
 \alias{snSMART-package}
-\title{snSMART: R package for snSMART data simulation, sample size calculation and trial data analysis}
+\title{snSMART: snSMART Data Analysis}
 \description{
-The aim of the snSMART R package is to consolidate data simulation, sample size calculation and analysis functions for several snSMART (small sample sequential, multiple assignment, randomized trial) designs under one library.
+Consolidated data simulation, sample size calculation and analysis functions for several snSMART (small sample sequential, multiple assignment, randomized trial) designs under one library. See Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M. "A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs)." (2018) Statistics in medicine, 37(26), pp.3723-3732 \doi{10.1002/sim.7900}.
 }
 \seealso{
 Useful links:

@@ -20,9 +20,9 @@ BJSM_binary(
   DTR = TRUE
 )
 
-\method{print}{BJSM_binary}(object, digits = 5, ...)
+\method{print}{BJSM_binary}(x, ...)
 
-\method{print}{BJSM_dose_binary}(object, digits = 5, ...)
+\method{print}{BJSM_dose_binary}(x, ...)
 }
 \arguments{
 \item{data}{trial data with 4 columns: \code{treatment_stageI, response_stageI,
@@ -79,9 +79,7 @@ treatment design.}
 dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 treatment design.}
 
-\item{object}{object to summarize.}
-
-\item{digits}{number of digits to print.}
+\item{x}{object to summarize.}
 
 \item{...}{further arguments. Not currently used.}
 }
@@ -142,23 +140,23 @@ mydata = data_binary
 
 BJSM_result = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
     pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-    n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+    n_MCMC_chain = 1, BURN.IN = 1000, MCMC_SAMPLE = 2000, ci = 0.95,
     six = TRUE, DTR = TRUE)
 
-BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
-    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-    n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
-    six = FALSE, DTR = FALSE)
+# BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
+#    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
+#    n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+#    six = FALSE, DTR = FALSE)
 
-summary(BJSM_result)
-summary(BJSM_result2)
+# summary(BJSM_result)
+# summary(BJSM_result2)
 
-data = data_dose
-BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
-    pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
-    n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+# data = data_dose
+# BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
+#     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
+#     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 
-summary(BJSM_dose_result)
+# summary(BJSM_dose_result)
 
 }
 \references{
