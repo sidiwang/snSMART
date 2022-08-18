@@ -363,7 +363,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE){
   }
 
   # generate truncated beta1 and beta0
-  set.seed(199)
+  # set.seed(199)
   # generate pareto truncated at 1.5 with location 1 and scale 3, mean 1.5
   beta1_mean=as.numeric(beta1)
   pareto_beta=1/(1-1/beta1_mean)
