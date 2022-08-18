@@ -209,27 +209,27 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
     max_B <- mean(apply(out_post[, 7:9], 1, function(x) {x[2] == max(x)}))  # posterior probability that B has largest response rate
     max_C <- mean(apply(out_post[, 7:9], 1, function(x) {x[3] == max(x)}))  # posterior probability that C has largest response rate
     keep_A <- (max_A > drop_threshold_large)
-    cat("\nInterim Analysis Outcome:\n")
-    cat("Threshold tau_l is set to: ")
-    cat(drop_threshold_large)
-    cat("\nThreshold psi_l is set to: ")
-    cat(drop_threshold_small)
+    message("\nInterim Analysis Outcome:\n")
+    message("Threshold tau_l is set to: ")
+    message(drop_threshold_large)
+    message("\nThreshold psi_l is set to: ")
+    message(drop_threshold_small)
     if (keep_A == 1){
-      cat("\nStep 1: Arm A's interim posterior probability of having the greatest response is bigger than threshold ")
-      cat(drop_threshold_large)
-      cat("\n")
+      message("\nStep 1: Arm A's interim posterior probability of having the greatest response is bigger than threshold ")
+      message(drop_threshold_large)
+      message("\n")
     }
     keep_B <- (max_B > drop_threshold_large)
     if (keep_B == 1){
-      cat("\nStep 1: Arm B's interim posterior probability of having the greatest response is bigger than threshold ")
-      cat(drop_threshold_large)
-      cat("\n")
+      message("\nStep 1: Arm B's interim posterior probability of having the greatest response is bigger than threshold ")
+      message(drop_threshold_large)
+      message("\n")
     }
     keep_C <- (max_C > drop_threshold_large)
     if (keep_C == 1){
-      cat("\nStep 1: Arm C's interim posterior probability of having the greatest response is bigger than threshold ")
-      cat(drop_threshold_large)
-      cat("\n")
+      message("\nStep 1: Arm C's interim posterior probability of having the greatest response is bigger than threshold ")
+      message(drop_threshold_large)
+      message("\n")
     }
     if(any(c(keep_A, keep_B, keep_C) > 0)){
       drop_A <- ((keep_A == 0)*(min_A == max(min_A, min_B, min_C)) == 1)
@@ -242,48 +242,48 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
         drop_C <- (randompick == 3)
       }
       if (drop_A == 1){
-        cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher\n")
-        cat("Arm A is dropped\n")
+        message("Step 2: Arm A's interim posterior probability of having the lowest response is higher\n")
+        message("Arm A is dropped\n")
       } else if (drop_B == 1){
-        cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher\n")
-        cat("Arm B is dropped\n")
+        message("Step 2: Arm B's interim posterior probability of having the lowest response is higher\n")
+        message("Arm B is dropped\n")
       } else if (drop_C == 1){
-        cat("Step 2: Arm C's interim posterior probability of having the lowest response is higher\n")
-        cat("Arm B is dropped\n")
+        message("Step 2: Arm C's interim posterior probability of having the lowest response is higher\n")
+        message("Arm B is dropped\n")
       }
     } else {
-      cat("Step 1: No treatment has P_{m,l} bigger than threshold ")
-      cat(drop_threshold_large)
-      cat("\n")
+      message("Step 1: No treatment has P_{m,l} bigger than threshold ")
+      message(drop_threshold_large)
+      message("\n")
       drop_A <- (min_A > drop_threshold_small)
       if (drop_A == 1){
-        cat("Step 2: Arm A's interim posterior probability of having the lowest response is higher than threshold ")
-        cat(drop_threshold_small)
-        cat("\n")
-        cat("Arm A is dropped\n")
+        message("Step 2: Arm A's interim posterior probability of having the lowest response is higher than threshold ")
+        message(drop_threshold_small)
+        message("\n")
+        message("Arm A is dropped\n")
       }
       drop_B <- (min_B > drop_threshold_small)
       if (drop_B == 1){
-        cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
-        cat(drop_threshold_small)
-        cat("\n")
-        cat("Arm B is dropped\n")
+        message("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
+        message(drop_threshold_small)
+        message("\n")
+        message("Arm B is dropped\n")
       }
       drop_C <- (min_C > drop_threshold_small)
       if (drop_A == 1){
-        cat("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
-        cat(drop_threshold_small)
-        cat("\n")
-        cat("Arm B is dropped\n")
+        message("Step 2: Arm B's interim posterior probability of having the lowest response is higher than threshold ")
+        message(drop_threshold_small)
+        message("\n")
+        message("Arm B is dropped\n")
       }
     }
 
     dropped_arm <- (drop_A == 1) * 1 + (drop_B == 1) * 2 + (drop_C == 1) * 3
     if(all(c(drop_A,drop_B,drop_C) == 0)){     # if none of the arm is dropped, move on to next update
-      cat("none of the arm is removed, move on to next update\n")
+      message("none of the arm is removed, move on to next update\n")
     }
 
-    cat("\n")
+    message("\n")
     result = list("dropped_arm" = dropped_arm)
     class(result) = "group_seq"
     return(result)

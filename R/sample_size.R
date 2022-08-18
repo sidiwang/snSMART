@@ -531,7 +531,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE){
 
   close(pb)
 
-  cat(paste0("With given settings, the estimated sample size per arm for an snSMART is: ", sample_size_tmp_pair1, "\n",
+  message(paste0("With given settings, the estimated sample size per arm for an snSMART is: ", sample_size_tmp_pair1, "\n",
                "This implies that for an snSMART with sample size of ", sample_size_tmp_pair1, " per arm (", 3*sample_size_tmp_pair1, " in total for three agents):", "\n",
                "The probability of successfully identifying the best treatment is ", power, " when the difference of response rates between the best and second best treatment is at least ", LIST_OF_PIS[1] - LIST_OF_PIS[2], ", and the response rate of the best treatment is ", LIST_OF_PIS[1], "\n"))
 
