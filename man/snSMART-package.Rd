@@ -4,7 +4,7 @@
 \name{snSMART-package}
 \alias{snSMART}
 \alias{snSMART-package}
-\title{snSMART: snSMART Data Analysis}
+\title{snSMART: Small N Sequential Multiple Assignment Randomized Trial Methods}
 \description{
 Consolidated data simulation, sample size calculation and analysis functions for several snSMART (small sample sequential, multiple assignment, randomized trial) designs under one library. See Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M. "A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs)." (2018) Statistics in medicine, 37(26), pp.3723-3732 \doi{10.1002/sim.7900}.
 }
