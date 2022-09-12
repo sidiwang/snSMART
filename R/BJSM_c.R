@@ -69,11 +69,18 @@
 BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
                             MCMC_SAMPLE, ci = 0.95, n.digits){
 
+  # bug files written to temporary directory on function call to satisfy CRAN
+  # requirements of not accessing user's system files
+
+  # "csnSMART.bugs"
+  csnSMART_file = tempfile(fileext = ".bug")
+  writeLines(csnSMART_text(), con = csnSMART_file)
+
   trialData = data
 
   NUM_ARMS = length(unique(trialData$trt1[!is.na(trialData$trt1)]))
 
-  jag <- rjags::jags.model(file = system.file("csnSMART.bugs", package = "snSMART"),
+  jag <- rjags::jags.model(file = csnSMART_file,
                     data = list(n = length(unique(trialData$id)),
                               ntrt = NUM_ARMS,
                               Y = cbind(trialData$stage1outcome, trialData$stage2outcome),

@@ -120,6 +120,26 @@
 group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
                      beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
 
+  # bug files written to temporary directory on function call to satisfy CRAN
+  # requirements of not accessing user's system files
+
+  # "Bayes_AR.bug"
+  Bayes_AR_file = tempfile(fileext = ".bug")
+  writeLines(Bayes_AR_text(), con = Bayes_AR_file)
+
+  # "Bayes_AR_new.bug"
+  Bayes_AR_new_file = tempfile(fileext = ".bug")
+  writeLines(Bayes_AR_new_text(), con = Bayes_AR_new_file)
+
+  # "Bayes.bug"
+  Bayes_file = tempfile(fileext = ".bug")
+  writeLines(Bayes_text(), con = Bayes_file)
+
+  # "Bayes_new.bug"
+  Bayes_new_file = tempfile(fileext = ".bug")
+  writeLines(Bayes_new_text(), con = Bayes_new_file)
+
+
   if (!is.null(drop_threshold_pair)){
     drop_threshold_large = drop_threshold_pair[1]
     drop_threshold_small = drop_threshold_pair[2]
@@ -157,17 +177,18 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
 
     patient_entry$disc <- 2 * patient_entry$trt.1st - (patient_entry$resp.1st == 0)
 
-    bugfile  <- readLines(system.file("Bayes_AR.bug", package = "snSMART"))
+    bugfile  <- readLines(Bayes_AR_file)
     bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con = system.file("Bayes_AR_new.bug", package = "snSMART"))
+    bugfile2_file = tempfile(fileext = ".bug")
+    writeLines(bugfile2, con = bugfile2_file)
 
     error_ind <- 0
     error_count = 0
     tryCatch({
-      jags <- rjags::jags.model(file.path(system.file("Bayes_AR_new.bug", package = "snSMART")),
+      jags <- rjags::jags.model(bugfile2_file,
                                 data=list(n1 = nrow(patient_entry[!is.na(patient_entry$resp.1st),]),
                                           n2 = nrow(patient_entry[!is.na(patient_entry$resp.2nd),]),
                                           num_arms = NUM_ARMS,
@@ -292,15 +313,16 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
     mydata <- data
     mydata$disc <- 2 * mydata$trt.1st - (mydata$resp.1st == 0)
 
-    bugfile  <- readLines(system.file("Bayes.bug", package = "snSMART"))
+    bugfile  <- readLines(Bayes_file)
     bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
     bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con = system.file("Bayes_new.bug", package = "snSMART"))
+    bugfile2_file = tempfile(fileext = ".bug")
+    writeLines(bugfile2, con = bugfile2_file)
     error_ind <- 0
     tryCatch({
-      jags <- rjags::jags.model(file.path(system.file("Bayes_new.bug", package = "snSMART")),
+      jags <- rjags::jags.model(bugfile2_file,
                                 data=list(n = nrow(mydata),
                                           num_arms = NUM_ARMS,
                                           Y1 = mydata$resp.1st,
