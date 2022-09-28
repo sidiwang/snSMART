@@ -16,7 +16,8 @@ group_seq(
   BURN.IN,
   n_MCMC_chain,
   ci = 0.95,
-  DTR = TRUE
+  DTR = TRUE,
+  cran_check_option = FALSE
 )
 
 \method{print}{group_seq}(x, ...)
@@ -55,6 +56,10 @@ assign value to this parameter when \code{interim = FALSE}.}
 \item{DTR, }{if TRUE, will also return the expected response rate of dynamic
 treatment regimens. default = TRUE. only assign value to this parameter when
 \code{interim = FALSE}.}
+
+\item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
+model like usual. This should be the default for all model fitting.
+If TRUE, the model fitting is bypassed to pass CRAN check.}
 
 \item{x}{object to summarize.}
 

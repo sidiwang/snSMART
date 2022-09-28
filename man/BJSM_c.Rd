@@ -15,7 +15,8 @@ BJSM_c(
   n.adapt,
   MCMC_SAMPLE,
   ci = 0.95,
-  n.digits
+  n.digits,
+  cran_check_option = FALSE
 )
 
 \method{summary}{BJSM_c}(object, ...)
@@ -51,6 +52,10 @@ then no adaptation takes place}
 
 \item{n.digits}{number of digits to keep in the final estimation of treatment
 effect}
+
+\item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
+model like usual. This should be the default for all model fitting.
+If TRUE, the model fitting is bypassed to pass CRAN check.}
 
 \item{object}{object to summarize.}
 

@@ -27,6 +27,9 @@
 #' @param DTR, if TRUE, will also return the expected response rate of dynamic
 #' treatment regimens. default = TRUE. only assign value to this parameter when
 #' `interim = FALSE`.
+#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
+#' model like usual. This should be the default for all model fitting.
+#' If TRUE, the model fitting is bypassed to pass CRAN check.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
@@ -118,8 +121,11 @@
 #'
 #' @rdname group_seq
 group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
-                     beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE){
+                     beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE, cran_check_option = FALSE){
 
+  if(cran_check_option) {
+    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files
 

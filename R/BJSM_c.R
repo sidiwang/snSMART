@@ -25,7 +25,9 @@
 #' @param n.digits number of digits to keep in the final estimation of treatment
 #' effect
 #' @param x an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
-
+#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
+#' model like usual. This should be the default for all model fitting.
+#' If TRUE, the model fitting is bypassed to pass CRAN check.
 #'
 #' @details
 #' section 2.2.1 and 2.2.2 of the paper listed under `reference` provides a detailed
@@ -67,8 +69,11 @@
 #' @export
 
 BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
-                            MCMC_SAMPLE, ci = 0.95, n.digits){
+                            MCMC_SAMPLE, ci = 0.95, n.digits, cran_check_option = FALSE){
 
+  if(cran_check_option) {
+    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files
 

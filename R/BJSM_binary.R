@@ -47,6 +47,9 @@
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of
 #' dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 #' treatment design.
+#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
+#' model like usual. This should be the default for all model fitting.
+#' If TRUE, the model fitting is bypassed to pass CRAN check.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -134,8 +137,11 @@
 #' @export
 
 BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, BURN.IN,
-                       MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE){
+                       MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE){
 
+  if(cran_check_option) {
+    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files
 
