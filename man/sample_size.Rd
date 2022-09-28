@@ -2,9 +2,18 @@
 % Please edit documentation in R/sample_size.R
 \name{sample_size}
 \alias{sample_size}
+\alias{summary.sample_size}
+\alias{print.summary.sample_size}
+\alias{print.sample_size}
 \title{Sample Size Calculation for snSMART with 3 active treatments and a binary outcome}
 \usage{
 sample_size(pi, beta1, beta0, coverage, power, mu, n, test = FALSE)
+
+\method{summary}{sample_size}(object, ...)
+
+\method{print}{summary.sample_size}(x, ...)
+
+\method{print}{sample_size}(x, ...)
 }
 \arguments{
 \item{pi}{a vector with 3 values (\code{piA}, \code{piB}, \code{piC}). \code{piA} is the the response
@@ -35,9 +44,22 @@ for treatment C}
 for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
 
 \item{test}{for testing purposes only. Defaults to \code{FALSE}.}
+
+\item{object}{object to summarize.}
+
+\item{...}{further arguments. Not currently used.}
+
+\item{x}{object to print}
 }
 \value{
-the estimated sample size per arm for an snSMART
+\describe{
+\item{final_N}{the estimated sample size per arm for this snSMART}
+\item{critical_value}{ critical value based on the provided coverage value}
+\item{grid_result}{for each iteration we calculate \code{l}, where \code{l} belongs to \code{{2 * (pi_(1) - pi_(2)), ..., 0.02, 0.01}}; \code{E(D)}: the mean of the posterior distribution of \code{D},
+, where \code{D = pi_(1) = pi_(2)}; \code{Var(D)}: the variance of the posterior distribution of \code{D}; \code{N}: the corresponding
+sample size; and \code{power}: the resulting power of this iteration}
+
+}
 }
 \description{
 conduct Bayesian sample size calculation for a snSMART design with 3 active

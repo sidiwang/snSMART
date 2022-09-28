@@ -15,7 +15,7 @@ Description: Consolidated data simulation,
     Statistics in medicine, 37(26), pp.3723-3732 <doi:10.1002/sim.7900>.
 License: GPL-2
 Depends: 
-    R (>= 3.4.0)
+    R (>= 3.5.0)
 Imports: 
     bayestestR,
     geepack,

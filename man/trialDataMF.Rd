@@ -4,6 +4,20 @@
 \name{trialDataMF}
 \alias{trialDataMF}
 \title{Data Mapping Function}
+\format{
+This data frame contains the following columns:
+\describe{
+\item{id}{participant ID}
+\item{trt1}{treatment received in stage 1 - possible values: 1 (placebo), 2, 3}
+\item{stage1outcome}{a number between 0-100 that represents the stage 1 treatment effect}
+\item{stay}{indicates whether the participant stayed on the same treatment arm in stage 2 - possible values: 0 (didn't stay), 1 (stayed)}
+\item{trt2}{treatment received in stage 2 - possible values: 2, 3}
+\item{stage2outcome}{a number between 0-100 that represents the stage 2 treatment effect}
+}
+}
+\usage{
+trialDataMF
+}
 \description{
 sample dataset of snSMART (mapping function) with continuous outcomes
 }

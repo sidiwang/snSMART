@@ -3,13 +3,16 @@
 \name{LPJSM_binary}
 \alias{LPJSM_binary}
 \alias{summary.LPJSM_binary}
+\alias{print.summary.LPJSM_binary}
 \alias{print.LPJSM_binary}
 \title{LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two
 dose level)}
 \usage{
-LPJSM_binary(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE)
+LPJSM_binary(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE, ...)
 
 \method{summary}{LPJSM_binary}(object, ...)
+
+\method{print}{summary.LPJSM_binary}(x, ...)
 
 \method{print}{LPJSM_binary}(x, ...)
 }
@@ -27,9 +30,9 @@ error of dynamic treatment regimens}
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
-\item{object}{object to summarize}
-
 \item{...}{further arguments. Not currently used.}
+
+\item{object}{object to print}
 
 \item{x}{object to summarize.}
 }

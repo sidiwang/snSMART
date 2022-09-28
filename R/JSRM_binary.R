@@ -16,6 +16,7 @@
 #' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
 #' model like usual. This should be the default for all model fitting.
 #' If TRUE, the model fitting is bypassed to pass CRAN check.
+#' @param ... optional arguments that are passed to \code{geepack::geeglm()} function.
 #'
 #' @return a `list` containing
 #' \itemize{
@@ -51,7 +52,7 @@
 #' @rdname LPJSM_binary
 #' @export
 #'
-LPJSM_binary = function(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE){
+LPJSM_binary = function(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE, ...){
 
   if(cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
@@ -87,7 +88,8 @@ LPJSM_binary = function(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE)
     geedata <- geedata[order(geedata$ptid),]
     rm(ptid, Y, gamma1A, gamma2A, gamma1B, gamma2B, gamma1C, gamma2C, alphaA, alphaB, alphaC)
     try({
-      mod1 <- geepack::geeglm(Y ~ alphaA + alphaB + alphaC + gamma1A + gamma2A + gamma1B + gamma2B + gamma1C + gamma2C - 1, family = poisson(link = "log"), data = geedata, id = ptid,corstr = "independence")
+      mod1 <- geepack::geeglm(Y ~ alphaA + alphaB + alphaC + gamma1A + gamma2A + gamma1B + gamma2B + gamma1C + gamma2C - 1,
+                              family = poisson(link = "log"), data = geedata, id = ptid ,corstr = "independence", ...)
       beta_hat <- mod1$coefficients[1:3];
       sd_beta_hat <- summary(mod1)$coef[1:3, 2];
       pi_hat <- exp(beta_hat);
@@ -230,30 +232,44 @@ LPJSM_binary = function(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE)
 #' @param ... not currently used
 #' @export
 summary.LPJSM_binary = function(object, ...){
-  cat("\nGEE output:\n")
-  print(summary(object$GEE_output))
-  cat("\nTreatment Effect Estimate:\n")
   trteff = cbind(object$pi_hat, object$sd_pi_hat)
   rownames(trteff) = c("trtA", "trtB", "trtC")
   colnames(trteff) = c("Estimate", "Std. Error")
-  print(trteff)
 
   if (!is.null(object$pi_DTR_hat) == TRUE){
-    cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
     DTRest = t(rbind(object$pi_DTR_hat, object$pi_DTR_se))
     colnames(DTRest) = c("Estimate", "Std. Error")
     rownames(DTRest) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
-    print(DTRest)
+  }
+
+  obj = list(GEEresult = summary(object$GEE_output), trteff = trteff, DTRest = DTRest)
+  class(obj) = "summary.LPJSM_binary"
+  obj
+}
+
+#' @rdname LPJSM_binary
+#' @param object object to print
+#' @param ... not currently used
+#' @export
+#' @export print.summary.LPJSM_binary
+print.summary.LPJSM_binary = function(x, ...){
+  cat("\nGEE output:\n")
+  print(x$GEEresult)
+  cat("\nTreatment Effect Estimate:\n")
+  print(x$trteff)
+
+  if (length(x) == 3){
+    cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+    print(x$DTRest)
   }
   cat("\n")
 }
-
-
 
 #' @rdname LPJSM_binary
 #' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
+#' @export print.LPJSM_binary
 print.LPJSM_binary = function(x, ...){
   cat("\nTreatment Effect Estimate\n")
   trteff = cbind(x$pi_hat, x$sd_pi_hat)
