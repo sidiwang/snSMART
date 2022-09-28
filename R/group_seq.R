@@ -16,7 +16,9 @@
 #' @param pi_prior vector of six values (a, b, c, d, e, f), where a and b are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1A}, c and d are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1B}, and e and f are the parameter \code{a} and parameter \code{b} of the prior distribution for \code{pi_1C}. Please check the `Details` section for more explanation
 #' @param beta_prior vector of four values (`beta0_prior.a`, `beta0_prior.b`, `beta1_prior.a`, `beta1_prior.c`).  `beta0_prior.a` is the parameter a of the prior distribution for linkage parameter `beta0`. `beta0_prior.b` is the parameter b of the prior distribution  for linkage parameter `beta0`. `beta1_prior.a` is the parameter a of the prior distribution for linkage parameter `beta1`. `beta1_prior.c` is the parameter b of the prior distribution for linkage parameter `beta1`. Please check the `Details` section for more explanation
 #' @param n_MCMC_chain number of MCMC chains, default to 1
+#' @param n.adapt the number of iterations for adaptation
 #' @param BURN.IN number of burn-in iterations for MCMC
+#' @param thin thinning interval for monitors
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param prior_dist vector of three values ("prior distribution for \code{pi}",
 #' "prior distribution for \code{beta0}", "prior distribution for \code{beta1}"),
@@ -27,9 +29,7 @@
 #' @param DTR, if TRUE, will also return the expected response rate of dynamic
 #' treatment regimens. default = TRUE. only assign value to this parameter when
 #' `interim = FALSE`.
-#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
-#' model like usual. This should be the default for all model fitting.
-#' If TRUE, the model fitting is bypassed to pass CRAN check.
+#' @param ... optional arguments that are passed to \code{jags.model()} function.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
@@ -55,15 +55,15 @@
 #'
 #' result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
 #'   prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, BURN.IN = 1000, n_MCMC_chain = 1)
+#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1)
 #'
-#' result1
+#' summary(result1)
 #'
 #'
 #' mydata = groupseqDATA_full
 #' result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta",
 #'   "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, BURN.IN = 1000,
+#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000,
 #'   n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 #'
 #' summary(result2)
@@ -75,8 +75,9 @@
 #' if `interim = FALSE`, this function returns:
 #'
 #' \describe{
-#'    \item{posterior_sample}{posterior samples of the link parameters and response
-#'    rates generated through the MCMC process}
+#'    \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
+#'    which includes posterior samples of the link parameters and response rates generated through the MCMC
+#'    process}
 #'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'
 #' \item{se_hat_bjsm}{standard error of the response rate}
@@ -121,11 +122,8 @@
 #'
 #' @rdname group_seq
 group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
-                     beta_prior, MCMC_SAMPLE, BURN.IN, n_MCMC_chain, ci = 0.95, DTR = TRUE, cran_check_option = FALSE){
+                     beta_prior, MCMC_SAMPLE, n.adapt, thin = 1, BURN.IN = 100, n_MCMC_chain, ci = 0.95, DTR = TRUE, ...){
 
-  if(cran_check_option) {
-    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
-  }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files
 
@@ -210,10 +208,11 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
                                           beta0_prior.b = beta0_prior.b,
                                           beta1_prior.a = beta1_prior.a,
                                           beta1_prior.c = beta1_prior.c),
-                                n.chains = n_MCMC_chain,n.adapt = BURN.IN)
+                                n.chains = n_MCMC_chain, n.adapt = n.adapt, ...)
+      update(jags, BURN.IN)
       posterior_sample <- rjags::coda.samples(jags,
                                               c('pi','beta'),
-                                              MCMC_SAMPLE)
+                                              MCMC_SAMPLE, thin = thin)
     },
     warning = function(war){
       warning_count <- warning_count + 1
@@ -311,9 +310,10 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
     }
 
     message("\n")
-    result = list("dropped_arm" = dropped_arm)
+    result = list("dropped_arm" = dropped_arm, "posterior_sample" = posterior_sample)
     class(result) = "group_seq"
     return(result)
+
   } else {
 
     mydata <- data
@@ -344,6 +344,7 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
                                           beta1_prior.a = beta1_prior.a,
                                           beta1_prior.c = beta1_prior.c),
                                 n.chains = n_MCMC_chain,n.adapt = BURN.IN)
+      update(jags, BURN.IN)
       posterior_sample <- rjags::coda.samples(jags,
                                               c('pi','beta'),
                                               MCMC_SAMPLE)
@@ -367,7 +368,7 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
 
     if (DTR == TRUE){
 
-      result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+      result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
                     "se_hat_bjsm" = apply(out_post[, 7:9], 2, stats::sd),     # standard error of the response rate
                     "ci_pi_A" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
@@ -398,7 +399,7 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
                     "ci_pi_CB" = bayestestR::ci(pi_DTR[, 6], ci = ci, method = "HDI")
       )
     }else{
-      result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+      result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                     "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
                     "se_hat_bjsm" = apply(out_post[, 7:9], 2, stats::sd),     # standard error of the response rate
                     "ci_pi_A" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
@@ -446,18 +447,15 @@ group_seq = function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dis
 #'
 #' @export
 summary.group_seq = function(object, ...){
-  if (length(object) != 1){
-    cat("\nTreatment Effects Estimate:\n")
+  if (length(object) != 2){
     trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
     rownames(trteff) = c("trtA", "trtB", "trtC")
     colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(trteff)
-    cat("\nDifferences between Treatments:\n")
+
     trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
     rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
     colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-    print(trtdiff)
-    cat("\nLinkage Parameter Estimate:\n")
+
     if (length(object$beta0_hat) == 1){
       betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
       colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
@@ -467,24 +465,55 @@ summary.group_seq = function(object, ...){
       colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
     }
 
-    print(betaest)
     if (!is.null(object$pi_DTR_est)){
-      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
       dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
       colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-      print(dtreff)
+      obj = list(trteff = trteff, trtdiff = trtdiff, betaest = betaest, dtreff = dtreff)
+    }
+
+    obj = list(trteff = trteff, trtdiff = trtdiff, betaest = betaest)
+
+  } else {
+
+    obj = list(dropped_arm = object$dropped_arm, MCMC_result = summary(object$posterior_sample))
+
+  }
+
+  class(obj) = "summary.group_seq"
+  obj
+}
+
+
+#' @rdname group_seq
+#' @param x object to print
+#' @param ... further arguments. Not currently used.
+#' @export
+#' @export print.summary.group_seq
+print.summary.group_seq = function(x, ...){
+  if (length(x) != 2){
+    cat("\nTreatment Effects Estimate:\n")
+    print(x$trteff)
+    cat("\nDifferences between Treatments:\n")
+    print(x$trtdiff)
+    cat("\nLinkage Parameter Estimate:\n")
+    print(x$betaest)
+    if (!is.null(x$dtreff)){
+      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+      print(x$dtreff)
     }
     cat("\n")
   } else {
-    if(object$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
+    if(x$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
       cat("none of the arm is removed, move on to next update\n")
-    } else if  (object$dropped_arm == 1){
+    } else if  (x$dropped_arm == 1){
       cat("Arm A is dropped\n")
-    } else if (object$dropped_arm == 2){
+    } else if (x$dropped_arm == 2){
       cat("Arm B is dropped\n")
     } else {
       cat("Arm C is dropped\n")
     }
+
+    print(x$MCMC_result)
   }
 }
 
@@ -493,8 +522,9 @@ summary.group_seq = function(object, ...){
 #' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
+#' @export print.group_seq
 print.group_seq = function(x, ...){
-  if (length(x) != 1){
+  if (length(x) != 2){
     cat("\nTreatment Effects Estimate:\n")
     trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_A, x$ci_pi_B, x$ci_pi_C))
     rownames(trteff) = c("trtA", "trtB", "trtC")
@@ -505,24 +535,6 @@ print.group_seq = function(x, ...){
     rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
     colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
     print(trtdiff)
-    cat("\nLinkage Parameter Estimate:\n")
-    if (length(x$beta0_hat) == 1){
-      betaest = rbind(as.matrix(cbind(x$beta0_hat, x$se_beta0_hat, x$ci_beta0_hat)), as.matrix(cbind(x$beta1_hat, x$se_beta1_hat, x$ci_beta1_hat)))
-      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-      rownames(betaest) = c("beta0", "beta1")
-    } else {
-      betaest = rbind(cbind(x$beta0_hat, x$se_beta0_hat, c(rep(trteff$C.I.[1], length(x$beta0_hat))), t(x$ci_beta0_hat)), cbind(x$beta1_hat, x$se_beta1_hat, c(rep(trteff$C.I.[1], length(x$beta1_hat))), t(x$ci_beta1_hat)))
-      colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    }
-
-    print(betaest)
-    if (!is.null(x$pi_DTR_est)){
-      cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
-      dtreff = cbind(x$pi_DTR_est, x$pi_DTR_se, rbind(x$ci_pi_AB, x$ci_pi_AC, x$ci_pi_BA, x$ci_pi_BC, x$ci_pi_CA, x$ci_pi_CB))
-      colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-      print(dtreff)
-    }
-    cat("\n")
   } else {
     if(x$dropped_arm == 0){     # if none of the arm is dropped, move on to next update
       cat("none of the arm is removed, move on to next update\n")
