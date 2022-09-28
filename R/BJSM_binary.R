@@ -32,7 +32,9 @@
 #' prior distribution \eqn{N(\mu, \sigma^2)}, that is \eqn{log(\pi_L/\pi_P)~N(normal.mean, normal.var)},
 #' and \eqn{log(\pi_H/\pi_P)~N(normal.mean, normal.var)}. \code{normal.mean} is the mean of
 #' this Gaussian prior. `normal.var` is the variance of this Gaussian prior distribution
+#' @param n.adapt the number of iterations for adaptation
 #' @param BURN.IN number of burn-in iterations for MCMC
+#' @param thin thinning interval for monitors
 #' @param MCMC_SAMPLE number of iterations for MCMC
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param prior_dist for 3 active treatment design: vector of three values
@@ -47,9 +49,7 @@
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of
 #' dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 #' treatment design.
-#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
-#' model like usual. This should be the default for all model fitting.
-#' If TRUE, the model fitting is bypassed to pass CRAN check.
+#' @param ... optional arguments that are passed to \code{jags.model()} function.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -65,8 +65,9 @@
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #' @return
 #' \describe{
-#'    \item{posterior_sample}{posterior samples of the link parameters and response
-#'    rates generated through the MCMC process}
+#'    \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
+#'    which includes posterior samples of the link parameters and response rates generated through the MCMC
+#'    process}
 #'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'
 #' \item{se_hat_bjsm}{standard error of the response rate}
@@ -96,27 +97,28 @@
 #'
 #' \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x% credible intervals for the estimated DTR response rate}
 #' }
+#' @importFrom stats update
 #'
 #' @examples
 #' mydata = data_binary
 #'
 #' BJSM_result = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #'     pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-#'     n_MCMC_chain = 1, BURN.IN = 1000, MCMC_SAMPLE = 2000, ci = 0.95,
+#'     n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 2000, ci = 0.95,
 #'     six = TRUE, DTR = TRUE)
 #'
 #' # BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #' #    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-#' #    n_MCMC_chain = 1, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+#' #    n_MCMC_chain = 1, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
 #' #    six = FALSE, DTR = FALSE)
 #'
 #' # summary(BJSM_result)
 #' # summary(BJSM_result2)
 #'
-#' # data = data_dose
-#' # BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
-#' #     pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
-#' #     n_MCMC_chain = 2, BURN.IN = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
+#'  data = data_dose
+#'  BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
+#'      pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
+#'      n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95)
 #'
 #' # summary(BJSM_dose_result)
 #'
@@ -136,12 +138,9 @@
 #' @rdname BJSM_binary
 #' @export
 
-BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, BURN.IN,
-                       MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE){
+BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, n.adapt, BURN.IN = 100,
+                       thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, ...){
 
-  if(cran_check_option) {
-    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
-  }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files
 
@@ -168,22 +167,6 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
   # "BJSM_dose_new.bug"
   BJSM_dose_new_file = tempfile(fileext = ".bug")
   writeLines(BJSM_dose_new_text(), con = BJSM_dose_new_file)
-
-
-  # NUM_ARMS number of treatment arms
-  # pi_prior.a  alpha parameter of the prior beta distribution for pi_1K, a vector with three values, one for each treatment
-  # pi_prior.b  beta parameter of the prior beta distribution  for pi_1K, a vector with three values, one for each treatment
-  # beta0_prior.a alpha parameter of the prior beta distribution for linkage parameter beta0
-  # beta0_prior.b beta parameter of the prior beta distribution  for linkage parameter beta0
-  # beta1_prior.a scale parameter of the prior pareto distribution for linkage parameter beta1
-  # beta1_prior.c shape parameter of the prior pareto distribution for linkage parameter beta1
-  # n_MCMC_chain number of MCMC chains, default to 1. If this is set to a number more than 1
-  # BURN.IN number of burn-in iterations for MCMC
-  # MCMC_SAMPLE number of iterations for MCMC
-  # ci coverage probability for credible intervals
-  # pi_prior_dist, beta0_prior_dist, beta1_prior_dist are prior distributions for pi, beta0, and beta1, user can choose from gamma, beta, pareto
-  # for gamma, prior.a is r, prior.b is lambda, for beta, prior.a is alpha, prior.b is beta, for pareto, prior.a is alpha, prior.b is c (page 29 of the jags user manual version 3.4.0)
-  # six, if TRUE, will run the six beta model, if FALSE will run the two beta model
 
   if (length(pi_prior) > 2) {
 
@@ -234,10 +217,11 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                                            beta1_prior.a = beta1_prior.a,    # pareto
                                            beta1_prior.c = beta1_prior.c     # pareto
                                  ),
-                                 n.chains = n_MCMC_chain, n.adapt = BURN.IN)
+                                 n.chains = n_MCMC_chain, n.adapt = n.adapt, ...)
+        update(jag, BURN.IN)
         posterior_sample <- rjags::coda.samples(jag,
                                                 c('pi','beta'),
-                                                MCMC_SAMPLE)
+                                                n.iter = MCMC_SAMPLE, thin = thin)
       },
       warning = function(war){},
       error = function(err){},
@@ -275,10 +259,11 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                                              beta0_prior.b = beta0_prior.b,
                                              beta1_prior.a = beta1_prior.a,
                                              beta1_prior.c = beta1_prior.c),
-                                 n.chains = n_MCMC_chain, n.adapt = BURN.IN)
+                                 n.chains = n_MCMC_chain, n.adapt = n.adapt, ...)
+        update(jag, BURN.IN)
         posterior_sample <- rjags::coda.samples(jag,
                                                 c('pi', 'beta'),
-                                                MCMC_SAMPLE)
+                                                n.iter = MCMC_SAMPLE, thin = thin)
       },
       warning = function(war){},
       error = function(err){},
@@ -305,7 +290,7 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 
       if (DTR == TRUE){
 
-        result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+        result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                       "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
                       "se_hat_bjsm" = apply(out_post[, 7:9], 2, stats::sd),     # standard error of the response rate
                       "ci_pi_A" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
@@ -337,7 +322,7 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                         )
 
       }else{
-        result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+        result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                       "pi_hat_bjsm" = apply(out_post[, 7:9], 2, mean),   # estimate of response rate/treatment effect
                       "se_hat_bjsm" = apply(out_post[, 7:9], 2, stats::sd),     # standard error of the response rate
                       "ci_pi_A" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
@@ -374,7 +359,7 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
       colnames(pi_DTR) = c("rep_AB", "rep_AC", "rep_BA", "rep_BC", "rep_CA", "rep_CB")
 
       if (DTR == TRUE){
-        result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+        result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                       "pi_hat_bjsm" = apply(out_post[, 3:5], 2, mean), # estimate of treatment response rate
                       "se_hat_bjsm" = apply(out_post[, 3:5], 2, stats::sd), # estimated standard error of the response rate
                       "ci_pi_A" = bayestestR::ci(out_post[, 3], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment A
@@ -405,7 +390,7 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                       "ci_pi_CB" = bayestestR::ci(pi_DTR[, 6], ci = ci, method = "HDI")
         )
       }else{
-        result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+        result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                       "pi_hat_bjsm" = apply(out_post[, 3:5], 2, mean), # estimate of treatment response rate
                       "se_hat_bjsm" = apply(out_post[, 3:5], 2, stats::sd), # estimated standard error of the response rate
                       "ci_pi_A" = bayestestR::ci(out_post[, 3], ci = ci, method = "HDI"), # x% credible intervals for the response rate of treatment A
@@ -479,32 +464,20 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
                                            b_beta = beta_prior.b,
                                            normal.mean = normal.mean,
                                            normal.var = normal.var),
-                               n.chains = n_MCMC_chain)
-
+                               n.chains = n_MCMC_chain, n.adapt = n.adapt, ...)
+      update(jag, BURN.IN)
       posterior_sample <- rjags::coda.samples(jag,
                                               c('pi','beta'),
-                                              MCMC_SAMPLE)
-    },
-    error = function(c) {rbind(error_round,i)
-      posterior_sample_burn = window(posterior_sample,start = BURN.IN, end = MCMC_SAMPLE)
-      posterior_sample_cmb = do.call(rbind, posterior_sample_burn)
-      error_round = rbind(error_round,i)
-      error_count = error_count+1
-    },
-    warning = function(c) {warn_round = rbind(warn_round,i)
-    warn_count = warn_count+1},
-    finally = {
-      posterior_sample_burn = window(posterior_sample,start = BURN.IN, end = MCMC_SAMPLE)
-      posterior_sample_cmb = do.call(rbind, posterior_sample_burn)
+                                              n.iter = MCMC_SAMPLE, thin = thin)
     }
     )
 
-    out_post = as.data.frame(posterior_sample_cmb)
+    out_post = as.data.frame(posterior_sample[[1]])
     colnames(out_post)[c(7:9)] = c("pi_P", "pi_L", "pi_H")
 
 
 
-    result = list("posterior_sample" = out_post, # posterior samples of the link parameters and response rates generated through the MCMC process
+    result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
                   "pi_hat_bjsm" = apply(out_post[, 7:9],2,mean),   # estimate of response rate/treatment effect
                   "se_hat_bjsm" = apply(out_post[, 7:9],2,sd),     # standard error of the response rate
                   "ci_pi_P" = bayestestR::ci(out_post[, 7], ci = ci, method = "HDI"), # x% credible intervals for A
@@ -548,17 +521,14 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 #'
 #' @export
 summary.BJSM_binary = function(object, ...){
-  cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_A, object$ci_pi_B, object$ci_pi_C))
   rownames(trteff) = c("trtA", "trtB", "trtC")
   colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(trteff)
-  cat("\nDifferences between Treatments:\n")
+
   trtdiff = cbind(rbind(object$diff_AB, object$diff_BC, object$diff_AC), rbind(object$se_AB, object$se_BC, object$se_AC), rbind(object$ci_diff_AB, object$ci_diff_BC, object$ci_diff_AC))
   rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-  print(trtdiff)
-  cat("\nLinkage Parameter Estimate:\n")
+
   if (length(object$beta0_hat) == 1){
     betaest = rbind(as.matrix(cbind(object$beta0_hat, object$se_beta0_hat, object$ci_beta0_hat)), as.matrix(cbind(object$beta1_hat, object$se_beta1_hat, object$ci_beta1_hat)))
     colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
@@ -568,12 +538,34 @@ summary.BJSM_binary = function(object, ...){
     colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
   }
 
-  print(betaest)
   if (!is.null(object$pi_DTR_est) == TRUE){
-    cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
     dtreff = cbind(object$pi_DTR_est, object$pi_DTR_se, rbind(object$ci_pi_AB, object$ci_pi_AC, object$ci_pi_BA, object$ci_pi_BC, object$ci_pi_CA, object$ci_pi_CB))
     colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(dtreff)
+    obj = list(trteff = trteff, trtdiff = trtdiff, betaest = betaest, dtreff = dtreff)
+  } else {
+    obj = list(trteff = trteff, trtdiff = trtdiff, betaest = betaest)
+  }
+
+
+  class(obj) = "summary.BJSM_binary"
+  obj
+}
+
+#' @rdname BJSM_binary
+#' @param x object to summarize.
+#' @param ... further arguments. Not currently used.
+#' @export
+#' @export print.summary.BJSM_binary
+print.summary.BJSM_binary <- function(x, ...) {
+  cat("\nTreatment Effects Estimate:\n")
+  print(x$trteff)
+  cat("\nDifferences between Treatments:\n")
+  print(x$trtdiff)
+  cat("\nLinkage Parameter Estimate:\n")
+  print(x$betaest)
+  if (length(x) == 4){
+    cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
+    print(x$dtreff)
   }
   cat("\n")
 }
@@ -583,6 +575,8 @@ summary.BJSM_binary = function(object, ...){
 #' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
+#' @export print.BJSM_binary
+
 print.BJSM_binary = function(x, ...){
   cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_A, x$ci_pi_B, x$ci_pi_C))
@@ -594,24 +588,6 @@ print.BJSM_binary = function(x, ...){
   rownames(trtdiff) = c("diffAB", "diffBC", "diffAC")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
   print(trtdiff)
-  cat("\nLinkage Parameter Estimate:\n")
-  if (length(x$beta0_hat) == 1){
-    betaest = rbind(as.matrix(cbind(x$beta0_hat, x$se_beta0_hat, x$ci_beta0_hat)), as.matrix(cbind(x$beta1_hat, x$se_beta1_hat, x$ci_beta1_hat)))
-    colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    rownames(betaest) = c("beta0", "beta1")
-  } else {
-    betaest = rbind(cbind(x$beta0_hat, x$se_beta0_hat, c(rep(trteff$C.I.[1], length(x$beta0_hat))), t(x$ci_beta0_hat)), cbind(x$beta1_hat, x$se_beta1_hat, c(rep(trteff$C.I.[1], length(x$beta1_hat))), t(x$ci_beta1_hat)))
-    colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  }
-
-  print(betaest)
-  if (!is.null(x$pi_DTR_est) == TRUE){
-    cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
-    dtreff = cbind(x$pi_DTR_est, x$pi_DTR_se, rbind(x$ci_pi_AB, x$ci_pi_AC, x$ci_pi_BA, x$ci_pi_BC, x$ci_pi_CA, x$ci_pi_CB))
-    colnames(dtreff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-    print(dtreff)
-  }
-  cat("\n")
 }
 
 
@@ -634,20 +610,35 @@ print.BJSM_binary = function(x, ...){
 #'
 #' @export
 summary.BJSM_dose_binary = function(object, ...){
-  cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(object$pi_hat_bjsm, object$se_hat_bjsm, rbind(object$ci_pi_P, object$ci_pi_L, object$ci_pi_H))
   rownames(trteff) = c("trtP", "trtL", "trtH")
   colnames(trteff) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(trteff)
-  cat("\nDifferences between Treatments:\n")
+
   trtdiff = cbind(rbind(object$diff_PL, object$diff_LH, object$diff_PH), rbind(object$se_PL, object$se_LH, object$se_PH), rbind(object$ci_diff_PL, object$ci_diff_LH, object$ci_diff_PH))
   rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
-  print(trtdiff)
-  cat("\nLinkage Parameter Estimate:\n")
+
   betaest = t(rbind(object$beta_hat, object$se_beta, c(rep(trteff[, 3][1], length(object$beta_hat))), object$ci_beta_hat))
   colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(betaest)
+
+  obj = list(trteff = trteff, trtdiff = trtdiff, betaest = betaest)
+  class(obj) = "summary.BJSM_dose_binary"
+  obj
+
+}
+
+#' @rdname BJSM_binary
+#' @param x object to summarize.
+#' @param ... further arguments. Not currently used.
+#' @export
+#' @export print.summary.BJSM_dose_binary
+print.summary.BJSM_dose_binary = function(x, ...){
+  cat("\nTreatment Effects Estimate:\n")
+  print(x$trteff)
+  cat("\nDifferences between Treatments:\n")
+  print(x$trtdiff)
+  cat("\nLinkage Parameter Estimate:\n")
+  print(x$betaest)
   cat("\n")
 }
 
@@ -656,6 +647,7 @@ summary.BJSM_dose_binary = function(object, ...){
 #' @param x object to summarize.
 #' @param ... further arguments. Not currently used.
 #' @export
+#' @export print.BJSM_dose_binary
 print.BJSM_dose_binary = function(x, ...){
   cat("\nTreatment Effects Estimate:\n")
   trteff = cbind(x$pi_hat_bjsm, x$se_hat_bjsm, rbind(x$ci_pi_P, x$ci_pi_L, x$ci_pi_H))
@@ -667,11 +659,6 @@ print.BJSM_dose_binary = function(x, ...){
   rownames(trtdiff) = c("diffPL", "diffLH", "diffPH")
   colnames(trtdiff) = c("Estimate", "Std.Error", "C.I.", "CI low", "CI high")
   print(trtdiff)
-  cat("\nLinkage Parameter Estimate:\n")
-  betaest = t(rbind(x$beta_hat, x$se_beta, c(rep(trteff[, 3][1], length(x$beta_hat))), x$ci_beta_hat))
-  colnames(betaest) = c("Estimate", "Std. Error", "C.I.", "CI low", "CI high")
-  print(betaest)
-  cat("\n")
 }
 
 
