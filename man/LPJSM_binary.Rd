@@ -7,7 +7,7 @@
 \title{LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two
 dose level)}
 \usage{
-LPJSM_binary(data, six = TRUE, DTR = TRUE)
+LPJSM_binary(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE)
 
 \method{summary}{LPJSM_binary}(object, ...)
 
@@ -22,6 +22,10 @@ beta model. Default is \code{six = TRUE}}
 
 \item{DTR}{if TRUE, will also return the expected response rate and its standard
 error of dynamic treatment regimens}
+
+\item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
+model like usual. This should be the default for all model fitting.
+If TRUE, the model fitting is bypassed to pass CRAN check.}
 
 \item{object}{object to summarize}
 

@@ -17,7 +17,8 @@ BJSM_binary(
   MCMC_SAMPLE,
   ci = 0.95,
   six = TRUE,
-  DTR = TRUE
+  DTR = TRUE,
+  cran_check_option = FALSE
 )
 
 \method{print}{BJSM_binary}(x, ...)
@@ -78,6 +79,10 @@ treatment design.}
 \item{DTR}{TRUE or FALSE. If TRUE, will also return the expected response rate of
 dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 treatment design.}
+
+\item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
+model like usual. This should be the default for all model fitting.
+If TRUE, the model fitting is bypassed to pass CRAN check.}
 
 \item{x}{object to summarize.}
 

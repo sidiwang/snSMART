@@ -13,6 +13,9 @@
 #' beta model. Default is `six = TRUE`
 #' @param DTR if TRUE, will also return the expected response rate and its standard
 #' error of dynamic treatment regimens
+#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
+#' model like usual. This should be the default for all model fitting.
+#' If TRUE, the model fitting is bypassed to pass CRAN check.
 #'
 #' @return a `list` containing
 #' \itemize{
@@ -48,7 +51,11 @@
 #' @rdname LPJSM_binary
 #' @export
 #'
-LPJSM_binary = function(data, six = TRUE, DTR = TRUE){
+LPJSM_binary = function(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE){
+
+  if(cran_check_option) {
+    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
 
   # data, same format as the bjsm_binary.R file trial dataset format
   # six, if TRUE, will run the six beta model, if FALSE will run the two beta model

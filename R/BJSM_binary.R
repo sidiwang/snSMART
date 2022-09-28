@@ -47,6 +47,9 @@
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of
 #' dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 #' treatment design.
+#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
+#' model like usual. This should be the default for all model fitting.
+#' If TRUE, the model fitting is bypassed to pass CRAN check.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -134,7 +137,39 @@
 #' @export
 
 BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, BURN.IN,
-                       MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE){
+                       MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE){
+
+  if(cran_check_option) {
+    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
+  # bug files written to temporary directory on function call to satisfy CRAN
+  # requirements of not accessing user's system files
+
+  # "BJSM_6betas_missing.bug"
+  BJSM_6betas_missing_file = tempfile(fileext = ".bug")
+  writeLines(BJSM_6betas_missing_text(), con = BJSM_6betas_missing_file)
+
+  # "BJSM_6betas_missing_new.bug"
+  BJSM_6betas_missing_new_file = tempfile(fileext = ".bug")
+  writeLines(BJSM_6betas_missing_new_text(), con = BJSM_6betas_missing_new_file)
+
+  # "BJSM_2beta_missing.bug"
+  BJSM_2beta_missing_file = tempfile(fileext = ".bug")
+  writeLines(BJSM_2beta_missing_text(), con = BJSM_2beta_missing_file)
+
+  # "BJSM_2beta_missing_new.bug"
+  BJSM_2beta_missing_new_file = tempfile(fileext = ".bug")
+  writeLines(BJSM_2beta_missing_new_text(), con = BJSM_2beta_missing_new_file)
+
+  # "BJSM_dose.bug"
+  BJSM_dose_file = tempfile(fileext = ".bug")
+  writeLines(BJSM_dose_text(), con = BJSM_dose_file)
+
+  # "BJSM_dose_new.bug"
+  BJSM_dose_new_file = tempfile(fileext = ".bug")
+  writeLines(BJSM_dose_new_text(), con = BJSM_dose_new_file)
+
+
   # NUM_ARMS number of treatment arms
   # pi_prior.a  alpha parameter of the prior beta distribution for pi_1K, a vector with three values, one for each treatment
   # pi_prior.b  beta parameter of the prior beta distribution  for pi_1K, a vector with three values, one for each treatment
@@ -172,13 +207,15 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
 
     if (six == TRUE){
       # If using 6-betas model
-      bugfile  <- readLines(system.file("BJSM_6betas_missing.bug", package = "snSMART"))
+      #bugfile  <- readLines(system.file("BJSM_6betas_missing.bug", package = "snSMART"))
+      bugfile  <- readLines(BJSM_6betas_missing_file)
       bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
       bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
       bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-      writeLines(bugfile2, con = system.file("BJSM_6betas_missing_new.bug", package = "snSMART"))
-      jag.model.name <- system.file("BJSM_6betas_missing_new.bug", package = "snSMART")
+      bugfile2_file = tempfile(fileext = ".bug")
+      writeLines(bugfile2, con = bugfile2_file)
+      jag.model.name <- bugfile2_file
       tryCatch({
         jag <- rjags::jags.model(file.path(jag.model.name),
                                  data=list(n1 = nrow(mydata),
@@ -208,15 +245,19 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
       )
 
     } else {
-      bugfile  <- readLines(system.file("BJSM_2beta_missing.bug", package = "snSMART"))
+      #bugfile  <- readLines(system.file("BJSM_2beta_missing.bug", package = "snSMART"))
+      bugfile  <- readLines(BJSM_2beta_missing_file)
       bugfile  <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
       bugfile  <- gsub(pattern = "beta0_prior_dist", replacement = beta0_prior_dist, x = bugfile)
       bugfile2  <- gsub(pattern = "beta1_prior_dist", replacement = beta1_prior_dist, x = bugfile)
 
-      writeLines(bugfile2, con=system.file("BJSM_2beta_missing_new.bug", package = "snSMART"))
+      bugfile2_file = tempfile(fileext = ".bug")
+      writeLines(bugfile2, con = bugfile2_file)
+      # writeLines(bugfile2, con=system.file("BJSM_2beta_missing_new.bug", package = "snSMART"))
 
       # If using 2-betas model
-      jag.model.name <- system.file("BJSM_2beta_missing_new.bug", package = "snSMART")  # beta1 ~ pareto
+      # jag.model.name <- system.file("BJSM_2beta_missing_new.bug", package = "snSMART")  # beta1 ~ pareto
+      jag.model.name <- bugfile2_file
       tryCatch({
         jag <- rjags::jags.model(file.path(jag.model.name),
                                  data = list(n1 = nrow(mydata),
@@ -409,12 +450,17 @@ BJSM_binary = function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCM
     mydata = data
     mydata$response_status_stageI = mydata$response_stageI + 1
 
-    bugfile <- readLines(system.file("BJSM_dose.bug", package = "snSMART"))
+    bugfile <- readLines(BJSM_dose_file)
     bugfile <- gsub(pattern = "pi_prior_dist", replacement = pi_prior_dist, x = bugfile)
     bugfile2 <- gsub(pattern = "beta_prior_dist", replacement = beta_prior_dist, x = bugfile)
 
-    writeLines(bugfile2, con = system.file("BJSM_dose_new.bug", package = "snSMART"))
-    jag.model.name <- system.file("BJSM_dose_new.bug", package = "snSMART")
+    ##
+    bugfile2_file = tempfile(fileext = ".bug")
+    writeLines(bugfile2, con = bugfile2_file)
+
+    # writeLines(bugfile2, con = system.file("BJSM_dose_new.bug", package = "snSMART"))
+    #jag.model.name <- system.file("BJSM_dose_new.bug", package = "snSMART")
+    jag.model.name <- bugfile2_file
 
     tryCatch({
       jag <- rjags::jags.model(file.path(jag.model.name),
