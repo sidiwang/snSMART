@@ -3,7 +3,7 @@
 \docType{data}
 \name{trialDataMF}
 \alias{trialDataMF}
-\title{Data Mapping Function}
+\title{Dataset with continuous outcomes}
 \format{
 This data frame contains the following columns:
 \describe{

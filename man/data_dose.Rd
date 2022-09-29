@@ -3,7 +3,7 @@
 \docType{data}
 \name{data_dose}
 \alias{data_dose}
-\title{Data Dose Level}
+\title{Dose Level dataset with binary outcomes}
 \format{
 This data frame contains the following columns:
 \describe{

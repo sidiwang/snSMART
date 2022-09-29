@@ -3,7 +3,7 @@
 \docType{data}
 \name{groupseqDATA_full}
 \alias{groupseqDATA_full}
-\title{group sequential full data}
+\title{Group sequential full data}
 \format{
 This data frame contains the following columns:
 \describe{

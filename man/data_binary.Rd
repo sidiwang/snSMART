@@ -3,7 +3,7 @@
 \docType{data}
 \name{data_binary}
 \alias{data_binary}
-\title{Data Binary}
+\title{Dataset with binary outcomes}
 \format{
 This data frame contains the following columns:
 \describe{

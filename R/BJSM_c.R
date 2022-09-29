@@ -5,18 +5,18 @@
 #' outcome and a mapping function).
 #'
 #' @param data trial ddatset with columns: \code{id, trt1} (treatment 1), \code{stage1outcome, stay}
-#' (stay = 1 if patient stay on the same treatment in stage 2, otherwise stay = 0),
-#' \code{trt2} (treatment 2), \code{stage2outcome}
+#'  (stay = 1 if patient stay on the same treatment in stage 2, otherwise stay = 0),
+#'  \code{trt2} (treatment 2), \code{stage2outcome}
 #' @param xi_prior.mean a 3-element vector of mean of the prior distributions
-#' (normal distribution) for \code{xi}s (treatment effect). Please check the `Details`
-#' section for more explaination
+#'  (normal distribution) for \code{xi}s (treatment effect). Please check the `Details`
+#'  section for more explaination
 #' @param xi_prior.sd a 3-element vector of standard deviation of the prior distributions
-#' (normal distribution) for \code{xi}s (treatment effect). Please check the `Details`
-#' section for more explaination
+#'  (normal distribution) for \code{xi}s (treatment effect). Please check the `Details`
+#'  section for more explaination
 #' @param phi3_prior.sd standard deviation of the prior distribution (folded normal
-#' distribution) of \code{phi3} (if the patient stays on the same treatment, \code{phi3}
-#' is the cumulative effect of stage 1 that occurs on the treatment longer term).
-#' Please check the `Details` section for more explaination
+#'  distribution) of \code{phi3} (if the patient stays on the same treatment, \code{phi3}
+#'  is the cumulative effect of stage 1 that occurs on the treatment longer term).
+#'  Please check the `Details` section for more explaination
 #' @param n_MCMC_chain number of MCMC chains, default to 1
 #' @param n.adapt the number of iterations for adaptation
 #' @param BURN.IN number of burn-in iterations for MCMC
@@ -26,8 +26,8 @@
 #' @param n.digits number of digits to keep in the final estimation of treatment effect
 #' @param x an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
 #' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
-#' model like usual. This should be the default for all model fitting.
-#' If TRUE, the model fitting is bypassed to pass CRAN check.
+#'  model like usual. This should be the default for all model fitting.
+#'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param ... optional arguments that are passed to \code{jags.model()} function.
 
 #'
@@ -55,11 +55,13 @@
 #' }
 #'
 #' @examples
-#' trialData = trialDataMF
+#' trialData <- trialDataMF
 #'
-#' BJSM_result = BJSM_c(data = trialData, xi_prior.mean = c(50, 50, 50),
-#'     xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-#'     n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5)
+#' BJSM_result <- BJSM_c(
+#'   data = trialData, xi_prior.mean = c(50, 50, 50),
+#'   xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
+#'   n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5
+#' )
 #'
 #' summary(BJSM_result)
 #' print(BJSM_result)
@@ -71,10 +73,9 @@
 #' @rdname BJSM_c
 #' @export
 
-BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
-                  MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE, ...){
-
-  if(cran_check_option) {
+BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
+                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE, ...) {
+  if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
 
@@ -82,39 +83,47 @@ BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain,
   # requirements of not accessing user's system files
 
   # "csnSMART.bugs"
-  csnSMART_file = tempfile(fileext = ".bug")
+  csnSMART_file <- tempfile(fileext = ".bug")
   writeLines(csnSMART_text(), con = csnSMART_file)
 
-  trialData = data
+  trialData <- data
 
-  NUM_ARMS = length(unique(trialData$trt1[!is.na(trialData$trt1)]))
+  NUM_ARMS <- length(unique(trialData$trt1[!is.na(trialData$trt1)]))
 
-  jag <- rjags::jags.model(file = csnSMART_file,
-                           data = list(n = length(unique(trialData$id)),
-                                       ntrt = NUM_ARMS,
-                                       Y = cbind(trialData$stage1outcome, trialData$stage2outcome),
-                                       trt1 = trialData$trt1,
-                                       trt2 = trialData$trt2,
-                                       stay = trialData$stay,
-                                       stay1 = trialData$stay+1,
-                                       xi_prior.mean = xi_prior.mean,
-                                       xi_prior.sd = 1/(xi_prior.sd^2),
-                                       phi3_prior.sd = 1/(phi3_prior.sd^2)),
-                           n.chains = n_MCMC_chain, n.adapt = n.adapt, ...)
+  jag <- rjags::jags.model(
+    file = csnSMART_file,
+    data = list(
+      n = length(unique(trialData$id)),
+      ntrt = NUM_ARMS,
+      Y = cbind(trialData$stage1outcome, trialData$stage2outcome),
+      trt1 = trialData$trt1,
+      trt2 = trialData$trt2,
+      stay = trialData$stay,
+      stay1 = trialData$stay + 1,
+      xi_prior.mean = xi_prior.mean,
+      xi_prior.sd = 1 / (xi_prior.sd^2),
+      phi3_prior.sd = 1 / (phi3_prior.sd^2)
+    ),
+    n.chains = n_MCMC_chain, n.adapt = n.adapt, ...
+  )
   update(jag, BURN.IN)
   posterior_sample <- rjags::coda.samples(jag,
-                                          c('xi_','phi1','phi3','rho'),
-                                          MCMC_SAMPLE, thin = thin)
+    c("xi_", "phi1", "phi3", "rho"),
+    MCMC_SAMPLE,
+    thin = thin
+  )
 
 
-  out_post = as.data.frame(posterior_sample[[1]])
+  out_post <- as.data.frame(posterior_sample[[1]])
 
 
-  result = list("posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
-                "mean_estimate" = round(apply(out_post,2,mean), n.digits),   # estimate of each parameter
-                "ci_estimate" = bayestestR::ci(out_post, ci = ci, method = "HDI")) # x% credible intervals for each parameter
+  result <- list(
+    "posterior_sample" = posterior_sample, # posterior samples of the link parameters and response rates generated through the MCMC process
+    "mean_estimate" = round(apply(out_post, 2, mean), n.digits), # estimate of each parameter
+    "ci_estimate" = bayestestR::ci(out_post, ci = ci, method = "HDI")
+  ) # x% credible intervals for each parameter
 
-  class(result) = "BJSM_c"
+  class(result) <- "BJSM_c"
 
   return(result)
 }
@@ -124,11 +133,11 @@ BJSM_c = function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain,
 #' @param ... further arguments. Not currently used.
 #' @export
 #'
-summary.BJSM_c = function(object, ...){
-  out = as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
-  colnames(out)[1] = "Estimate"
-  obj = list(out = out)
-  class(obj) = "summary.BJSM_c"
+summary.BJSM_c <- function(object, ...) {
+  out <- as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
+  colnames(out)[1] <- "Estimate"
+  obj <- list(out = out)
+  class(obj) <- "summary.BJSM_c"
   obj
 }
 
@@ -138,7 +147,7 @@ summary.BJSM_c = function(object, ...){
 #' @export
 #' @export print.summary.BJSM_c
 #'
-print.summary.BJSM_c = function(x, ...){
+print.summary.BJSM_c <- function(x, ...) {
   cat("\nParameter Estimation:\n")
   print(x$out[-2])
 }
@@ -149,10 +158,10 @@ print.summary.BJSM_c = function(x, ...){
 #' @export
 #' @export print.BJSM_c
 #'
-print.BJSM_c = function(x, ...){
+print.BJSM_c <- function(x, ...) {
   cat("\nTreatment Effect Estimation:\n")
-  out = as.data.frame(cbind(x$mean_estimate, x$ci_estimate))
-  colnames(out)[1] = "Estimate"
-  rownames(out)[11:13] = c("trtA", "trtB", "trtC")
-  print(out[-c(seq(1, 10, 1)),-2])
+  out <- as.data.frame(cbind(x$mean_estimate, x$ci_estimate))
+  colnames(out)[1] <- "Estimate"
+  rownames(out)[11:13] <- c("trtA", "trtB", "trtC")
+  print(out[-c(seq(1, 10, 1)), -2])
 }

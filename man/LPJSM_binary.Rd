@@ -51,12 +51,12 @@ A joint-stage regression model (LPJSM) is a frequentist modeling approach that
 incorporates the responses of both stages as repeated measurements for each subject.
 Generalized estimating equations (GEE) are used to estimate the response rates of
 each treatment. The marginal response rates for each DTR can also be obtained based
-on the GEE results
+on the GEE results.
 }
 \examples{
-data = data_binary
+data <- data_binary
 
-LPJSM_result = LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
+LPJSM_result <- LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
 
 summary(LPJSM_result)
 

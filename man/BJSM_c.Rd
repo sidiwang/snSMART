@@ -101,11 +101,13 @@ description of the assumptions and prior distributions of the model.
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
-trialData = trialDataMF
+trialData <- trialDataMF
 
-BJSM_result = BJSM_c(data = trialData, xi_prior.mean = c(50, 50, 50),
-    xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-    n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5)
+BJSM_result <- BJSM_c(
+  data = trialData, xi_prior.mean = c(50, 50, 50),
+  xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
+  n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5
+)
 
 summary(BJSM_result)
 print(BJSM_result)

@@ -4,7 +4,7 @@
 \alias{group_seq}
 \alias{print.summary.group_seq}
 \alias{print.group_seq}
-\title{BJSM Method for interim analysis and final analysis of group sequential trial design}
+\title{BJSM method for interim analysis and final analysis of group sequential trial design}
 \usage{
 group_seq(
   data,
@@ -118,7 +118,7 @@ credible interval}
 }
 \description{
 After obtain real trial data, this function can be used to decide which arm to
-drop in an interim analysis or provide a full final analysis
+drop in an interim analysis or provide a full final analysis.
 }
 \details{
 For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
@@ -140,20 +140,26 @@ Please refer to the paper listed under \code{reference} section for detailed def
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
-mydata = groupseqDATA_look1
+mydata <- groupseqDATA_look1
 
-result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
-  prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1)
+result1 <- group_seq(
+  data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
+  prior_dist = c("beta", "beta", "pareto"), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1
+)
 
 summary(result1)
 
 
-mydata = groupseqDATA_full
-result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta",
-  "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+mydata <- groupseqDATA_full
+result2 <- group_seq(
+  data = mydata, interim = FALSE, prior_dist = c(
+    "beta",
+    "beta", "pareto"
+  ), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000,
-  n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+  n_MCMC_chain = 1, ci = 0.95, DTR = TRUE
+)
 
 summary(result2)
 

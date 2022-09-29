@@ -1,5 +1,5 @@
 
-#' group sequential data look 1
+#' Group sequential data look 1
 #'
 #' sample dataset of group sequential trial design snSMART, can be used for interim analysis
 #'
@@ -30,7 +30,7 @@
 
 NULL
 
-#' group sequential full data
+#' Group sequential full data
 #'
 #' sample dataset of group sequential trial design snSMART, can be used for final analysis
 #' @name groupseqDATA_full
@@ -56,7 +56,7 @@ NULL
 #'   n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
 NULL
 
-#' Data Binary
+#' Dataset with binary outcomes
 #'
 #' sample dataset of snSMART (3 active treatment) with binary outcomes
 #' @name data_binary
@@ -76,7 +76,7 @@ NULL
 #'
 NULL
 
-#' Data Dose Level
+#' Dose Level dataset with binary outcomes
 #'
 #' sample dataset of snSMART (dose level treatment) with binary outcomes
 #' @name data_dose
@@ -98,7 +98,7 @@ NULL
 #'
 NULL
 
-#' Data Mapping Function
+#' Dataset with continuous outcomes
 #'
 #' sample dataset of snSMART (mapping function) with continuous outcomes
 #' @name trialDataMF

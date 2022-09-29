@@ -3,7 +3,7 @@
 \docType{data}
 \name{groupseqDATA_look1}
 \alias{groupseqDATA_look1}
-\title{group sequential data look 1}
+\title{Group sequential data look 1}
 \format{
 This data frame contains the following columns:
 \describe{
