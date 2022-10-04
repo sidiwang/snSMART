@@ -328,48 +328,48 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
 
 
   if (!piA < 1 & piA > 0) {
-    print("The value of \u03C0A should be within 0.01~0.99")
+    message("The value of \u03C0A should be within 0.01~0.99")
   }
   if (!piB < 1 & piB > 0) {
-    print("The value of \u03C0B should be within 0.01~0.99")
+    message("The value of \u03C0B should be within 0.01~0.99")
   }
   if (!piC < 1 & piC > 0) {
-    print("The value of \u03C0C should be within 0.01~0.99")
+    message("The value of \u03C0C should be within 0.01~0.99")
   }
   if (!(beta1 <= max_beta1 & beta1 > 1) |
     is.na(max_beta1) |
     piA > 1 | piA < 0 |
     piB > 1 | piB < 0 |
     piC > 1 | piC < 0) {
-    print(str_beta1)
+    message(str_beta1)
   }
   if (!beta0 < 1 & beta0 > 0) {
-    print("The value of \u03B20 should be within 0.01~0.99")
+    message("The value of \u03B20 should be within 0.01~0.99")
   }
   if (!coverage < 1 & coverage > 0) {
-    print("The value of 1-\u03B1 should be within 0.01~0.99")
+    message("The value of 1-\u03B1 should be within 0.01~0.99")
   }
   if (!power < 1 & power > 0) {
-    print("The value of 1-\u03BE should be within 0.01~0.99")
+    message("The value of 1-\u03BE should be within 0.01~0.99")
   }
 
   if (!muA < 1 & muA > 0) {
-    print("The value of \u03bcA should be within 0.01~0.99")
+    message("The value of \u03bcA should be within 0.01~0.99")
   }
   if (!muB < 1 & muB > 0) {
-    print("The value of \u03bcB should be within 0.01~0.99")
+    message("The value of \u03bcB should be within 0.01~0.99")
   }
   if (!muC < 1 & muC > 0) {
-    print("The value of \u03bcC should be within 0.01~0.99")
+    message("The value of \u03bcC should be within 0.01~0.99")
   }
   if (!nA > 0) {
-    print("The value of nA should be greater than 0")
+    message("The value of nA should be greater than 0")
   }
   if (!nB > 0) {
-    print("The value of nB should be greater than 0")
+    message("The value of nB should be greater than 0")
   }
   if (!nC > 0) {
-    print("The value of nC should be greater than 0")
+    message("The value of nC should be greater than 0")
   }
 
 
@@ -501,9 +501,9 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
 
   for (CIL_I in seq(CIL_MAX, CIL_MIN, by = -CIL_STEP_I)) {
     # i=i+1
-    # print(CIL_I)
+    # message(CIL_I)
     # get sample size solved
-    # print(CIL_I)
+    # message(CIL_I)
     # CIL_I=0.26
 
     if (CIL_I / 2 == (max(c(piA, piB, piC)) - min(c(piA, piB, piC)))) {
@@ -532,7 +532,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
         }
 
         # for(i in 1:300){
-        #   print(fun(i))
+        #   message(fun(i))
         # }
 
         # ciL=0.28
@@ -584,19 +584,19 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
       warning = function(c) {
         # warn_round_tmp_pair1=cbind(i,beta1,beta0,CIL_I)
         # warn_round_pair1=rbind(warn_round_pair1,warn_round_tmp_pair1)
-        # print(i)
-        # print(CIL_I)
+        # message(i)
+        # message(CIL_I)
         # next
       },
       finally = { # posterior_sample_burn=window(posterior_sample,start=BURNING, end=MCMC_SAMPLE)
         # posterior_sample_cmb=do.call(rbind, posterior_sample_burn)
       }
     )
-    # print(CIL_I)
-    # print(pow_pair1)
-    # print(mu_o1o2_diff)
-    # print(mu_o1o2_sq_diff)
-    # print(sample_size_tmp_pair1)
+    # message(CIL_I)
+    # message(pow_pair1)
+    # message(mu_o1o2_diff)
+    # message(mu_o1o2_sq_diff)
+    # message(sample_size_tmp_pair1)
   }
 
   close(pb)
@@ -635,7 +635,7 @@ print.summary.sample_size <- function(x, ...) {
   cat("With given settings, the estimated sample size per arm for an snSMART is: ")
   cat(as.numeric(x$final_N))
   cat(paste0("In total ", nrow(x$grid_result), " iterations were taken:\n"))
-  print(x$grid_result)
+  message(x$grid_result)
 }
 
 #' @rdname sample_size
