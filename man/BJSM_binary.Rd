@@ -23,6 +23,7 @@ BJSM_binary(
   six = TRUE,
   DTR = TRUE,
   cran_check_option = FALSE,
+  verbose = FALSE,
   ...
 )
 
@@ -97,6 +98,9 @@ treatment design.}
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
+\item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
+printed.}
+
 \item{...}{further arguments. Not currently used.}
 
 \item{x}{object to summarize.}
@@ -161,13 +165,13 @@ BJSM_result <- BJSM_binary(
   data = mydata, prior_dist = c("beta", "beta", "pareto"),
   pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
   n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 2000, ci = 0.95,
-  six = TRUE, DTR = TRUE
+  six = TRUE, DTR = TRUE, verbose = FALSE
 )
 
 # BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
 #    n_MCMC_chain = 1, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
-#    six = FALSE, DTR = FALSE)
+#    six = FALSE, DTR = FALSE, verbose = FALSE)
 
 # summary(BJSM_result)
 # summary(BJSM_result2)
@@ -176,7 +180,7 @@ data <- data_dose
 BJSM_dose_result <- BJSM_binary(
   data = data_dose, prior_dist = c("beta", "gamma"),
   pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
-  n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95
+  n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95, verbose = FALSE
 )
 
 # summary(BJSM_dose_result)

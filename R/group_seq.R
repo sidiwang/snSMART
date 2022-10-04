@@ -32,6 +32,8 @@
 #' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
 #'  model like usual. This should be the default for all model fitting.
 #'  If TRUE, the model fitting is bypassed to pass CRAN check.
+#' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
+#'  printed.
 #' @param ... optional arguments that are passed to \code{jags.model()} function.
 #'
 #' @details
@@ -131,9 +133,17 @@
 #'
 #' @rdname group_seq
 group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
-                      beta_prior, MCMC_SAMPLE, n.adapt, thin = 1, BURN.IN = 100, n_MCMC_chain, ci = 0.95, DTR = TRUE, cran_check_option = FALSE, ...) {
+                      beta_prior, MCMC_SAMPLE, n.adapt, thin = 1, BURN.IN = 100, n_MCMC_chain, ci = 0.95, DTR = TRUE, cran_check_option = FALSE, verbose = FALSE, ...) {
   if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
+
+  quiet = FALSE
+  progress.bar = "text"
+
+  if (verbose == FALSE) {
+    quiet = TRUE
+    progress.bar = "none"
   }
 
   # bug files written to temporary directory on function call to satisfy CRAN
@@ -223,13 +233,13 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
             beta1_prior.a = beta1_prior.a,
             beta1_prior.c = beta1_prior.c
           ),
-          n.chains = n_MCMC_chain, n.adapt = n.adapt, ...
+          n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
         )
-        update(jags, BURN.IN)
+        update(jags, BURN.IN, progress.bar = progress.bar)
         posterior_sample <- rjags::coda.samples(jags,
           c("pi", "beta"),
           MCMC_SAMPLE,
-          thin = thin
+          thin = thin, progress.bar = progress.bar
         )
       },
       warning = function(war) {
@@ -374,13 +384,13 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
             beta1_prior.a = beta1_prior.a,
             beta1_prior.c = beta1_prior.c
           ),
-          n.chains = n_MCMC_chain, n.adapt = BURN.IN
+          n.chains = n_MCMC_chain, n.adapt = BURN.IN, quiet = quiet
         )
-        update(jags, BURN.IN)
+        update(jags, BURN.IN, progress.bar = progress.bar)
         posterior_sample <- rjags::coda.samples(
           jags,
           c("pi", "beta"),
-          MCMC_SAMPLE
+          MCMC_SAMPLE, progress.bar = progress.bar
         )
       },
       warning = function(war) {

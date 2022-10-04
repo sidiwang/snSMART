@@ -21,6 +21,7 @@ group_seq(
   ci = 0.95,
   DTR = TRUE,
   cran_check_option = FALSE,
+  verbose = FALSE,
   ...
 )
 
@@ -70,6 +71,9 @@ treatment regimens. default = TRUE. only assign value to this parameter when
 \item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
+
+\item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
+printed.}
 
 \item{...}{further arguments. Not currently used.}
 

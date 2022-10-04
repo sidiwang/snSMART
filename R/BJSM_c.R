@@ -28,6 +28,8 @@
 #' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
 #'  model like usual. This should be the default for all model fitting.
 #'  If TRUE, the model fitting is bypassed to pass CRAN check.
+#' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
+#'  printed.
 #' @param ... optional arguments that are passed to \code{jags.model()} function.
 
 #'
@@ -60,7 +62,7 @@
 #' BJSM_result <- BJSM_c(
 #'   data = trialData, xi_prior.mean = c(50, 50, 50),
 #'   xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-#'   n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5
+#'   n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5, verbose = FALSE
 #' )
 #'
 #' summary(BJSM_result)
@@ -74,9 +76,17 @@
 #' @export
 
 BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
-                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE, ...) {
+                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE, verbose = FALSE, ...) {
   if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
+  }
+
+  quiet = FALSE
+  progress.bar = "text"
+
+  if (verbose == FALSE) {
+    quiet = TRUE
+    progress.bar = "none"
   }
 
   # bug files written to temporary directory on function call to satisfy CRAN
@@ -104,13 +114,13 @@ BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain
       xi_prior.sd = 1 / (xi_prior.sd^2),
       phi3_prior.sd = 1 / (phi3_prior.sd^2)
     ),
-    n.chains = n_MCMC_chain, n.adapt = n.adapt, ...
+    n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
   )
-  update(jag, BURN.IN)
+  update(jag, BURN.IN, progress.bar = progress.bar)
   posterior_sample <- rjags::coda.samples(jag,
     c("xi_", "phi1", "phi3", "rho"),
     MCMC_SAMPLE,
-    thin = thin
+    thin = thin, progress.bar = progress.bar
   )
 
 

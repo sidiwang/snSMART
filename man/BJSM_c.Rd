@@ -20,6 +20,7 @@ BJSM_c(
   thin = 1,
   BURN.IN = 100,
   cran_check_option = FALSE,
+  verbose = FALSE,
   ...
 )
 
@@ -65,6 +66,9 @@ Please check the \code{Details} section for more explaination}
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
+\item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
+printed.}
+
 \item{...}{further arguments. Not currently used.}
 
 \item{object}{object to summarize.}
@@ -106,7 +110,7 @@ trialData <- trialDataMF
 BJSM_result <- BJSM_c(
   data = trialData, xi_prior.mean = c(50, 50, 50),
   xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-  n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5
+  n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5, verbose = FALSE
 )
 
 summary(BJSM_result)

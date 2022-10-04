@@ -52,6 +52,8 @@
 #' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
 #'  model like usual. This should be the default for all model fitting.
 #'  If TRUE, the model fitting is bypassed to pass CRAN check.
+#' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
+#'  printed.
 #' @param ... optional arguments that are passed to \code{jags.model()} function.
 #'
 #' @details
@@ -109,13 +111,13 @@
 #'   data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #'   pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
 #'   n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 2000, ci = 0.95,
-#'   six = TRUE, DTR = TRUE
+#'   six = TRUE, DTR = TRUE, verbose = FALSE
 #' )
 #'
 #' # BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
 #' #    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
 #' #    n_MCMC_chain = 1, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
-#' #    six = FALSE, DTR = FALSE)
+#' #    six = FALSE, DTR = FALSE, verbose = FALSE)
 #'
 #' # summary(BJSM_result)
 #' # summary(BJSM_result2)
@@ -124,7 +126,7 @@
 #' BJSM_dose_result <- BJSM_binary(
 #'   data = data_dose, prior_dist = c("beta", "gamma"),
 #'   pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
-#'   n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95
+#'   n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95, verbose = FALSE
 #' )
 #'
 #' # summary(BJSM_dose_result)
@@ -146,11 +148,18 @@
 #' @export
 
 BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, n.adapt, BURN.IN = 100,
-                        thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE, ...) {
+                        thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE, verbose = FALSE, ...) {
   if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
 
+  quiet = FALSE
+  progress.bar = "text"
+
+  if (verbose == FALSE) {
+    quiet = TRUE
+    progress.bar = "none"
+  }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files
 
@@ -228,12 +237,12 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
               beta1_prior.a = beta1_prior.a, # pareto
               beta1_prior.c = beta1_prior.c # pareto
             ),
-            n.chains = n_MCMC_chain, n.adapt = n.adapt, ...
+            n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
           )
-          update(jag, BURN.IN)
+          update(jag, BURN.IN, progress.bar = progress.bar)
           posterior_sample <- rjags::coda.samples(jag,
             c("pi", "beta"),
-            n.iter = MCMC_SAMPLE, thin = thin
+            n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar
           )
         },
         warning = function(war) {},
@@ -274,12 +283,12 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
               beta1_prior.a = beta1_prior.a,
               beta1_prior.c = beta1_prior.c
             ),
-            n.chains = n_MCMC_chain, n.adapt = n.adapt, ...
+            n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
           )
-          update(jag, BURN.IN)
+          update(jag, BURN.IN, progress.bar = progress.bar)
           posterior_sample <- rjags::coda.samples(jag,
             c("pi", "beta"),
-            n.iter = MCMC_SAMPLE, thin = thin
+            n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar
           )
         },
         warning = function(war) {},
@@ -481,12 +490,12 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
           normal.mean = normal.mean,
           normal.var = normal.var
         ),
-        n.chains = n_MCMC_chain, n.adapt = n.adapt, ...
+        n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
       )
-      update(jag, BURN.IN)
+      update(jag, BURN.IN, progress.bar = progress.bar)
       posterior_sample <- rjags::coda.samples(jag,
         c("pi", "beta"),
-        n.iter = MCMC_SAMPLE, thin = thin
+        n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar
       )
     })
 
