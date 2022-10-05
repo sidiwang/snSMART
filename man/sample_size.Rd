@@ -7,7 +7,17 @@
 \alias{print.sample_size}
 \title{Sample size calculation for snSMART with 3 active treatments and a binary outcome}
 \usage{
-sample_size(pi, beta1, beta0, coverage, power, mu, n, test = FALSE)
+sample_size(
+  pi,
+  beta1,
+  beta0,
+  coverage,
+  power,
+  mu,
+  n,
+  test = FALSE,
+  verbose = FALSE
+)
 
 \method{summary}{sample_size}(object, ...)
 
@@ -44,6 +54,9 @@ for treatment C}
 for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
 
 \item{test}{for testing purposes only. Defaults to \code{FALSE}.}
+
+\item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
+printed.}
 
 \item{object}{object to summarize.}
 

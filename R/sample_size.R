@@ -25,6 +25,8 @@
 #'  (larger than 0) for treatment A. `nB` is the prior sample size (larger than 0)
 #'  for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
 #' @param test for testing purposes only. Defaults to `FALSE`.
+#' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
+#'  printed.
 #'
 #' @details
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
@@ -70,7 +72,7 @@
 #'
 
 
-sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) {
+sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE, verbose = FALSE) {
   if (test == TRUE) {
     return()
   }
@@ -494,8 +496,10 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
   ciZ <- qnorm(1 - (1 - COVRAGE) / 2) # critical value of coverage
 
   # i=0
-  pb <- txtProgressBar(min = 0, max = 1, initial = 0, style = 3)
-  setTxtProgressBar(pb, 0.3)
+  if (verbose == TRUE) {
+    pb <- txtProgressBar(min = 0, max = 1, initial = 0, style = 3)
+    setTxtProgressBar(pb, 0.3)
+  }
 
   grid_result <- NULL
 
@@ -566,13 +570,17 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
 
         # total_process=length(seq(CIL_MAX,CIL_MIN,by=-CIL_STEP_I))
 
-        setTxtProgressBar(pb, pow_pair1 / POW)
+        if (verbose == TRUE) {
+          setTxtProgressBar(pb, pow_pair1 / POW)
+        }
 
         grid_result <- rbind(grid_result, c(CIL_I, mu_o1o2_diff, mu_o1o2_sq_diff, pow_pair1, sample_size_tmp_pair1))
 
 
         if (pow_pair1 > POW) {
-          setTxtProgressBar(pb, 1)
+          if (verbose == TRUE) {
+            setTxtProgressBar(pb, 1)
+          }
           break
         }
       },
@@ -599,7 +607,10 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE) 
     # message(sample_size_tmp_pair1)
   }
 
-  close(pb)
+  if (verbose == TRUE){
+    close(pb)
+  }
+
   colnames(grid_result) <- c("l", "E(D)", "Var(D)", "power", "N")
   result <- list(critical_value = ciZ, grid_result = as.data.frame(grid_result), final_N = sample_size_tmp_pair1)
 
