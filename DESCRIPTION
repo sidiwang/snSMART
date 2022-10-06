@@ -1,39 +1,41 @@
-Package: snSMART
 Type: Package
+Package: snSMART
 Title: Small N Sequential Multiple Assignment Randomized Trial Methods
 Version: 0.2.1
 Authors@R: c(
-    person(given = "Sidi", family = "Wang", role = c("aut"), email = "sidiwang@umich.edu"),
-    person(given = "Kelley", family = "Kidwell", role = c("aut"), email = "kidwell@umich.edu"),
-    person(given = "Michael", family = "Kleinsasser", role = c("cre"), email = "mkleinsa@umich.edu"))
+    person("Sidi", "Wang", , "sidiwang@umich.edu", role = "aut"),
+    person("Kelley", "Kidwell", , "kidwell@umich.edu", role = "aut"),
+    person("Michael", "Kleinsasser", , "mkleinsa@umich.edu", role = "cre")
+  )
 Maintainer: Michael Kleinsasser <mkleinsa@umich.edu>
-Description: Consolidated data simulation, 
-    sample size calculation and analysis functions for several snSMART (small 
-    sample sequential, multiple assignment, randomized trial) designs under one library.
-    See Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M. "A Bayesian analysis 
-    of small n sequential multiple assignment randomized trials (snSMARTs)." (2018) 
-    Statistics in medicine, 37(26), pp.3723-3732 <doi:10.1002/sim.7900>.
+Description: Consolidated data simulation, sample size calculation and
+    analysis functions for several snSMART (small sample sequential,
+    multiple assignment, randomized trial) designs under one library.  See
+    Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M. "A Bayesian
+    analysis of small n sequential multiple assignment randomized trials
+    (snSMARTs)." (2018) Statistics in medicine, 37(26), pp.3723-3732
+    <doi:10.1002/sim.7900>.
 License: GPL-2
+URL: https://github.com/sidiwang/snSMART
+BugReports: https://github.com/sidiwang/snSMART/issues
 Depends: 
     R (>= 3.5.0)
 Imports: 
     bayestestR,
-    geepack,
-    rjags,
-    HDInterval,
-    truncdist,
     condMVNorm,
-    pracma,
     cubature,
+    EnvStats,
+    geepack,
+    HDInterval,
+    pracma,
+    rjags,
     tidyr,
-    EnvStats
+    truncdist
 Suggests:
     coda
-SystemRequirements: JAGS 4.x.y
-URL: https://github.com/sidiwang/snSMART
-BugReports: https://github.com/sidiwang/snSMART/issues
+Biarch: true
 Encoding: UTF-8
 LazyData: true
-Biarch: true
-RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+SystemRequirements: JAGS 4.x.y
