@@ -24,13 +24,13 @@ groupseqDATA_look1
 sample dataset of group sequential trial design snSMART, can be used for interim analysis
 }
 \examples{
-mydata = groupseqDATA_look1
+mydata <- groupseqDATA_look1
 
-result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
-  prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1)
-
-
+result1 <- group_seq(
+  data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
+  prior_dist = c("beta", "beta", "pareto"), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1
+)
 
 }
 \keyword{data}

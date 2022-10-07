@@ -20,8 +20,8 @@ data_binary
 sample dataset of snSMART (3 active treatment) with binary outcomes
 }
 \examples{
-mydata = data_binary
-LPJSM_result = LPJSM_binary(data = mydata, six = TRUE, DTR = TRUE)
+mydata <- data_binary
+LPJSM_result <- LPJSM_binary(data = mydata, six = TRUE, DTR = TRUE)
 
 }
 \keyword{data}

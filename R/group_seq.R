@@ -138,12 +138,12 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
 
-  quiet = FALSE
-  progress.bar = "text"
+  quiet <- FALSE
+  progress.bar <- "text"
 
   if (verbose == FALSE) {
-    quiet = TRUE
-    progress.bar = "none"
+    quiet <- TRUE
+    progress.bar <- "none"
   }
 
   # bug files written to temporary directory on function call to satisfy CRAN
@@ -390,7 +390,8 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
         posterior_sample <- rjags::coda.samples(
           jags,
           c("pi", "beta"),
-          MCMC_SAMPLE, progress.bar = progress.bar
+          MCMC_SAMPLE,
+          progress.bar = progress.bar
         )
       },
       warning = function(war) {

@@ -607,7 +607,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE, 
     # message(sample_size_tmp_pair1)
   }
 
-  if (verbose == TRUE){
+  if (verbose == TRUE) {
     close(pb)
   }
 

@@ -153,12 +153,12 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
 
-  quiet = FALSE
-  progress.bar = "text"
+  quiet <- FALSE
+  progress.bar <- "text"
 
   if (verbose == FALSE) {
-    quiet = TRUE
-    progress.bar = "none"
+    quiet <- TRUE
+    progress.bar <- "none"
   }
   # bug files written to temporary directory on function call to satisfy CRAN
   # requirements of not accessing user's system files

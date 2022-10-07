@@ -81,12 +81,12 @@ BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
 
-  quiet = FALSE
-  progress.bar = "text"
+  quiet <- FALSE
+  progress.bar <- "text"
 
   if (verbose == FALSE) {
-    quiet = TRUE
-    progress.bar = "none"
+    quiet <- TRUE
+    progress.bar <- "none"
   }
 
   # bug files written to temporary directory on function call to satisfy CRAN
