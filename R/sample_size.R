@@ -34,14 +34,12 @@
 #' This function may take a few minutes to run
 #'
 #' @return
-#' \describe{
-#'     \item{final_N}{the estimated sample size per arm for this snSMART}
-#'     \item{critical_value}{ critical value based on the provided coverage value}
-#'     \item{grid_result}{for each iteration we calculate \code{l}, where \code{l} belongs to \code{{2 * (pi_(1) - pi_(2)), ..., 0.02, 0.01}}; \code{E(D)}: the mean of the posterior distribution of \code{D},
+#' \item{final_N}{the estimated sample size per arm for this snSMART}
+#' \item{critical_value}{ critical value based on the provided coverage value}
+#' \item{grid_result}{for each iteration we calculate \code{l}, where \code{l} belongs to \code{{2 * (pi_(1) - pi_(2)), ..., 0.02, 0.01}}; \code{E(D)}: the mean of the posterior distribution of \code{D},
 #'     , where \code{D = pi_(1) = pi_(2)}; \code{Var(D)}: the variance of the posterior distribution of \code{D}; \code{N}: the corresponding
 #'     sample size; and \code{power}: the resulting power of this iteration}
 #'
-#' }
 #' @examples
 #' require(EnvStats)
 #'

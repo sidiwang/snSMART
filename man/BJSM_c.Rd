@@ -20,6 +20,8 @@ BJSM_c(
   thin = 1,
   BURN.IN = 100,
   cran_check_option = FALSE,
+  jags.model_options = NULL,
+  coda.samples_options = NULL,
   verbose = FALSE,
   ...
 )
@@ -66,6 +68,10 @@ Please check the \code{Details} section for more explaination}
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
+\item{jags.model_options}{a list of optional arguments that are passed to \code{jags.model()} function.}
+
+\item{coda.samples_options}{a list of optional arguments that are passed to \code{coda.samples()} function.}
+
 \item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
 printed.}
 
@@ -76,7 +82,6 @@ printed.}
 \item{x}{object to print}
 }
 \value{
-\describe{
 \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
 which includes posterior samples of the link parameters and response rates generated through the MCMC
 process}
@@ -91,7 +96,6 @@ indicates the row number of the inverse of variance-covariance matrix, and the t
 \item{ci_estimate}{x\% credible interval for each parameter. By default round to
 2 decimal places, if more decimals are needed, please access the results by
 \verb{[YourResultName]$ci_estimates$CI_low} or \verb{[YourResultName]$ci_estimates$CI_high} }
-}
 }
 \description{
 BJSM (Bayesian Joint Stage Modeling) method that borrows information across both stages

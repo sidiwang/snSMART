@@ -21,6 +21,8 @@ group_seq(
   ci = 0.95,
   DTR = TRUE,
   cran_check_option = FALSE,
+  jags.model_options = NULL,
+  coda.samples_options = NULL,
   verbose = FALSE,
   ...
 )
@@ -72,6 +74,10 @@ treatment regimens. default = TRUE. only assign value to this parameter when
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
+\item{jags.model_options}{a list of optional arguments that are passed to \code{jags.model()} function.}
+
+\item{coda.samples_options}{a list of optional arguments that are passed to \code{coda.samples()} function.}
+
 \item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
 printed.}
 
@@ -85,7 +91,6 @@ or A/B/C - arm A/B/C is dropped \cr
 
 if \code{interim = FALSE}, this function returns:
 
-\describe{
 \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
 which includes posterior samples of the link parameters and response rates generated through the MCMC
 process}
@@ -117,8 +122,6 @@ credible interval}
 \item{pi_DTR_se}{standard error for the estimated DTR response rate}
 
 \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x\% credible intervals for the estimated DTR response rate}
-
-}
 }
 \description{
 After obtain real trial data, this function can be used to decide which arm to
@@ -157,10 +160,8 @@ summary(result1)
 
 mydata <- groupseqDATA_full
 result2 <- group_seq(
-  data = mydata, interim = FALSE, prior_dist = c(
-    "beta",
-    "beta", "pareto"
-  ), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+  data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"),
+  pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000,
   n_MCMC_chain = 1, ci = 0.95, DTR = TRUE
 )

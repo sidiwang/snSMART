@@ -19,13 +19,11 @@
 #' @param ... optional arguments that are passed to \code{geepack::geeglm()} function.
 #'
 #' @return a `list` containing
-#' \itemize{
-#'   \item{`GEE_output`}{ - original output of the GEE (geeglm) model}
-#'   \item{`pi_hat`}{ - estimate of response rate/treatment effect}
-#'   \item{`sd_pi_hat`}{ - standard error of the response rate}
-#'   \item{`pi_DTR_hat`}{ - expected response rate of dynamic treatment regimens (DTRs)}
-#'   \item{`pi_DTR_se`}{ - standard deviation of DTR estimates}
-#' }
+#'  \item{`GEE_output`}{ - original output of the GEE (geeglm) model}
+#'  \item{`pi_hat`}{ - estimate of response rate/treatment effect}
+#'  \item{`sd_pi_hat`}{ - standard error of the response rate}
+#'  \item{`pi_DTR_hat`}{ - expected response rate of dynamic treatment regimens (DTRs)}
+#'  \item{`pi_DTR_se`}{ - standard deviation of DTR estimates}
 #'
 #' @examples
 #' data <- data_binary

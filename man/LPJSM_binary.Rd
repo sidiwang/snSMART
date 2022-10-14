@@ -38,13 +38,11 @@ If TRUE, the model fitting is bypassed to pass CRAN check.}
 }
 \value{
 a \code{list} containing
-\itemize{
 \item{\code{GEE_output}}{ - original output of the GEE (geeglm) model}
 \item{\code{pi_hat}}{ - estimate of response rate/treatment effect}
 \item{\code{sd_pi_hat}}{ - standard error of the response rate}
 \item{\code{pi_DTR_hat}}{ - expected response rate of dynamic treatment regimens (DTRs)}
 \item{\code{pi_DTR_se}}{ - standard deviation of DTR estimates}
-}
 }
 \description{
 A joint-stage regression model (LPJSM) is a frequentist modeling approach that

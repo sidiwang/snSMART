@@ -40,11 +40,10 @@
 #'
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #' @return
-#' \describe{
-#'     \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
+#' \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
 #'    which includes posterior samples of the link parameters and response rates generated through the MCMC
 #'    process}
-#'     \item{mean_estimate}{BJSM estimate of each parameter:
+#' \item{mean_estimate}{BJSM estimate of each parameter:
 #'     \enumerate{
 #'          \item \code{phi1} - lingering effect of the first treatment
 #'          \item `phi3` - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
@@ -52,10 +51,9 @@
 #'          \item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
 #' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
 #'    }
-#'     \item{ci_estimate}{x% credible interval for each parameter. By default round to
+#' \item{ci_estimate}{x% credible interval for each parameter. By default round to
 #'     2 decimal places, if more decimals are needed, please access the results by
 #'     `[YourResultName]$ci_estimates$CI_low` or `[YourResultName]$ci_estimates$CI_high` }
-#' }
 #'
 #' @examples
 #' trialData <- trialDataMF

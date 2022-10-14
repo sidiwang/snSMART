@@ -70,11 +70,10 @@
 #'
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 #' @return
-#' \describe{
-#'    \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
+#' \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
 #'    which includes posterior samples of the link parameters and response rates generated through the MCMC
 #'    process}
-#'    \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
+#' \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 #'
 #' \item{se_hat_bjsm}{standard error of the response rate}
 #'
@@ -102,7 +101,7 @@
 #' \item{pi_DTR_se}{standard error for the estimated DTR response rate}
 #'
 #' \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x% credible intervals for the estimated DTR response rate}
-#' }
+#'
 #' @importFrom stats update
 #'
 #' @examples

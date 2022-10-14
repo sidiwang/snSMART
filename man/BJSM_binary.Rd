@@ -100,9 +100,9 @@ treatment design.}
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
-\item{jags.model_options}{optional arguments that are passed to \code{jags.model()} function.}
+\item{jags.model_options}{a list of optional arguments that are passed to \code{jags.model()} function.}
 
-\item{coda.samples_options}{optional arguments that are passed to \code{coda.samples()} function.}
+\item{coda.samples_options}{a list of optional arguments that are passed to \code{coda.samples()} function.}
 
 \item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
 printed.}
@@ -112,7 +112,6 @@ printed.}
 \item{x}{object to summarize.}
 }
 \value{
-\describe{
 \item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
 which includes posterior samples of the link parameters and response rates generated through the MCMC
 process}
@@ -144,7 +143,6 @@ credible interval}
 \item{pi_DTR_se}{standard error for the estimated DTR response rate}
 
 \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x\% credible intervals for the estimated DTR response rate}
-}
 }
 \description{
 This function implements the BJSM (Bayesian Joint Stage Modeling) method which
