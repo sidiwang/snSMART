@@ -23,6 +23,8 @@ BJSM_binary(
   six = TRUE,
   DTR = TRUE,
   cran_check_option = FALSE,
+  jags.model_options = NULL,
+  coda.samples_options = NULL,
   verbose = FALSE,
   ...
 )
@@ -97,6 +99,10 @@ treatment design.}
 \item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
+
+\item{jags.model_options}{optional arguments that are passed to \code{jags.model()} function.}
+
+\item{coda.samples_options}{optional arguments that are passed to \code{coda.samples()} function.}
 
 \item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
 printed.}

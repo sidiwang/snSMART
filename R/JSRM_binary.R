@@ -162,7 +162,7 @@ LPJSM_binary <- function(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE
     geedata <- geedata[order(geedata$ptid), ]
     rm(ptid, Y, gamma1A, gamma2A, gamma1B, gamma2B, gamma1C, gamma2C, alphaA, alphaB, alphaC, gamma1, gamma2)
     try({
-      mod1 <- geepack::geeglm(Y ~ alphaA + alphaB + alphaC + gamma1 + gamma2 - 1, family = poisson(link = "log"), data = geedata, id = ptid, corstr = "independence")
+      mod1 <- geepack::geeglm(Y ~ alphaA + alphaB + alphaC + gamma1 + gamma2 - 1, family = poisson(link = "log"), data = geedata, id = ptid, corstr = "independence", ...)
       beta_hat <- mod1$coefficients[1:3]
       sd_beta_hat <- summary(mod1)$coef[1:3, 2]
       pi_hat <- exp(beta_hat)

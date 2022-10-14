@@ -54,7 +54,8 @@
 #'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
-#' @param ... optional arguments that are passed to \code{jags.model()} function.
+#' @param jags.model_options a list of optional arguments that are passed to \code{jags.model()} function.
+#' @param coda.samples_options a list of optional arguments that are passed to \code{coda.samples()} function.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r}, \code{prior.b} is the rate parameter \code{lambda}. For \code{beta} distribution, \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter \code{b}.
@@ -148,7 +149,8 @@
 #' @export
 
 BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, n.adapt, BURN.IN = 100,
-                        thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE, verbose = FALSE, ...) {
+                        thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE,
+                        jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
   if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
@@ -219,7 +221,8 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
       jag.model.name <- bugfile2_file
       tryCatch(
         {
-          jag <- rjags::jags.model(file.path(jag.model.name),
+          jag <- do.call(rjags::jags.model, c(list(
+            file = file.path(jag.model.name),
             data = list(
               n1 = nrow(mydata),
               n2 = nrow(mydata[!is.na(mydata$response_stageII), ]),
@@ -237,13 +240,14 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
               beta1_prior.a = beta1_prior.a, # pareto
               beta1_prior.c = beta1_prior.c # pareto
             ),
-            n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
-          )
+            n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, jags.model_options
+          )))
           update(jag, BURN.IN, progress.bar = progress.bar)
-          posterior_sample <- rjags::coda.samples(jag,
-            c("pi", "beta"),
-            n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar
-          )
+          posterior_sample <- do.call(rjags::coda.samples, c(list(
+            model = jag,
+            variable.names = c("pi", "beta"),
+            n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar, coda.samples_options
+          )))
         },
         warning = function(war) {},
         error = function(err) {},
@@ -265,7 +269,8 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
       jag.model.name <- bugfile2_file
       tryCatch(
         {
-          jag <- rjags::jags.model(file.path(jag.model.name),
+          jag <- do.call(rjags::jags.model, c(list(
+            file = file.path(jag.model.name),
             data = list(
               n1 = nrow(mydata),
               n2 = nrow(mydata[!is.na(mydata$response_stageII), ]),
@@ -283,13 +288,14 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
               beta1_prior.a = beta1_prior.a,
               beta1_prior.c = beta1_prior.c
             ),
-            n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
-          )
+            n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, jags.model_options
+          )))
           update(jag, BURN.IN, progress.bar = progress.bar)
-          posterior_sample <- rjags::coda.samples(jag,
-            c("pi", "beta"),
-            n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar
-          )
+          posterior_sample <- do.call(rjags::coda.samples, c(list(
+            model = jag,
+            variable.names = c("pi", "beta"),
+            n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar, coda.samples_options
+          )))
         },
         warning = function(war) {},
         error = function(err) {},
@@ -472,7 +478,8 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
     jag.model.name <- bugfile2_file
 
     tryCatch({
-      jag <- rjags::jags.model(file.path(jag.model.name),
+      jag <- do.call(rjags::jags.model, c(list(
+        file = file.path(jag.model.name),
         data = list(
           overall_sample_size = nrow(mydata),
           num_arms = NUM_ARMS,
@@ -490,13 +497,14 @@ BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MC
           normal.mean = normal.mean,
           normal.var = normal.var
         ),
-        n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
-      )
+        n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, jags.model_options
+      )))
       update(jag, BURN.IN, progress.bar = progress.bar)
-      posterior_sample <- rjags::coda.samples(jag,
-        c("pi", "beta"),
-        n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar
-      )
+      posterior_sample <- do.call(rjags::coda.samples, c(list(
+        model = jag,
+        variable.names = c("pi", "beta"),
+        n.iter = MCMC_SAMPLE, thin = thin, progress.bar = progress.bar, coda.samples_options
+      )))
     })
 
     out_post <- as.data.frame(posterior_sample[[1]])

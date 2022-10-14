@@ -30,7 +30,8 @@
 #'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
-#' @param ... optional arguments that are passed to \code{jags.model()} function.
+#' @param jags.model_options a list of optional arguments that are passed to \code{jags.model()} function.
+#' @param coda.samples_options a list of optional arguments that are passed to \code{coda.samples()} function.
 
 #'
 #' @details
@@ -76,7 +77,8 @@
 #' @export
 
 BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
-                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE, verbose = FALSE, ...) {
+                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE,
+                   jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
   if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
@@ -100,7 +102,7 @@ BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain
 
   NUM_ARMS <- length(unique(trialData$trt1[!is.na(trialData$trt1)]))
 
-  jag <- rjags::jags.model(
+  jag <- do.call(rjags::jags.model, c(list(
     file = csnSMART_file,
     data = list(
       n = length(unique(trialData$id)),
@@ -114,14 +116,15 @@ BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain
       xi_prior.sd = 1 / (xi_prior.sd^2),
       phi3_prior.sd = 1 / (phi3_prior.sd^2)
     ),
-    n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
-  )
+    n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, jags.model_options
+  )))
   update(jag, BURN.IN, progress.bar = progress.bar)
-  posterior_sample <- rjags::coda.samples(jag,
-    c("xi_", "phi1", "phi3", "rho"),
-    MCMC_SAMPLE,
-    thin = thin, progress.bar = progress.bar
-  )
+  posterior_sample <- do.call(rjags::coda.samples, c(list(
+    model = jag,
+    variable.names = c("xi_", "phi1", "phi3", "rho"),
+    n.iter = MCMC_SAMPLE,
+    thin = thin, progress.bar = progress.bar, coda.samples_options
+  )))
 
 
   out_post <- as.data.frame(posterior_sample[[1]])

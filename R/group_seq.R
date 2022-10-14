@@ -34,7 +34,8 @@
 #'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
-#' @param ... optional arguments that are passed to \code{jags.model()} function.
+#' @param jags.model_options a list of optional arguments that are passed to \code{jags.model()} function.
+#' @param coda.samples_options a list of optional arguments that are passed to \code{coda.samples()} function.
 #'
 #' @details
 #' For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
@@ -133,7 +134,9 @@
 #'
 #' @rdname group_seq
 group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
-                      beta_prior, MCMC_SAMPLE, n.adapt, thin = 1, BURN.IN = 100, n_MCMC_chain, ci = 0.95, DTR = TRUE, cran_check_option = FALSE, verbose = FALSE, ...) {
+                      beta_prior, MCMC_SAMPLE, n.adapt, thin = 1, BURN.IN = 100, n_MCMC_chain,
+                      ci = 0.95, DTR = TRUE, cran_check_option = FALSE,
+                      jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
   if (cran_check_option) {
     return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
   }
@@ -215,7 +218,8 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
     error_count <- 0
     tryCatch(
       {
-        jags <- rjags::jags.model(bugfile2_file,
+        jags <- do.call(rjags::jags.model, c(list(
+          file = bugfile2_file,
           data = list(
             n1 = nrow(patient_entry[!is.na(patient_entry$resp.1st), ]),
             n2 = nrow(patient_entry[!is.na(patient_entry$resp.2nd), ]),
@@ -233,14 +237,15 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
             beta1_prior.a = beta1_prior.a,
             beta1_prior.c = beta1_prior.c
           ),
-          n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, ...
-        )
+          n.chains = n_MCMC_chain, n.adapt = n.adapt, quiet = quiet, jags.model_options
+        )))
         update(jags, BURN.IN, progress.bar = progress.bar)
-        posterior_sample <- rjags::coda.samples(jags,
-          c("pi", "beta"),
-          MCMC_SAMPLE,
-          thin = thin, progress.bar = progress.bar
-        )
+        posterior_sample <- do.call(rjags::coda.samples, c(list(
+          model = jags,
+          variable.names = c("pi", "beta"),
+          n.iter = MCMC_SAMPLE,
+          thin = thin, progress.bar = progress.bar, coda.samples_options
+        )))
       },
       warning = function(war) {
         warning_count <- warning_count + 1
@@ -367,7 +372,8 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
     error_ind <- 0
     tryCatch(
       {
-        jags <- rjags::jags.model(bugfile2_file,
+        jags <- do.call(rjags::jags.model, c(list(
+          file = bugfile2_file,
           data = list(
             n = nrow(mydata),
             num_arms = NUM_ARMS,
@@ -384,14 +390,18 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
             beta1_prior.a = beta1_prior.a,
             beta1_prior.c = beta1_prior.c
           ),
-          n.chains = n_MCMC_chain, n.adapt = BURN.IN, quiet = quiet
-        )
+          n.chains = n_MCMC_chain, n.adapt = BURN.IN, quiet = quiet, jags.model_options
+        )))
         update(jags, BURN.IN, progress.bar = progress.bar)
-        posterior_sample <- rjags::coda.samples(
-          jags,
-          c("pi", "beta"),
-          MCMC_SAMPLE,
-          progress.bar = progress.bar
+        posterior_sample <- do.call(
+          rjags::coda.samples,
+          c(list(
+            model = jags,
+            variable.names = c("pi", "beta"),
+            n.iter = MCMC_SAMPLE,
+            progress.bar = progress.bar,
+            coda.samples_options
+          ))
         )
       },
       warning = function(war) {

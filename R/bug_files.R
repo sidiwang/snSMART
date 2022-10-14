@@ -1,8 +1,7 @@
 
-BJSM_6betas_missing_text = function() {
-
+BJSM_6betas_missing_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n1){   # n1 is number of first-stage outcomes
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -26,14 +25,12 @@ BJSM_6betas_missing_text = function() {
   beta[6]~beta1_prior_dist(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
 
-BJSM_6betas_missing_new_text = function() {
-
+BJSM_6betas_missing_new_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n1){   # n1 is number of first-stage outcomes
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -57,13 +54,11 @@ BJSM_6betas_missing_new_text = function() {
   beta[6]~dpar(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
-BJSM_2beta_missing_text = function() {
-
+BJSM_2beta_missing_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n1){   # n1 is number of first-stage outcomes
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -84,13 +79,11 @@ BJSM_2beta_missing_text = function() {
   beta[2]~beta1_prior_dist(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
-BJSM_2beta_missing_new_text = function() {
-
+BJSM_2beta_missing_new_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n1){   # n1 is number of first-stage outcomes
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -111,13 +104,11 @@ BJSM_2beta_missing_new_text = function() {
   beta[2]~dpar(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
-BJSM_dose_text = function() {
-
+BJSM_dose_text <- function() {
   return(
-"model{
+    "model{
 	for(i in 1:overall_sample_size) {
   #likelihood
     response_stageI[i]~dbern(response_rate_stageI[i])
@@ -148,13 +139,11 @@ BJSM_dose_text = function() {
 
 }"
   )
-
 }
 
-BJSM_dose_new_text = function() {
-
+BJSM_dose_new_text <- function() {
   return(
-"model{
+    "model{
 	for(i in 1:overall_sample_size) {
   #likelihood
     response_stageI[i]~dbern(response_rate_stageI[i])
@@ -185,13 +174,11 @@ BJSM_dose_new_text = function() {
 
 }"
   )
-
 }
 
-csnSMART_text = function() {
-
+csnSMART_text <- function() {
   return(
-"#continuous snSMART bayesian analysis
+    "#continuous snSMART bayesian analysis
 
 #Holly Hartman
 #March 18, 2019
@@ -230,13 +217,11 @@ model{
  Omega1[2,1] <- 0
 }"
   )
-
 }
 
-Bayes_AR_text = function() {
-
+Bayes_AR_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n1){   # n1 is number of first-stage outcomes
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -260,13 +245,11 @@ Bayes_AR_text = function() {
   beta[6]~beta1_prior_dist(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
-Bayes_AR_new_text = function() {
-
+Bayes_AR_new_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n1){   # n1 is number of first-stage outcomes
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -290,13 +273,11 @@ Bayes_AR_new_text = function() {
   beta[6]~dpar(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
-Bayes_text = function() {
-
+Bayes_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n){   # n is total sample size
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -317,13 +298,11 @@ Bayes_text = function() {
   beta[6]~beta1_prior_dist(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
 
-Bayes_new_text = function() {
-
+Bayes_new_text <- function() {
   return(
-"model{
+    "model{
   for (i in 1:n){   # n is total sample size
   # likelihood
     Y1[i]~dbern(pi_1[i])
@@ -344,7 +323,4 @@ Bayes_new_text = function() {
   beta[6]~dpar(beta1_prior.a,beta1_prior.c)
 }"
   )
-
 }
-
-

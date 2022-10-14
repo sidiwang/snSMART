@@ -49,10 +49,13 @@ NULL
 #' @keywords data
 #' @examples
 #' mydata <- groupseqDATA_full
-#' result2 <- group_seq(data = mydata, interim = FALSE, prior_dist = c(
-#'     "beta","beta", "pareto"), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-#'      beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000,
-#'      n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+#' result2 <- group_seq(
+#'   data = mydata, interim = FALSE, prior_dist = c(
+#'     "beta", "beta", "pareto"
+#'   ), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+#'   beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000,
+#'   n_MCMC_chain = 1, ci = 0.95, DTR = TRUE
+#' )
 NULL
 
 #' Dataset with binary outcomes
