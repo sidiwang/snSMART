@@ -14,8 +14,6 @@ v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/l
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
-[![Codecov test
-coverage](https://codecov.io/gh/sidiwang/snSMART/branch/main/graph/badge.svg)](https://app.codecov.io/gh/sidiwang/snSMART?branch=main)
 <!-- badges: end -->
 
 The aim of the **snSMART** R package is to consolidate data simulation,
