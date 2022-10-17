@@ -3,13 +3,16 @@
 \name{LPJSM_binary}
 \alias{LPJSM_binary}
 \alias{summary.LPJSM_binary}
+\alias{print.summary.LPJSM_binary}
 \alias{print.LPJSM_binary}
 \title{LPJSM for snSMART with binary outcomes (3 active treatments or placebo and two
 dose level)}
 \usage{
-LPJSM_binary(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE)
+LPJSM_binary(data, six = TRUE, DTR = TRUE, cran_check_option = FALSE, ...)
 
 \method{summary}{LPJSM_binary}(object, ...)
+
+\method{print}{summary.LPJSM_binary}(x, ...)
 
 \method{print}{LPJSM_binary}(x, ...)
 }
@@ -27,33 +30,31 @@ error of dynamic treatment regimens}
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
-\item{object}{object to summarize}
-
 \item{...}{further arguments. Not currently used.}
+
+\item{object}{object to print}
 
 \item{x}{object to summarize.}
 }
 \value{
 a \code{list} containing
-\itemize{
 \item{\code{GEE_output}}{ - original output of the GEE (geeglm) model}
 \item{\code{pi_hat}}{ - estimate of response rate/treatment effect}
 \item{\code{sd_pi_hat}}{ - standard error of the response rate}
 \item{\code{pi_DTR_hat}}{ - expected response rate of dynamic treatment regimens (DTRs)}
 \item{\code{pi_DTR_se}}{ - standard deviation of DTR estimates}
 }
-}
 \description{
 A joint-stage regression model (LPJSM) is a frequentist modeling approach that
 incorporates the responses of both stages as repeated measurements for each subject.
 Generalized estimating equations (GEE) are used to estimate the response rates of
 each treatment. The marginal response rates for each DTR can also be obtained based
-on the GEE results
+on the GEE results.
 }
 \examples{
-data = data_binary
+data <- data_binary
 
-LPJSM_result = LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
+LPJSM_result <- LPJSM_binary(data = data, six = TRUE, DTR = TRUE)
 
 summary(LPJSM_result)
 

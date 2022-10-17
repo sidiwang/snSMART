@@ -1,8 +1,20 @@
 
 # snSMART
 
-![Github All
-Releases](https://img.shields.io/github/downloads/sidiwang/snSMART/total.svg)
+<!-- badges: start -->
+
+![cran-badge example for snSMART
+package](http://www.r-pkg.org/badges/version/snSMART)
+[![R-CMD-check](https://github.com/sidiwang/snSMART/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sidiwang/snSMART/actions/workflows/R-CMD-check.yaml)
+![RStudio CRAN
+downloads](http://cranlogs.r-pkg.org/badges/grand-total/snSMART)
+![RStudio CRAN monthly
+downloads](http://cranlogs.r-pkg.org/badges/snSMART) [![License: GPL
+v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
+<!-- badges: end -->
 
 The aim of the **snSMART** R package is to consolidate data simulation,
 sample size calculation and analysis functions for several snSMART
@@ -35,17 +47,16 @@ library(snSMART)
 
 ## snSMART designs and functions covered in this package
 
--   snSMART with binary outcome (3 active treatments or placebo and 2
-    dose level, non-responders re-randomized)
-    -   Bayesian Joint Stage Model (BJSM) analysis function -
-        `BJSM_binary`
-    -   Log Poisson Joint Stage Model (JSRM) analysis function -
-        `JSRM_binary`
-    -   sample size calculation function - `sample_size`
-    -   Group Sequential snSMART BJSM analysis function - `group_seq`
--   snSMART with mapping function (3 active treatments, re-randomization
-    depends on continuous outcome at stage 1; continuous outcomes)
-    -   BJSM analysis function - `BJSM_c`
+- snSMART with binary outcome (3 active treatments or placebo and 2 dose
+  level, non-responders re-randomized)
+  - Bayesian Joint Stage Model (BJSM) analysis function - `BJSM_binary`
+  - Log Poisson Joint Stage Model (JSRM) analysis function -
+    `JSRM_binary`
+  - sample size calculation function - `sample_size`
+  - Group Sequential snSMART BJSM analysis function - `group_seq`
+- snSMART with mapping function (3 active treatments, re-randomization
+  depends on continuous outcome at stage 1; continuous outcomes)
+  - BJSM analysis function - `BJSM_c`
 
 ## References
 

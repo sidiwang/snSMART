@@ -3,16 +3,32 @@
 \docType{data}
 \name{trialDataMF}
 \alias{trialDataMF}
-\title{Data Mapping Function}
+\title{Dataset with continuous outcomes}
+\format{
+This data frame contains the following columns:
+\describe{
+\item{id}{participant ID}
+\item{trt1}{treatment received in stage 1 - possible values: 1 (placebo), 2, 3}
+\item{stage1outcome}{a number between 0-100 that represents the stage 1 treatment effect}
+\item{stay}{indicates whether the participant stayed on the same treatment arm in stage 2 - possible values: 0 (didn't stay), 1 (stayed)}
+\item{trt2}{treatment received in stage 2 - possible values: 2, 3}
+\item{stage2outcome}{a number between 0-100 that represents the stage 2 treatment effect}
+}
+}
+\usage{
+trialDataMF
+}
 \description{
 sample dataset of snSMART (mapping function) with continuous outcomes
 }
 \examples{
-trialData = trialDataMF
+trialData <- trialDataMF
 
-BJSM_result = BJSM_c(data = trialData, xi_prior.mean = c(50, 50, 50),
-    xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-    n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5)
+BJSM_result <- BJSM_c(
+  data = trialData, xi_prior.mean = c(50, 50, 50),
+  xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
+  n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5
+)
 
 summary(BJSM_result)
 print(BJSM_result)

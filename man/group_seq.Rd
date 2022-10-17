@@ -2,8 +2,9 @@
 % Please edit documentation in R/group_seq.R
 \name{group_seq}
 \alias{group_seq}
+\alias{print.summary.group_seq}
 \alias{print.group_seq}
-\title{BJSM Method for interim analysis and final analysis of group sequential trial design}
+\title{BJSM method for interim analysis and final analysis of group sequential trial design}
 \usage{
 group_seq(
   data,
@@ -13,12 +14,20 @@ group_seq(
   pi_prior,
   beta_prior,
   MCMC_SAMPLE,
-  BURN.IN,
+  n.adapt,
+  thin = 1,
+  BURN.IN = 100,
   n_MCMC_chain,
   ci = 0.95,
   DTR = TRUE,
-  cran_check_option = FALSE
+  cran_check_option = FALSE,
+  jags.model_options = NULL,
+  coda.samples_options = NULL,
+  verbose = FALSE,
+  ...
 )
+
+\method{print}{summary.group_seq}(x, ...)
 
 \method{print}{group_seq}(x, ...)
 }
@@ -46,6 +55,10 @@ user can choose from "gamma", "beta", "pareto". e.g. prior_dist = c("beta",
 
 \item{MCMC_SAMPLE}{number of iterations for MCMC}
 
+\item{n.adapt}{the number of iterations for adaptation}
+
+\item{thin}{thinning interval for monitors}
+
 \item{BURN.IN}{number of burn-in iterations for MCMC}
 
 \item{n_MCMC_chain}{number of MCMC chains, default to 1}
@@ -61,9 +74,16 @@ treatment regimens. default = TRUE. only assign value to this parameter when
 model like usual. This should be the default for all model fitting.
 If TRUE, the model fitting is bypassed to pass CRAN check.}
 
-\item{x}{object to summarize.}
+\item{jags.model_options}{a list of optional arguments that are passed to \code{jags.model()} function.}
+
+\item{coda.samples_options}{a list of optional arguments that are passed to \code{coda.samples()} function.}
+
+\item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
+printed.}
 
 \item{...}{further arguments. Not currently used.}
+
+\item{x}{object to summarize.}
 }
 \value{
 if \code{interim = TRUE}, this function returns either 0 - no arm is dropped,
@@ -71,9 +91,9 @@ or A/B/C - arm A/B/C is dropped \cr
 
 if \code{interim = FALSE}, this function returns:
 
-\describe{
-\item{posterior_sample}{posterior samples of the link parameters and response
-rates generated through the MCMC process}
+\item{posterior_sample}{an \code{mcmc.list} object generated through the \code{coda.samples()} function,
+which includes posterior samples of the link parameters and response rates generated through the MCMC
+process}
 \item{pi_hat_bjsm}{estimate of response rate/treatment effect}
 
 \item{se_hat_bjsm}{standard error of the response rate}
@@ -102,12 +122,10 @@ credible interval}
 \item{pi_DTR_se}{standard error for the estimated DTR response rate}
 
 \item{ci_pi_AB, ci_pi_AC, ci_pi_BA, ci_pi_BC, ci_pi_CA, ci_pi_CB}{x\% credible intervals for the estimated DTR response rate}
-
-}
 }
 \description{
 After obtain real trial data, this function can be used to decide which arm to
-drop in an interim analysis or provide a full final analysis
+drop in an interim analysis or provide a full final analysis.
 }
 \details{
 For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
@@ -129,20 +147,24 @@ Please refer to the paper listed under \code{reference} section for detailed def
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
 }
 \examples{
-mydata = groupseqDATA_look1
+mydata <- groupseqDATA_look1
 
-result1 = group_seq(data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
-  prior_dist = c("beta", "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, BURN.IN = 1000, n_MCMC_chain = 1)
+result1 <- group_seq(
+  data = mydata, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
+  prior_dist = c("beta", "beta", "pareto"), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1
+)
 
-result1
+summary(result1)
 
 
-mydata = groupseqDATA_full
-result2 = group_seq(data = mydata, interim = FALSE, prior_dist = c("beta",
-  "beta", "pareto"), pi_prior =  c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
-  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, BURN.IN = 1000,
-  n_MCMC_chain = 1, ci = 0.95, DTR = TRUE)
+mydata <- groupseqDATA_full
+result2 <- group_seq(
+  data = mydata, interim = FALSE, prior_dist = c("beta", "beta", "pareto"),
+  pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000,
+  n_MCMC_chain = 1, ci = 0.95, DTR = TRUE
+)
 
 summary(result2)
 

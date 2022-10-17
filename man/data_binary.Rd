@@ -3,13 +3,25 @@
 \docType{data}
 \name{data_binary}
 \alias{data_binary}
-\title{Data Binary}
+\title{Dataset with binary outcomes}
+\format{
+This data frame contains the following columns:
+\describe{
+\item{treatment_stageI}{treatment received in stage 1 - possible values: 1 (placebo), 2, 3}
+\item{response_stageI}{whether patients respond to stage 1 treatment - possible values: 0 (nonresponder), 1 (responder)}
+\item{treatment_stageII}{treatment received in stage 2 - possible values: 2, 3}
+\item{response_stageII}{whether patients respond to stage 2 treatment - possible values: 0 (nonresponder), 1 (responder)}
+}
+}
+\usage{
+data_binary
+}
 \description{
 sample dataset of snSMART (3 active treatment) with binary outcomes
 }
 \examples{
-mydata = data_binary
-LPJSM_result = LPJSM_binary(data = mydata, six = TRUE, DTR = TRUE)
+mydata <- data_binary
+LPJSM_result <- LPJSM_binary(data = mydata, six = TRUE, DTR = TRUE)
 
 }
 \keyword{data}

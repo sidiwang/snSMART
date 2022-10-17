@@ -3,15 +3,29 @@
 \docType{data}
 \name{data_dose}
 \alias{data_dose}
-\title{Data Dose Level}
+\title{Dose Level dataset with binary outcomes}
+\format{
+This data frame contains the following columns:
+\describe{
+\item{treatment_stageI}{treatment received in stage 1 - possible values: 1 (placebo), 2, 3}
+\item{response_stageI}{whether patients respond to stage 1 treatment - possible values: 0 (nonresponder), 1 (responder)}
+\item{treatment_stageII}{treatment received in stage 2 - possible values: 2, 3}
+\item{response_stageII}{whether patients respond to stage 2 treatment - possible values: 0 (nonresponder), 1 (responder)}
+}
+}
+\usage{
+data_dose
+}
 \description{
 sample dataset of snSMART (dose level treatment) with binary outcomes
 }
 \examples{
-mydata = data_dose
-BJSM_dose_result = BJSM_binary(data = data_dose, prior_dist = c("beta", "gamma"),
-    pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
-    n_MCMC_chain = 2, BURN.IN = 1000, MCMC_SAMPLE = 6000, ci = 0.95)
+mydata <- data_dose
+BJSM_dose_result <- BJSM_binary(
+  data = data_dose, prior_dist = c("beta", "gamma"),
+  pi_prior = c(3, 17), normal.par = c(0.2, 100), beta_prior = c(2, 2),
+  n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95
+)
 
 }
 \keyword{data}
