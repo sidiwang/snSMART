@@ -3,7 +3,7 @@
 
 ![cran-badge example for snSMART
 package](http://www.r-pkg.org/badges/version/snSMART)
-[![R-CMD-check](https://github.com/ropensci/ijtiff/workflows/R-CMD-check/badge.svg)](https://github.com/sidiwang/snSMART)
+[![R-CMD-check](https://github.com/sidiwang/snSMART/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sidiwang/snSMART/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/ropensci/ijtiff/branch/master/graph/badge.svg?token=rNNRw2FU0F)](https://codecov.io/gh/ropensci/ijtiff)
 ![RStudio CRAN
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/snSMART)
