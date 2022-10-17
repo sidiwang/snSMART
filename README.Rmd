@@ -4,7 +4,15 @@ output: github_document
 
 # snSMART
 
-![Github All Releases](https://img.shields.io/github/downloads/sidiwang/snSMART/total.svg)
+![cran-badge example for snSMART package](http://www.r-pkg.org/badges/version/snSMART)
+[![R-CMD-check](https://github.com/ropensci/ijtiff/workflows/R-CMD-check/badge.svg)](https://github.com/sidiwang/snSMART)
+[![codecov](https://codecov.io/gh/ropensci/ijtiff/branch/master/graph/badge.svg?token=rNNRw2FU0F)](https://codecov.io/gh/ropensci/ijtiff)
+![RStudio CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/snSMART)
+![RStudio CRAN monthly downloads](http://cranlogs.r-pkg.org/badges/snSMART)
+
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
+
+
 
 The aim of the **snSMART** R package is to consolidate data simulation, sample size calculation and analysis functions for several snSMART (small sample sequential, multiple assignment, randomized trial) designs under one library.
 
