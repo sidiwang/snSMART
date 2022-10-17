@@ -643,8 +643,9 @@ summary.sample_size <- function(object, ...) {
 print.summary.sample_size <- function(x, ...) {
   cat("With given settings, the estimated sample size per arm for an snSMART is: ")
   cat(as.numeric(x$final_N))
+  cat("\n")
   cat(paste0("In total ", nrow(x$grid_result), " iterations were taken:\n"))
-  message(x$grid_result)
+  print(x$grid_result)
 }
 
 #' @rdname sample_size
