@@ -32,7 +32,8 @@ Imports:
     tidyr,
     truncdist
 Suggests:
-    coda
+    coda,
+    covr
 Biarch: true
 Encoding: UTF-8
 LazyData: true

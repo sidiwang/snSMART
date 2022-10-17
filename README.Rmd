@@ -3,15 +3,15 @@ output: github_document
 ---
 
 # snSMART
-
+<!-- badges: start -->
 ![cran-badge example for snSMART package](http://www.r-pkg.org/badges/version/snSMART)
 [![R-CMD-check](https://github.com/sidiwang/snSMART/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sidiwang/snSMART/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/ropensci/ijtiff/branch/master/graph/badge.svg?token=rNNRw2FU0F)](https://codecov.io/gh/ropensci/ijtiff)
 ![RStudio CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/snSMART)
 ![RStudio CRAN monthly downloads](http://cranlogs.r-pkg.org/badges/snSMART)
-
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
-
+[![Codecov test coverage](https://codecov.io/gh/sidiwang/snSMART/branch/main/graph/badge.svg)](https://app.codecov.io/gh/sidiwang/snSMART?branch=main)
+<!-- badges: end -->
 
 
 The aim of the **snSMART** R package is to consolidate data simulation, sample size calculation and analysis functions for several snSMART (small sample sequential, multiple assignment, randomized trial) designs under one library.

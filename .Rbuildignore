@@ -3,3 +3,4 @@
 ^README\.Rmd$
 vignettes/
 ^\.github$
+^codecov\.yml$
