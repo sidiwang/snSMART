@@ -19,8 +19,12 @@ An snSMART is a multi-stage trial design where for a two-stage design, randomiza
 
 ## Installation
 
-You can download and install **snSMART** with:
-
+You can install the package from CRAN:
+```{r}
+install.packages("snSMART", repos = "http://cran.us.r-project.org")
+library(snSMART)
+```
+Or get the development version from GitHub:
 ```{r echo = TRUE, eval = FALSE}
 # Install devtools first if you haven't done so
 library(devtools)
@@ -40,6 +44,65 @@ library(snSMART)
 * snSMART with mapping function (3 active treatments, re-randomization depends on continuous outcome at stage 1; continuous outcomes)
   +   BJSM analysis function - `BJSM_c`
   
+## Example 
+`BJSM_binary`:
+We call the `BJSM_binary` function using data from an snSMART with 30 total individuals. We assumed a six beta model with the priors for $\pi_A, \pi_B$ and $\pi_C$ being $Beta(0.4, 1.6)$, the prior for $\beta_{0m}$ being $Beta(1.6, 0.4)$, and the prior for $\beta_{1m}$ being $Pareto(3, 1)$. The coverage probability for credible intervals is set to 0.95, and the expected response rate of DTR will also be calculated. 
+```{r}
+mydata <- data_binary
+BJSM_result <- BJSM_binary(
+  data = mydata, prior_dist = c("beta", "beta", "pareto"),
+  pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
+  n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 20, ci = 0.95,
+  six = TRUE, DTR = TRUE, verbose = FALSE
+)
+summary(BJSM_result)
+```
+`LPJSM_binary`:
+Here, we call the LPJSM_binary mirroring our example for the BJSM_binary above.
+```{r}
+LPJSM_result <- LPJSM_binary(data = data_binary, six = TRUE, DTR = TRUE)
+summary(LPJSM_result)
+```
+`sample_size`:
+In this example, we call the function to request the sample size needed per arm with the following assumptions: the response rates for treatments A, B, and C are 0.7, 0.5 and 0.25, respectively; $\beta_1$ is assumed to be 1.4; $\beta_0$ is assumed to be 0.5; the coverage rate for the posterior difference of top two treatments is set to 0.9; the ‘power’ is set to 0.8; the prior sample size is 4 for treatment A, 2 for treatment B and 3 for treatment C; the prior means are 0.65 for treatment A, 0.55 for treatment B and 0.25 for treatment C
+```{r}
+library("EnvStats")
+sampleSize <- sample_size(
+  pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5,
+  coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25),
+  n = c(4, 2, 3)
+)
+```
+`group_seq`:
+This function either outputs which treatment arm should be dropped if \code{interim = TRUE} or provides a full BJSM analysis based on the complete dataset if \code{interim = FALSE}. The dataset \code{groupseqDATA\_look1} and \code{groupseqDATA\_full} are provided in the \pkg{snSMART} package for illustration purpose. 
+```{r}
+result1 <- group_seq(
+  data = groupseqDATA_look1, interim = TRUE, drop_threshold_pair = c(0.5, 0.4),
+  prior_dist = c("beta", "beta", "pareto"), pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6),
+  beta_prior = c(1.6, 0.4, 3, 1), MCMC_SAMPLE = 6000, n.adapt = 1000, n_MCMC_chain = 1
+)
+```
+
+```{r}
+result2 <- group_seq(
+  data = groupseqDATA_full, interim = FALSE, prior_dist = c("beta", "beta", "pareto"),
+  pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
+  MCMC_SAMPLE = 60000, BURN.IN = 10000, n_MCMC_chain = 1, ci = 0.95, DTR = TRUE
+)
+summary(result2)
+```
+`BJSM_c`:
+Below, we call the function assuming the mean and standard deviation of the normal prior being 50 and 50 for all three treatments, and the standard deviation of the prior distribution of $\phi_3$ being 20. The number of MCMC chain is set to 1 with 1,000 adaptation iterations and 5,000 total iterations. 
+```{r}
+BJSM_result <- BJSM_c(
+  data = trialDataMF, xi_prior.mean = c(50, 50, 50), xi_prior.sd = c(50, 50, 50),
+  phi3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000,
+  ci = 0.95, n.digits = 5
+)
+summary(BJSM_result)
+```
+This R package will continue to be updated as more snSMART designs and methods are developed. We hope that this package translates snSMART design and methods into finding more effective treatments for rare disease.
+
 ## References
 
 Chao, Y.C., Trachtman, H., Gipson, D.S., Spino, C., Braun, T.M. and Kidwell, K.M., 2020. Dynamic treatment regimens in small n, sequential, multiple assignment, randomized trials: An application in focal segmental glomerulosclerosis. Contemporary clinical trials, 92, p.105989.
