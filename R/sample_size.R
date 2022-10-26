@@ -310,7 +310,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, verbose = FALS
 
   sortT <- sort(c(piA, piB, piC))
   if (sortT[-1][1] == sortT[-1][2]) {
-    stop("Top 2 treatments have the same expected response rate, only a unique best treatment is allowed")
+    message("Top 2 treatments have the same expected response rate, only a unique best treatment is allowed")
   }
 
   muA <- mu[1]
