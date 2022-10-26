@@ -20,7 +20,6 @@ group_seq(
   n_MCMC_chain,
   ci = 0.95,
   DTR = TRUE,
-  cran_check_option = FALSE,
   jags.model_options = NULL,
   coda.samples_options = NULL,
   verbose = FALSE,
@@ -69,10 +68,6 @@ assign value to this parameter when \code{interim = FALSE}.}
 \item{DTR, }{if TRUE, will also return the expected response rate of dynamic
 treatment regimens. default = TRUE. only assign value to this parameter when
 \code{interim = FALSE}.}
-
-\item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
-model like usual. This should be the default for all model fitting.
-If TRUE, the model fitting is bypassed to pass CRAN check.}
 
 \item{jags.model_options}{a list of optional arguments that are passed to \code{jags.model()} function.}
 

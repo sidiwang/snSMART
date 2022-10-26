@@ -49,9 +49,6 @@
 #' @param DTR TRUE or FALSE. If TRUE, will also return the expected response rate of
 #'  dynamic treatment regimens. default = TRUE. Only need to specify this for 3 active
 #'  treatment design.
-#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
-#'  model like usual. This should be the default for all model fitting.
-#'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
 #' @param jags.model_options a list of optional arguments that are passed to \code{jags.model()} function.
@@ -114,13 +111,17 @@
 #'   six = TRUE, DTR = TRUE, verbose = FALSE
 #' )
 #'
-#' # BJSM_result2 = BJSM_binary(data = mydata, prior_dist = c("beta", "beta", "pareto"),
-#' #    pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
-#' #    n_MCMC_chain = 1, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
-#' #    six = FALSE, DTR = FALSE, verbose = FALSE)
+#' \donttest{
+#' BJSM_result2 <- BJSM_binary(
+#'   data = mydata, prior_dist = c("beta", "beta", "pareto"),
+#'   pi_prior = c(0.4, 1.6, 0.4, 1.6, 0.4, 1.6), beta_prior = c(1.6, 0.4, 3, 1),
+#'   n_MCMC_chain = 1, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95,
+#'   six = FALSE, DTR = FALSE, verbose = FALSE
+#' )
 #'
-#' # summary(BJSM_result)
-#' # summary(BJSM_result2)
+#' summary(BJSM_result)
+#' summary(BJSM_result2)
+#' }
 #'
 #' data <- data_dose
 #' BJSM_dose_result <- BJSM_binary(
@@ -129,7 +130,7 @@
 #'   n_MCMC_chain = 2, n.adapt = 10000, MCMC_SAMPLE = 60000, ci = 0.95, verbose = FALSE
 #' )
 #'
-#' # summary(BJSM_dose_result)
+#' summary(BJSM_dose_result)
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
@@ -148,12 +149,8 @@
 #' @export
 
 BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, n.adapt, BURN.IN = 100,
-                        thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE, cran_check_option = FALSE,
+                        thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE,
                         jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
-  if (cran_check_option) {
-    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
-  }
-
   quiet <- FALSE
   progress.bar <- "text"
 

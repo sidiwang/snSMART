@@ -29,9 +29,6 @@
 #' @param DTR, if TRUE, will also return the expected response rate of dynamic
 #'  treatment regimens. default = TRUE. only assign value to this parameter when
 #'  `interim = FALSE`.
-#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
-#'  model like usual. This should be the default for all model fitting.
-#'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
 #' @param jags.model_options a list of optional arguments that are passed to \code{jags.model()} function.
@@ -130,12 +127,8 @@
 #' @rdname group_seq
 group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_dist, pi_prior,
                       beta_prior, MCMC_SAMPLE, n.adapt, thin = 1, BURN.IN = 100, n_MCMC_chain,
-                      ci = 0.95, DTR = TRUE, cran_check_option = FALSE,
+                      ci = 0.95, DTR = TRUE,
                       jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
-  if (cran_check_option) {
-    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
-  }
-
   quiet <- FALSE
   progress.bar <- "text"
 

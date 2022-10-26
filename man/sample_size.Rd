@@ -7,17 +7,7 @@
 \alias{print.sample_size}
 \title{Sample size calculation for snSMART with 3 active treatments and a binary outcome}
 \usage{
-sample_size(
-  pi,
-  beta1,
-  beta0,
-  coverage,
-  power,
-  mu,
-  n,
-  test = FALSE,
-  verbose = FALSE
-)
+sample_size(pi, beta1, beta0, coverage, power, mu, n, verbose = FALSE)
 
 \method{summary}{sample_size}(object, ...)
 
@@ -53,8 +43,6 @@ for treatment C}
 (larger than 0) for treatment A. \code{nB} is the prior sample size (larger than 0)
 for treatment B. \code{nC} is the prior sample size (larger than 0) for treatment C}
 
-\item{test}{for testing purposes only. Defaults to \code{FALSE}.}
-
 \item{verbose}{TRUE or FALSE. If FALSE, no function message and progress bar will be
 printed.}
 
@@ -83,14 +71,18 @@ This function may take a few minutes to run
 }
 \examples{
 require(EnvStats)
-
+# short running time example
 sampleSize <- sample_size(
   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
-  power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = TRUE
+  power = 0.3, mu = c(0.65, 0.55, 0.25), n = c(10, 10, 10)
 )
 
-# sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
-#    power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = FALSE)
+\donttest{
+sampleSize <- sample_size(
+  pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
+  power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3)
+)
+}
 
 }
 \references{

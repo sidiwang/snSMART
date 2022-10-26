@@ -19,7 +19,6 @@ BJSM_c(
   n.digits,
   thin = 1,
   BURN.IN = 100,
-  cran_check_option = FALSE,
   jags.model_options = NULL,
   coda.samples_options = NULL,
   verbose = FALSE,
@@ -63,10 +62,6 @@ Please check the \code{Details} section for more explaination}
 \item{thin}{thinning interval for monitors}
 
 \item{BURN.IN}{number of burn-in iterations for MCMC}
-
-\item{cran_check_option}{TRUE or FALSE. If FALSE, the algorithm will fit a
-model like usual. This should be the default for all model fitting.
-If TRUE, the model fitting is bypassed to pass CRAN check.}
 
 \item{jags.model_options}{a list of optional arguments that are passed to \code{jags.model()} function.}
 

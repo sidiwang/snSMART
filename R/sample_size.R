@@ -24,7 +24,6 @@
 #' @param n a vector with 3 values (`nA`, `nB`, `nC`). `nA` is the prior sample size
 #'  (larger than 0) for treatment A. `nB` is the prior sample size (larger than 0)
 #'  for treatment B. `nC` is the prior sample size (larger than 0) for treatment C
-#' @param test for testing purposes only. Defaults to `FALSE`.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
 #'
@@ -42,14 +41,18 @@
 #'
 #' @examples
 #' require(EnvStats)
-#'
+#' # short running time example
 #' sampleSize <- sample_size(
 #'   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
-#'   power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = TRUE
+#'   power = 0.3, mu = c(0.65, 0.55, 0.25), n = c(10, 10, 10)
 #' )
 #'
-#' # sampleSize = sample_size(pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
-#' #    power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3), test = FALSE)
+#' \donttest{
+#' sampleSize <- sample_size(
+#'   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
+#'   power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3)
+#' )
+#' }
 #'
 #' @references
 #' Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of
@@ -70,11 +73,7 @@
 #'
 
 
-sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, test = FALSE, verbose = FALSE) {
-  if (test == TRUE) {
-    return()
-  }
-
+sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, verbose = FALSE) {
   beta_prior_generator <- function(info_level, prior_mean) {
     alpha0 <- prior_mean * info_level
     beta0 <- info_level * (1 - prior_mean)
