@@ -40,14 +40,17 @@
 #'     sample size; and \code{power}: the resulting power of this iteration}
 #'
 #' @examples
-#' require(EnvStats)
+#' \dontrun{
+#' library(EnvStats)
 #' # short running time example
 #' sampleSize <- sample_size(
 #'   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
 #'   power = 0.3, mu = c(0.65, 0.55, 0.25), n = c(10, 10, 10)
 #' )
+#' }
 #'
 #' \donttest{
+#' library(EnvStats)
 #' sampleSize <- sample_size(
 #'   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
 #'   power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3)
