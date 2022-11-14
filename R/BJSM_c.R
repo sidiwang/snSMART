@@ -25,9 +25,6 @@
 #' @param ci coverage probability for credible intervals, default = 0.95
 #' @param n.digits number of digits to keep in the final estimation of treatment effect
 #' @param x an object of class "`BJSM_c`", usually, a result of a call to \code{\link{BJSM_c}}
-#' @param cran_check_option TRUE or FALSE. If FALSE, the algorithm will fit a
-#'  model like usual. This should be the default for all model fitting.
-#'  If TRUE, the model fitting is bypassed to pass CRAN check.
 #' @param verbose TRUE or FALSE. If FALSE, no function message and progress bar will be
 #'  printed.
 #' @param jags.model_options a list of optional arguments that are passed to \code{jags.model()} function.
@@ -75,12 +72,8 @@
 #' @export
 
 BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain, n.adapt,
-                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100, cran_check_option = FALSE,
+                   MCMC_SAMPLE, ci = 0.95, n.digits, thin = 1, BURN.IN = 100,
                    jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
-  if (cran_check_option) {
-    return("Model not fitted. Set cran_check_option = FALSE to fit a model.")
-  }
-
   quiet <- FALSE
   progress.bar <- "text"
 
