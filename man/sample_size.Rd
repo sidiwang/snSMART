@@ -66,12 +66,10 @@ treatment using the Bayesian joint stage model.
 }
 \details{
 Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
-Please load the \code{EnvStats} package before calculating sample size.
 This function may take a few minutes to run
 }
 \examples{
 \dontrun{
-library(EnvStats)
 # short running time example
 sampleSize <- sample_size(
   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
@@ -80,7 +78,6 @@ sampleSize <- sample_size(
 }
 
 \donttest{
-library(EnvStats)
 sampleSize <- sample_size(
   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
   power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3)

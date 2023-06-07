@@ -45,9 +45,9 @@
 #'          \item \code{phi1} - lingering effect of the first treatment
 #'          \item `phi3` - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
 #'          \item `xi_j` - the expected effect of treatment j, j = 1, 2, 3 in the first stage
-#'          \item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
-#' indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
-#'    }
+#'          \item \code{V1},\code{V2} are the variance-covariance matrix of the multivariate distribution. \code{V1} is for patients who stay on the same treatment,
+#'          and \code{V2} is for patients who switch treatments.
+#'    }}
 #' \item{ci_estimate}{x% credible interval for each parameter. By default round to
 #'     2 decimal places, if more decimals are needed, please access the results by
 #'     `[YourResultName]$ci_estimates$CI_low` or `[YourResultName]$ci_estimates$CI_high` }
@@ -58,7 +58,7 @@
 #' BJSM_result <- BJSM_c(
 #'   data = trialData, xi_prior.mean = c(50, 50, 50),
 #'   xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-#'   n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5, verbose = FALSE
+#'   n.adapt = 1000, MCMC_SAMPLE = 5000, BURIN.IN = 1000, ci = 0.95, n.digits = 5, verbose = FALSE
 #' )
 #'
 #' summary(BJSM_result)
@@ -66,7 +66,6 @@
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
 #' sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
-#'
 #'
 #' @rdname BJSM_c
 #' @export
@@ -112,7 +111,7 @@ BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain
   update(jag, BURN.IN, progress.bar = progress.bar)
   posterior_sample <- do.call(rjags::coda.samples, c(list(
     model = jag,
-    variable.names = c("xi_", "phi1", "phi3", "rho"),
+    variable.names = c("xi_", "phi1", "phi3", "V1", "V2"),
     n.iter = MCMC_SAMPLE,
     thin = thin, progress.bar = progress.bar, coda.samples_options
   )))
@@ -140,6 +139,7 @@ BJSM_c <- function(data, xi_prior.mean, xi_prior.sd, phi3_prior.sd, n_MCMC_chain
 summary.BJSM_c <- function(object, ...) {
   out <- as.data.frame(cbind(object$mean_estimate, object$ci_estimate))
   colnames(out)[1] <- "Estimate"
+  rownames(out)[11:13] <- c("xi_[A]", "xi_[B]", "xi_[C]")
   obj <- list(out = out)
   class(obj) <- "summary.BJSM_c"
   obj

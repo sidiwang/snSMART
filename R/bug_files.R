@@ -211,6 +211,8 @@ model{
   phi1~dunif(0, 0.5)
   phi3~dnorm(0, phi3_prior.sd) T(0,)
 
+ V2[1:2, 1:2] <- inverse(rho[1, 1:2, 1:2])
+ V1[1:2, 1:2] <- inverse(rho[2, 1:2, 1:2])
  Omega1[1,1] <- 1
  Omega1[2,2] <- 1
  Omega1[1,2] <- 0
@@ -324,3 +326,4 @@ Bayes_new_text <- function() {
 }"
   )
 }
+

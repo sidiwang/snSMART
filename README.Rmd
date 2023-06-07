@@ -66,7 +66,6 @@ summary(LPJSM_result)
 `sample_size`:
 In this example, we call the function to request the sample size needed per arm with the following assumptions: the response rates for treatments A, B, and C are 0.7, 0.5 and 0.25, respectively; $\beta_1$ is assumed to be 1.4; $\beta_0$ is assumed to be 0.5; the coverage rate for the posterior difference of top two treatments is set to 0.9; the ‘power’ is set to 0.8; the prior sample size is 4 for treatment A, 2 for treatment B and 3 for treatment C; the prior means are 0.65 for treatment A, 0.55 for treatment B and 0.25 for treatment C
 ```{r}
-library("EnvStats")
 sampleSize <- sample_size(
   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5,
   coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25),
@@ -96,7 +95,7 @@ Below, we call the function assuming the mean and standard deviation of the norm
 ```{r}
 BJSM_result <- BJSM_c(
   data = trialDataMF, xi_prior.mean = c(50, 50, 50), xi_prior.sd = c(50, 50, 50),
-  phi3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000,
+  phi3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000, BURN.IN = 1000,
   ci = 0.95, n.digits = 5
 )
 summary(BJSM_result)
