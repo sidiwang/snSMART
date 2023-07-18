@@ -1,7 +1,7 @@
 Type: Package
 Package: snSMART
 Title: Small N Sequential Multiple Assignment Randomized Trial Methods
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: c(
     person("Sidi", "Wang", , "sidiwang@umich.edu", role = "aut"),
     person("Kelley", "Kidwell", , "kidwell@umich.edu", role = "aut"),
