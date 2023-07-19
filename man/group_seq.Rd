@@ -128,9 +128,7 @@ For \code{gamma} distribution, \code{prior.a} is the shape parameter \code{r},
 \code{prior.a} is the shape parameter \code{a}, \code{prior.b} is the shape parameter
 \code{b}.
 For \code{pareto} distribution, \code{prior.a} is the scale parameter \code{alpha},
-\code{prior.b} is the shape parameter \code{c} (see page 29 of the jags user manual
-version 3.4.0). link: \url{http://www.stats.ox.ac.uk/~nicholls/MScMCMC14/jags_user_manual.pdf}
-
+\code{prior.b} is the shape parameter \code{c} (see jags user manual).
 The individual response rate is regarded as a permanent feature of the treatment.
 The second stage outcome is modeled conditionally on the first stage results
 linking the first and

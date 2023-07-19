@@ -29,7 +29,6 @@
 #'
 #' @details
 #' Note that this package does not include the JAGS library, users need to install JAGS separately. Please check this page for more details: \url{https://sourceforge.net/projects/mcmc-jags/}
-#' Please load the \code{EnvStats} package before calculating sample size.
 #' This function may take a few minutes to run
 #'
 #' @return
@@ -41,7 +40,6 @@
 #'
 #' @examples
 #' \dontrun{
-#' library(EnvStats)
 #' # short running time example
 #' sampleSize <- sample_size(
 #'   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
@@ -50,7 +48,6 @@
 #' }
 #'
 #' \donttest{
-#' library(EnvStats)
 #' sampleSize <- sample_size(
 #'   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5, coverage = 0.9,
 #'   power = 0.8, mu = c(0.65, 0.55, 0.25), n = c(4, 2, 3)
@@ -616,7 +613,7 @@ sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, verbose = FALS
 
   message(paste0(
     "With given settings, the estimated sample size per arm for an snSMART is: ", sample_size_tmp_pair1, "\n",
-    "This implies that for an snSMART with sample size of ", sample_size_tmp_pair1, " per arm (", 3 * sample_size_tmp_pair1, " in total for three agents):", "\n",
+    "This implies that for an snSMART with sample size of ", sample_size_tmp_pair1, " per arm (", 3 * sample_size_tmp_pair1, " in total for three treatments):", "\n",
     "The probability of successfully identifying the best treatment is ", power, " when the difference of response rates between the best and second best treatment is at least ", LIST_OF_PIS[1] - LIST_OF_PIS[2], ", and the response rate of the best treatment is ", LIST_OF_PIS[1], "\n"
   ))
 

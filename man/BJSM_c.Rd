@@ -85,9 +85,9 @@ process}
 \item \code{phi1} - lingering effect of the first treatment
 \item \code{phi3} - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
 \item \code{xi_j} - the expected effect of treatment j, j = 1, 2, 3 in the first stage
-\item \code{rho} is the inverse of the variance-covariance matrix of the multivariate distribution, first parameter indicates whether patient stayed on the same treatment (2) or not (1), second parameter
-indicates the row number of the inverse of variance-covariance matrix, and the third parameter indicates the column number of the inverse of the variance-covariance matrix}
-}
+\item \code{V1},\code{V2} are the variance-covariance matrix of the multivariate distribution. \code{V1} is for patients who stay on the same treatment,
+and \code{V2} is for patients who switch treatments.
+}}
 \item{ci_estimate}{x\% credible interval for each parameter. By default round to
 2 decimal places, if more decimals are needed, please access the results by
 \verb{[YourResultName]$ci_estimates$CI_low} or \verb{[YourResultName]$ci_estimates$CI_high} }
@@ -109,7 +109,7 @@ trialData <- trialDataMF
 BJSM_result <- BJSM_c(
   data = trialData, xi_prior.mean = c(50, 50, 50),
   xi_prior.sd = c(50, 50, 50), phi3_prior.sd = 20, n_MCMC_chain = 1,
-  n.adapt = 1000, MCMC_SAMPLE = 5000, ci = 0.95, n.digits = 5, verbose = FALSE
+  n.adapt = 1000, MCMC_SAMPLE = 5000, BURIN.IN = 1000, ci = 0.95, n.digits = 5, verbose = FALSE
 )
 
 summary(BJSM_result)
