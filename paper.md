@@ -66,61 +66,32 @@ $\beta_{0m}\pi_{m'}$ is the second stage response rate for non-responders to tre
 
 
 +----------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| Function                                          | Description                                                                                                            | 
-|                                                         |                                                                                                                               |       
-+:=========================:+:===========================================================:+
-| *BJSM functions*                            |                                                                                                                               | 
+| Function                                     | Description                                                                                             | 
+|                                              |                                                                                                         |       
++:============================================:+:=======================================================================================================:+
+| *BJSM functions*                             |                                                                                                         | 
 +----------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| BJSM_binary                                   | BJSM binary (3AT or P2D snSMART)                                                                  |
-| BJSM_c                                           | BJSM (3AT snSMART with a mapping function and continuous outcome)          |
-| group_seq                                       | BJSM (interim analysis and final analysis of group sequential 3AT snSMART)   |
+| BJSM_binary                                  | BJSM binary (3AT or P2D snSMART)                                                                        |
+| BJSM_c                                       | BJSM (3AT snSMART with a mapping function and continuous outcome)                                       |
+| group_seq                                    | BJSM (interim analysis and final analysis of group sequential 3AT snSMART)                              |
 +----------------------------------------------+---------------------------------------------------------------------------------------------------------+
-| *Frequentist functions*                    |                                                                                                                               | 
-+-----------------------------------------------+--------------------------------------------------------------------------------------------------------+
-| LPJSM_binary                                 | LPJSM (3AT or P2D snSMART)                                                                           |
-+-----------------------------------------------+--------------------------------------------------------------------------------------------------------+
-| *Sample size calculation*                |                                                                                                                               | 
-+----------------------------------------------+----------------------------------------------------------------------------------------------------------+
-| sample_size                                    | 3AT snSMART sample size calculation                                                                 |
-+----------------------------------------------+----------------------------------------------------------------------------------------------------------+
-| *S3 summary and print methods*   |                                                                                                                                | 
-+----------------------------------------------+----------------------------------------------------------------------------------------------------------+
-| for class ’BJSM_binary’                  | Summarize and print ’BJSM_binary’ object                                                             |
-| for class ’BJSM_binary_dose’         | Summarize and print ’BJSM_binary_dose’ object                                                  |
-| for class ’BJSM_c’                           | Summarize and print ’BJSM_c’ object                                                                    |
-| for class ’group_seq’                       | Summarize and print ’group_seq’ object                                                                 |
-| for class ’LPJSM_binary’                 | Summarize and print ’LPJSM_binary’ object                                                          |
-| for class ’sim_group_seq’                | Summarize and print ’sim_group_seq’ object                                                         |
-+===========================+============================================================+
-
-\begin{table}
-\centering
-\begin{tabular}{lp{8cm}}
-\toprule
-Function & Description \\ 
-\midrule
-BJSM functions \\
-\code{BJSM\_binary} & BJSM binary (3AT or P2D snSMART) \\
-\code{BJSM\_c} & BJSM (3AT snSMART with a mapping function and continuous outcome) \\
-\code{group\_seq} & BJSM (interim analysis and final analysis of group sequential 3AT snSMART) \\
-\\
-Frequentist functions \\
-\code{LPJSM\_binary} & LPJSM (3AT or P2D snSMART) \\
-\\
-Sample size calculation \\
-\code{sample\_size} & 3AT snSMART sample size calculation \\
-\\
-\code{S3 summary} and \code{print} methods \\
-for class '\code{BJSM\_binary}' & Summarize and print '\code{BJSM\_binary}' object \\
-for class '\code{BJSM\_binary\_dose}' & Summarize and print '\code{BJSM\_binary\_dose}' object \\
-for class '\code{BJSM\_c}' & Summarize and print '\code{BJSM\_c}' object \\
-for class '\code{group\_seq}' & Summarize and print '\code{group\_seq}' object \\
-for class '\code{LPJSM\_binary}' & Summarize and print '\code{LPJSM\_binary}' object \\
-for class '\code{sim\_group\_seq}' & Summarize and print '\code{sim\_group\_seq}' object \\
-\bottomrule
-\end{tabular}
-\caption{\label{tab:functionality} Summary of the functionality of the \pkg{snSMART} package.}
-\end{table}
+| *Frequentist functions*                      |                                                                                                         | 
++----------------------------------------------+---------------------------------------------------------------------------------------------------------+
+| LPJSM_binary                                 | LPJSM (3AT or P2D snSMART)                                                                              |
++----------------------------------------------+---------------------------------------------------------------------------------------------------------+
+| *Sample size calculation*                    |                                                                                                         | 
++----------------------------------------------+---------------------------------------------------------------------------------------------------------+
+| sample_size                                  | 3AT snSMART sample size calculation                                                                     |
++----------------------------------------------+---------------------------------------------------------------------------------------------------------+
+| *S3 summary and print methods*               |                                                                                                         | 
++----------------------------------------------+---------------------------------------------------------------------------------------------------------+
+| for class ’BJSM_binary’                      | Summarize and print ’BJSM_binary’ object                                                                |
+| for class ’BJSM_binary_dose’                 | Summarize and print ’BJSM_binary_dose’ object                                                           |
+| for class ’BJSM_c’                           | Summarize and print ’BJSM_c’ object                                                                     |
+| for class ’group_seq’                        | Summarize and print ’group_seq’ object                                                                  |
+| for class ’LPJSM_binary’                     | Summarize and print ’LPJSM_binary’ object                                                               |
+| for class ’sim_group_seq’                    | Summarize and print ’sim_group_seq’ object                                                              |
++==============================================+=========================================================================================================+
 
 # The `snSMART` package
 
@@ -161,3 +132,5 @@ This R package will continue to be updated as more snSMART designs and methods a
 
 # Acknowledgments
 This work was supported by a Patient-Centered Outcomes Research Institute (PCORI) award (ME-1507-31108). We thank Boxian Wei, Yan-Cheng Chao, and Holly Hartman for contributing their original R code used in the creation of this package. 
+
+# References
