@@ -64,7 +64,7 @@ $\pi_m$ is the first stage response rate for treatment $m$;
 $\beta_{1m}\pi_{m}$ is the second stage response rate for first stage responders; and 
 $\beta_{0m}\pi_{m'}$ is the second stage response rate for non-responders to treatment $m$ in the first stage who receive treatment $m'$ in the second stage. 
 
-Table 1: Summary of the functionality of the snSMART package. \label{tab:functionality}
+Table 1: Summary of the functionality of the snSMART package.
 +----------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | Function                                     | Description                                                                                             | 
 |                                              |                                                                                                         |       
@@ -95,7 +95,7 @@ Table 1: Summary of the functionality of the snSMART package. \label{tab:functio
 
 # The `snSMART` package
 
-The `snSMART` package can be downloaded from the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/web/packages/snSMART/index.html. Please install the [JAGS library](https://sourceforge.net/projects/mcmc-jags/) [@plummer2003jags] before using this package. This package provides a sample size calculation and multiple methods of trial data analysis for various snSMART designs. A brief introduction of the snSMART design comparing two dose levels with placebo is provided in Section 2. We also summarized the functionality of all the `snSMART` functions included in this package in Table \ref{tab:functionality}. The `snSMART` package includes the option to set the number of "adaptation iterations" in the functions that perform MCMC computation. This option aims to provide users with the complete functionality of the  ``jags.model`` function available in the `rjags` package [@rjags].
+The `snSMART` package can be downloaded from the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/web/packages/snSMART/index.html. Please install the [JAGS library](https://sourceforge.net/projects/mcmc-jags/) [@plummer2003jags] before using this package. This package provides a sample size calculation and multiple methods of trial data analysis for various snSMART designs. A brief introduction of the snSMART design comparing two dose levels with placebo is provided in Section 2. We also summarized the functionality of all the `snSMART` functions included in this package in Table 1. The `snSMART` package includes the option to set the number of "adaptation iterations" in the functions that perform MCMC computation. This option aims to provide users with the complete functionality of the  ``jags.model`` function available in the `rjags` package [@rjags].
 
 After installing package `snSMART`, load the package:
 
