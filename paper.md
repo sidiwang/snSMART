@@ -64,36 +64,8 @@ $\pi_m$ is the first stage response rate for treatment $m$;
 $\beta_{1m}\pi_{m}$ is the second stage response rate for first stage responders; and 
 $\beta_{0m}\pi_{m'}$ is the second stage response rate for non-responders to treatment $m$ in the first stage who receive treatment $m'$ in the second stage. 
 
-\begin{table}
-\centering
-\begin{tabular}{lp{8cm}}
-\toprule
-Function & Description \\ 
-\midrule
-BJSM functions \\
-\code{BJSM\_binary} & BJSM binary (3AT or P2D snSMART) \\
-\code{BJSM\_c} & BJSM (3AT snSMART with a mapping function and continuous outcome) \\
-\code{group\_seq} & BJSM (interim analysis and final analysis of group sequential 3AT snSMART) \\
-\\
-Frequentist functions \\
-\code{LPJSM\_binary} & LPJSM (3AT or P2D snSMART) \\
-\\
-Sample size calculation \\
-\code{sample\_size} & 3AT snSMART sample size calculation \\
-\\
-\code{S3 summary} and \code{print} methods \\
-for class '\code{BJSM\_binary}' & Summarize and print '\code{BJSM\_binary}' object \\
-for class '\code{BJSM\_binary\_dose}' & Summarize and print '\code{BJSM\_binary\_dose}' object \\
-for class '\code{BJSM\_c}' & Summarize and print '\code{BJSM\_c}' object \\
-for class '\code{group\_seq}' & Summarize and print '\code{group\_seq}' object \\
-for class '\code{LPJSM\_binary}' & Summarize and print '\code{LPJSM\_binary}' object \\
-for class '\code{sim\_group\_seq}' & Summarize and print '\code{sim\_group\_seq}' object \\
-\bottomrule
-\end{tabular}
-\caption{\label{tab:functionality} Summary of the functionality of the \pkg{snSMART} package.}
-\end{table}
+Table: Summary of the functionality of the snSMART package.
 
-Table 1: Summary of the functionality of the snSMART package.
 +----------------------------------------------+---------------------------------------------------------------------------------------------------------+
 | Function                                     | Description                                                                                             | 
 |                                              |                                                                                                         |       
