@@ -36,17 +36,17 @@ Small sample, sequential, multiple assignment, randomized trials (snSMARTs) are 
 
 # Statement of need
 
-As a novel approach to study treatments in small samples, snSMART, or small sample, sequential, multiple assignment, randomized trial, designs and methods have been developed in recent years. The design and methods of snSMARTs generally apply to any disorder or disease that affects a small group of people and remains stable over the duration of the trial. A two-stage snSMART design first randomizes all participants to one of the first-stage treatments, then conducts second stage randomization based on its first stage treatment outcome. The goal of an snSMART is to identify the superior first stage treatment using data from both stages. An snSMART design repeats the same first stage treatments in the second stage of the trial, and may allow responders to the first stage treatment to stay on that same treatment in the second stage. Thus, the snSMART design allows for the estimation of first stage treatment effects by utilizing data from both stages, which is helpful for achieving more precise estimates.
+The design and methods of snSMARTs generally apply to any disorder or disease that affects a small group of people and remains stable over the duration of the trial. A two-stage snSMART design first randomizes all participants to one of the first-stage treatments, then conducts second stage randomization based on its first stage treatment outcome. The goal of an snSMART is to identify the superior first stage treatment using data from both stages. An snSMART design repeats the same first stage treatments in the second stage of the trial, and may allow responders to the first stage treatment to stay on that same treatment in the second stage. Thus, the snSMART design allows for the estimation of first stage treatment effects by utilizing data from both stages, which is helpful for achieving more precise estimates.
 
 In the past few years, substantial progress has been made regarding the development of statistical methods for analyzing trial data from the following snSMART designs: an snSMART with three active treatments [@wei2018bayesian; @wei2020sample; @chao2020dynamic], a group sequential snSMART with three active treatments [@chao2020bayesian], an snSMART with placebo and two dose levels of one treatment [@fang2021bayesian], and an snSMART with continuous outcomes [@hartman2021design]. However, there is a lack of statistical software to disseminate the methods. Our R package `snSMART` fills this gap by providing functions for calculating the required sample size for an snSMART with three active treatments, and analyzing trial data using both Bayesian and frequentist approaches. To the extent of our knowledge, there are no existing R packages that provide similar functions. 
 
 
-## snSMART comparing two dose levels with placebo (P2D)
+## snSMART comparing two dose levels with placebo
 Here we explain one of the snSMART designs in detail. This snSMART design investigates the response rate of one experimental treatment at low and high doses compared with placebo [@fang2021bayesian]. In such an snSMART design (Figure \ref{fig:snSMART-dose}), participants are equally assigned to either receive placebo, low dose, or high dose in the first stage. Participants receive their initial treatment for a pre-specified amount of time until the measurement of their responses at the end of stage 1. In the second stage, all participants who received placebo or low dose in the first stage are re-randomized to either low or high dose regardless of their first stage response. Participants who responded to high dose are re-randomized between low and high dose, whereas those who did not respond to high dose receive high dose again in the second stage. The main goal of this snSMART is to estimate first stage low and high dose treatment response rates and compare them to placebo by modeling the pooled data from two stages.
 
 ![\label{fig:snSMART-dose}](dose_snSMART.png)
 
-@fang2021bayesian used the Bayesian joint stage model (BJSM) from @wei2018bayesian in Equations \ref{eq:1} and \ref{eq:2} with six linkage parameters that varied by first stage treatments. For this design $m = P, L, H$ and $m' = L, H$ where P = placebo, L = low dose and H = high dose. The prior distribution for the response rate of placebo may be informed by natural history studies or previous trials and specified such that $\pi_P \sim Beta(\zeta_n, \eta_n)$. A weak tendency for the doses of the drug to have greater response rates than the effect of placebo can be assumed through $\log(\pi_L/\pi_P) \sim N(\mu, \sigma^2)$ and $\log(\pi_H/\pi_P) \sim N(\mu, \sigma^2)$. The prior distributions for the linkage parameters may vary with guidance of specifying $\beta_{0m}, \beta_{1m} \sim Gamma(\omega, \psi)$. As with the other designs and analytic methods, posterior samples are drawn through MCMC sampling.
+@fang2021bayesian used the Bayesian joint stage model (BJSM) from @wei2018bayesian in Equations \ref{eq:1} and \ref{eq:2} with six linkage parameters that varied by first stage treatments. For this design $m = P, L, H$ and $m' = L, H$ where P = placebo, L = low dose and H = high dose. The prior distribution for the response rate of placebo may be informed by natural history studies or previous trials and specified such that $\pi_P \sim Beta(\zeta_n, \eta_n)$. A weak tendency for the doses of the drug to have greater response rates than the effect of placebo can be assumed through $\log(\pi_L/\pi_P) \sim N(\mu, \sigma^2)$ and $\log(\pi_H/\pi_P) \sim N(\mu, \sigma^2)$. The prior distributions for the linkage parameters may vary with guidance of specifying $\beta_{0m}, \beta_{1m} \sim Gamma(\omega, \psi)$. As with the other snSMART designs and analytic methods, posterior samples are drawn through MCMC sampling.
 
 The BJSM is specified as follows:
 
@@ -106,19 +106,27 @@ Table: Summary of the functionality of the snSMART package.
 
 # The `snSMART` package
 
-The `snSMART` package can be downloaded from the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/web/packages/snSMART/index.html. Please install the [JAGS library](https://sourceforge.net/projects/mcmc-jags/) [@plummer2003jags] before using this package. This package provides a sample size calculation and multiple methods of trial data analysis for various snSMART designs. A brief introduction of the snSMART design comparing two dose levels with placebo is provided in Section 2. We also summarized the functionality of all the `snSMART` functions included in this package in Table 1. The `snSMART` package includes the option to set the number of "adaptation iterations" in the functions that perform MCMC computation. This option aims to provide users with the complete functionality of the  ``jags.model`` function available in the `rjags` package [@rjags].
+The `snSMART` package can be downloaded from the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/web/packages/snSMART/index.html. Please install the [JAGS library](https://sourceforge.net/projects/mcmc-jags/) [@plummer2003jags] before using this package. This package provides a sample size calculation and multiple methods of trial data analysis for various snSMART designs. We also summarized the functionality of all the `snSMART` functions included in this package in Table 1. The `snSMART` package includes the option to set the number of "adaptation iterations" in the functions that perform MCMC computation. This option aims to provide users with the complete functionality of the  ``jags.model`` function available in the `rjags` package [@rjags].
 
 After installing package `snSMART`, load the package:
 
 ```r
 library("snSMART")
 ```
-We assume that we have data from an snSMART with three active treatments in a matrix with 4 columns: ``treatment_stageI, response_stageI, treatment_stageII``, and ``response_stageII``. The rows of the dataset correspond to each participant in the trial. For example, here we use a dataset of 30 total individuals. 
+We assume that we have data from an snSMART in a matrix with 4 columns: ``treatment_stageI, response_stageI, treatment_stageII``, and ``response_stageII``. The rows of the dataset correspond to each participant in the trial. For example, here we use a dataset of 30 total individuals. 
 
 ```r
-head(data_binary)
+head(data_dose)
 ```
-
+```
+  response_stageI treatment_stageI response_stageII treatment_stageII
+1               1                1                1                 3
+2               0                1                1                 2
+3               0                1                1                 2
+4               0                1                1                 2
+5               0                1                1                 2
+6               0                1                1                 2
+```
 ## Bayesian joint stage model (BJSM)
 
 The function ``BJSM_binary`` implements the BJSM algorithm that borrows information across both stages to estimate the first stage response rates of each treatment based on trial data. Users specify the prior distributions for all treatment response rates and linkage parameters; the details of MCMC simulations; and the type of BJSM model they want to implement, i.e., six beta model or two beta model. This function creates an object of class '``BJSM_binary``' that contains a list of components: posterior samples of linkage parameters and treatment response rates; estimates of linkage parameters, treatment response rates, and pairwise response rate differences of all treatments.
@@ -134,10 +142,10 @@ BJSM_dose_result <- BJSM_binary(
 summary(BJSM_dose_result)
 ```
 
-The response rates for placebo, low dose and high dose are estimated to be 0.08 (95\% credible interval (CI): 0.02 - 0.15), 0.4 (95\% CI: 0.28 - 0.52), and 0.74 (95\% CI: 0.59 - 0.87) respectively. Other estimated outcomes are also clearly presented in the R output above.
+The response rates for placebo, low dose and high dose are estimated to be 0.08 (95\% credible interval (CI): 0.02 - 0.15), 0.4 (95\% CI: 0.28 - 0.52), and 0.74 (95\% CI: 0.59 - 0.87) respectively. Other estimated outcomes are also clearly presented in the R output.
 
 # Discussion
-In this paper, we introduced and demonstrated the `snSMART` package to analyze data from one of the snSMART designs using Bayesian methods. All statistical methods covered in the package are listed in the table above. While the authors of these methods generally found the BJSM to produce more efficient estimates than the frequentist method `LPJSM`, it is recommended to use the frequentist approach as a sensitivity analysis to the Bayesian approach. This package predominantly presents analytic functions, however, these functions may also be useful in the design phase. To conduct simulation studies, users can simulate snSMART data and implement the analysis functions included in this package to assess the operating characteristics of the design.
+In this paper, we introduced and demonstrated the `snSMART` package to analyze data from one of the snSMART designs using Bayesian methods. All statistical methods covered in the package are listed in the table above. While the authors of these methods generally found the BJSM to produce more efficient estimates than their frequentist counterparts included in the package, it is recommended to use the frequentist approach as a sensitivity analysis to the Bayesian approach. This package predominantly presents analytic functions, however, these functions may also be useful in the design phase. To conduct simulation studies, users can simulate snSMART data and implement the analysis functions included in this package to assess the operating characteristics of the design.
 
 This R package will continue to be updated as more snSMART designs and methods are developed. We hope that this package translates snSMART design and methods into finding more effective treatments for rare diseases. 
 
