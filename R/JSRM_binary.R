@@ -279,7 +279,7 @@ print.summary.LPJSM_binary <- function(x, ...) {
   cat("\nTreatment Effect Estimate:\n")
   print(x$trteff)
 
-  if (length(x) == 3) {
+  if (length(x) != 3) {
     cat("\nExpected Response Rate of Dynamic Treatment Regimens (DTR):\n")
     print(x$DTRest)
   }
