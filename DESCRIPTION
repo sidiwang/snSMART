@@ -32,10 +32,12 @@ Imports:
     tidyr (>= 1.1.2),
     truncdist (>= 1.0-1)
 Suggests:
-    coda (>= 0.19-2)
+    coda (>= 0.19-2),
+    testthat (>= 3.0.0)
 Biarch: true
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 SystemRequirements: JAGS 4.x.y
+Config/testthat/edition: 3
