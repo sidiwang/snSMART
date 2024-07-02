@@ -15,7 +15,7 @@ Description: Consolidated data simulation, sample size calculation and
     analysis of small n sequential multiple assignment randomized trials
     (snSMARTs)." (2018) Statistics in medicine, 37(26), pp.3723-3732
     <doi:10.1002/sim.7900>.
-License: GPL-2
+License: GPL (>= 2)
 URL: https://github.com/sidiwang/snSMART
 BugReports: https://github.com/sidiwang/snSMART/issues
 Depends: 
