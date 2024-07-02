@@ -14,6 +14,8 @@ v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/l
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
+[![Codecov test
+coverage](https://codecov.io/gh/sidiwang/snSMART/branch/main/graph/badge.svg)](https://app.codecov.io/gh/sidiwang/snSMART?branch=main)
 <!-- badges: end -->
 
 The aim of the **snSMART** R package is to consolidate data simulation,
@@ -43,11 +45,20 @@ install.packages("snSMART", repos = "http://cran.us.r-project.org")
 
     ## 
     ## The downloaded binary packages are in
-    ##  /var/folders/5_/sp2r7r_s5snf4hq634xmk_0r0000gn/T//RtmpxqLzkg/downloaded_packages
+    ##  /var/folders/5_/sp2r7r_s5snf4hq634xmk_0r0000gn/T//RtmpNRlYCm/downloaded_packages
 
 ``` r
 library(snSMART)
 ```
+
+    ## Loading required package: EnvStats
+
+    ## 
+    ## Attaching package: 'EnvStats'
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     predict, predict.lm
 
 Or get the development version from GitHub:
 
@@ -96,33 +107,33 @@ summary(BJSM_result)
     ## 
     ## Treatment Effects Estimate:
     ##       Estimate Std. Error C.I.    CI low   CI high
-    ## trtA 0.3724607 0.09596326 0.95 0.2529876 0.6262884
-    ## trtB 0.3937709 0.12073746 0.95 0.1868479 0.6406974
-    ## trtC 0.4490142 0.08668038 0.95 0.3508578 0.6316868
+    ## trtA 0.4046939 0.10427533 0.95 0.2103586 0.6583262
+    ## trtB 0.3900296 0.07865828 0.95 0.2501780 0.5374523
+    ## trtC 0.6180690 0.08709180 0.95 0.4925770 0.7772426
     ## 
     ## Differences between Treatments:
-    ##           Estimate Std.Error C.I.     CI low    CI high
-    ## diffAB -0.02131011 0.1671619 0.95 -0.2897015 0.32646743
-    ## diffBC -0.05524338 0.1671081 0.95 -0.3362856 0.21362700
-    ## diffAC -0.07655348 0.1023327 0.95 -0.3605940 0.08820396
+    ##           Estimate Std.Error C.I.     CI low     CI high
+    ## diffAB  0.01466433 0.1287876 0.95 -0.2202233  0.32554853
+    ## diffBC -0.22803936 0.1271915 0.95 -0.5270646 -0.06082518
+    ## diffAC -0.21337503 0.1493975 0.95 -0.4840569  0.04220399
     ## 
     ## Linkage Parameter Estimate:
     ##         Estimate Std. Error C.I.    CI low   CI high
-    ## beta0A 0.9675508 0.03408395 0.95 0.8698091 0.9970421
-    ## beta0B 0.9906452 0.01737068 0.95 0.9412510 0.9996143
-    ## beta0C 0.7724702 0.25633534 0.95 0.2095624 0.9925097
-    ## beta1A 1.6468066 0.46080230 0.95 1.0075555 2.7302687
-    ## beta1B 1.6115237 0.49898527 0.95 1.0037997 3.1514827
-    ## beta1C 1.7958893 0.38568874 0.95 1.2192022 2.4783575
+    ## beta0A 0.9595907 0.04719401 0.95 0.8544802 0.9998446
+    ## beta0B 0.9575869 0.05057664 0.95 0.8615737 0.9997691
+    ## beta0C 0.6930520 0.24176704 0.95 0.3444717 0.9917792
+    ## beta1A 1.5171964 0.38056743 0.95 1.0808245 2.3459093
+    ## beta1B 1.7896323 0.56996358 0.95 1.1208255 2.9052050
+    ## beta1C 1.3295262 0.23142426 0.95 1.0005293 1.8001938
     ## 
     ## Expected Response Rate of Dynamic Treatment Regimens (DTR):
     ##         Estimate Std. Error C.I.    CI low   CI high
-    ## rep_AB 0.4767614 0.09769684 0.95 0.3093855 0.6403936
-    ## rep_AC 0.5061297 0.10840983 0.95 0.3193806 0.7170460
-    ## rep_BA 0.4885528 0.12068662 0.95 0.3309846 0.7400024
-    ## rep_BC 0.5353517 0.11543082 0.95 0.3868979 0.7559936
-    ## rep_CA 0.5127254 0.09818464 0.95 0.3216308 0.6994843
-    ## rep_CB 0.5291309 0.10477125 0.95 0.3362417 0.7004188
+    ## rep_AB 0.4697516 0.09275624 0.95 0.2917702 0.6296532
+    ## rep_AC 0.6015571 0.07162453 0.95 0.4451989 0.7184334
+    ## rep_BA 0.5012073 0.08332682 0.95 0.3709581 0.6217467
+    ## rep_BC 0.6294671 0.09964662 0.95 0.4624197 0.7828289
+    ## rep_CA 0.6175090 0.11258901 0.95 0.3954040 0.8142629
+    ## rep_CB 0.6065809 0.10694339 0.95 0.4134393 0.7979918
 
 `LPJSM_binary`: Here, we call the LPJSM_binary mirroring our example for
 the BJSM_binary above.
@@ -186,21 +197,6 @@ treatment A, 2 for treatment B and 3 for treatment C; the prior means
 are 0.65 for treatment A, 0.55 for treatment B and 0.25 for treatment C
 
 ``` r
-library("EnvStats")
-```
-
-    ## 
-    ## Attaching package: 'EnvStats'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     predict, predict.lm
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     print.default
-
-``` r
 sampleSize <- sample_size(
   pi = c(0.7, 0.5, 0.25), beta1 = 1.4, beta0 = 0.5,
   coverage = 0.9, power = 0.8, mu = c(0.65, 0.55, 0.25),
@@ -209,7 +205,7 @@ sampleSize <- sample_size(
 ```
 
     ## With given settings, the estimated sample size per arm for an snSMART is: 34
-    ## This implies that for an snSMART with sample size of 34 per arm (102 in total for three agents):
+    ## This implies that for an snSMART with sample size of 34 per arm (102 in total for three treatments):
     ## The probability of successfully identifying the best treatment is 0.8 when the difference of response rates between the best and second best treatment is at least 0.2, and the response rate of the best treatment is 0.7
 
 `group_seq`: This function either outputs which treatment arm should be
@@ -262,24 +258,24 @@ summary(result2)
     ## 
     ## Treatment Effects Estimate:
     ##      Estimate Std. Error C.I. CI low CI high
-    ## trtA   0.3012    0.04875 0.95 0.2047  0.3950
-    ## trtB   0.4729    0.03947 0.95 0.3960  0.5503
-    ## trtC   0.6751    0.04099 0.95 0.5925  0.7542
+    ## trtA   0.3009    0.04858 0.95 0.2073  0.3965
+    ## trtB   0.4734    0.03911 0.95 0.3974  0.5503
+    ## trtC   0.6769    0.04219 0.95 0.5959  0.7610
     ## 
     ## Differences between Treatments:
     ##        Estimate Std.Error C.I.  CI low  CI high
-    ## diffAB  -0.1717   0.06239 0.95 -0.2929 -0.04934
-    ## diffBC  -0.2022   0.05592 0.95 -0.3094 -0.08953
-    ## diffAC  -0.3739   0.06275 0.95 -0.4968 -0.25160
+    ## diffAB  -0.1724   0.06193 0.95 -0.2945 -0.05246
+    ## diffBC  -0.2035   0.05663 0.95 -0.3137 -0.09219
+    ## diffAC  -0.3759   0.06264 0.95 -0.4936 -0.24832
     ## 
     ## Linkage Parameter Estimate:
     ##        Estimate Std. Error C.I. CI low CI high
-    ## beta0A   0.8739    0.10955 0.95 0.6669   1.000
-    ## beta0B   0.7238    0.11415 0.95 0.5443   1.000
-    ## beta0C   0.8739    0.12504 0.95 0.6241   1.000
-    ## beta1A   1.4726    0.36688 0.95 1.0000   2.175
-    ## beta1B   1.3637    0.17166 0.95 1.0262   1.678
-    ## beta1C   1.4671    0.09288 0.95 1.2916   1.652
+    ## beta0A   0.8728    0.10923 0.95 0.6662   1.000
+    ## beta0B   0.7207    0.11468 0.95 0.5401   1.000
+    ## beta0C   0.8729    0.12545 0.95 0.6231   1.000
+    ## beta1A   1.4711    0.36005 0.95 1.0000   2.164
+    ## beta1B   1.3608    0.16853 0.95 1.0301   1.673
+    ## beta1C   1.4633    0.09484 0.95 1.2800   1.641
 
 `BJSM_c`: Below, we call the function assuming the mean and standard
 deviation of the normal prior being 50 and 50 for all three treatments,
@@ -290,7 +286,7 @@ iterations and 5,000 total iterations.
 ``` r
 BJSM_result <- BJSM_c(
   data = trialDataMF, xi_prior.mean = c(50, 50, 50), xi_prior.sd = c(50, 50, 50),
-  phi3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000,
+  phi3_prior.sd = 20, n_MCMC_chain = 1, n.adapt = 1000, MCMC_SAMPLE = 5000, BURN.IN = 1000,
   ci = 0.95, n.digits = 5
 )
 summary(BJSM_result)
@@ -298,20 +294,20 @@ summary(BJSM_result)
 
     ## 
     ## Parameter Estimation:
-    ##            Estimate   CI     CI_low   CI_high
-    ## phi1        0.17753 0.95  5.414e-05  0.376034
-    ## phi3        4.01432 0.95  2.706e+00  5.339355
-    ## rho[1,1,1]  0.00976 0.95  4.846e-03  0.014915
-    ## rho[2,1,1]  0.06318 0.95  3.533e-02  0.094202
-    ## rho[1,2,1] -0.00261 0.95 -6.442e-03  0.001507
-    ## rho[2,2,1] -0.06957 0.95 -1.062e-01 -0.037752
-    ## rho[1,1,2] -0.00261 0.95 -6.442e-03  0.001507
-    ## rho[2,1,2] -0.06957 0.95 -1.062e-01 -0.037752
-    ## rho[1,2,2]  0.01123 0.95  5.720e-03  0.017143
-    ## rho[2,2,2]  0.09072 0.95  4.980e-02  0.134680
-    ## xi_[1]     51.09928 0.95  4.718e+01 54.731318
-    ## xi_[2]     62.04339 0.95  5.837e+01 65.903243
-    ## xi_[3]     68.98975 0.95  6.531e+01 72.827499
+    ##         Estimate   CI     CI_low  CI_high
+    ## V1[1,1]  110.526 0.95  6.351e+01 167.1243
+    ## V1[2,1]   84.797 0.95  4.640e+01 130.1543
+    ## V1[1,2]   84.797 0.95  4.640e+01 130.1543
+    ## V1[2,2]   77.082 0.95  4.386e+01 116.8413
+    ## V2[1,1]  122.695 0.95  6.342e+01 195.2136
+    ## V2[2,1]   28.201 0.95 -2.200e+01  74.1924
+    ## V2[1,2]   28.201 0.95 -2.200e+01  74.1924
+    ## V2[2,2]  107.332 0.95  5.682e+01 173.0125
+    ## phi1       0.184 0.95  3.294e-05   0.3795
+    ## phi3       4.004 0.95  2.738e+00   5.3468
+    ## xi_[A]    51.126 0.95  4.724e+01  54.9047
+    ## xi_[B]    62.030 0.95  5.836e+01  65.7607
+    ## xi_[C]    69.035 0.95  6.526e+01  72.7477
 
 This R package will continue to be updated as more snSMART designs and
 methods are developed. We hope that this package translates snSMART

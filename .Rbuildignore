@@ -4,3 +4,4 @@
 vignettes/
 ^\.github$
 ^codecov\.yml$
+^LICENSE\.md$

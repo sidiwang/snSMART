@@ -177,13 +177,13 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
   beta1_prior_dist <- ifelse(beta1_prior_dist == "gamma", "dgamma", ifelse(beta1_prior_dist == "beta", "dbeta", "dpar"))
 
 
-  assn.stage2 <- function(i, trt, y, rand.prob) # Function that assigns the second stage treatment
-  {
-    alltrt <- 1:3
-    if (y[i] == 1) newtrt <- trt[i]
-    if (y[i] == 0) newtrt <- sample(alltrt[alltrt != trt[i]], 1, prob = rand.prob[alltrt != trt[i]])
-    return(newtrt)
-  }
+  # assn.stage2 <- function(i, trt, y, rand.prob) # Function that assigns the second stage treatment
+  # {
+  #   alltrt <- 1:3
+  #   if (y[i] == 1) newtrt <- trt[i]
+  #   if (y[i] == 0) newtrt <- sample(alltrt[alltrt != trt[i]], 1, prob = rand.prob[alltrt != trt[i]])
+  #   return(newtrt)
+  # }
 
   if (interim == TRUE) {
 
@@ -232,17 +232,6 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
           n.iter = MCMC_SAMPLE,
           thin = thin, progress.bar = progress.bar, coda.samples_options
         )))
-      },
-      warning = function(war) {
-        warning_count <- warning_count + 1
-        err_war_message <- rbind(paste("The warning ", warning_count, " is: ", war))
-      },
-      error = function(err) {
-        error_count <- error_count + 1
-        err_war_message <- rbind(paste("The error ", error_count, " is: ", err))
-        error_ind <- 1
-      },
-      finally = {
       }
     )
     out_post <- posterior_sample[[1]]
@@ -390,10 +379,6 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
             coda.samples_options
           ))
         )
-      },
-      warning = function(war) {
-        warning_count <- warning_count + 1
-        err_war_message <- rbind(paste("The warning ", warning_count, " is: ", war))
       }
     )
     out_post <- as.data.frame(posterior_sample[[1]])
