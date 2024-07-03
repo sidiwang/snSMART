@@ -127,9 +127,7 @@ head(data_dose)
 ```
 ## Bayesian joint stage model (BJSM)
 
-The ``BJSM_binary`` function uses the BJSM algorithm to estimate first stage response rates by borrowing information from both stages. Users specify priors, MCMC details, and BJSM model type (six beta or two beta). The function creates a ``BJSM_binary`` object with posterior samples, linkage parameter estimates, and treatment response rates.
-
-To analyze trial data comparing dose levels with placebo, assume the prior distribution of $\pi_P$ as $Beta(3, 17)$, $\beta_{jm}$ as $Gamma(2, 2)$, and the treatment effect ratio as $Normal(0.2, 100)$. Label placebo as 1, low dose as 2, and high dose as 3 in the dataset. The output is a ``BJSM_dose_binary`` object with posterior samples and estimates of linkage parameters, treatment response rates, and pairwise response rate differences.
+The ``BJSM_binary`` function uses the BJSM algorithm to estimate first stage response rates by borrowing information from both stages. Users specify priors, MCMC details, and BJSM model type (six beta or two beta). To analyze trial data comparing dose levels with placebo, assume the prior distribution of $\pi_P$ as $Beta(3, 17)$, $\beta_{jm}$ as $Gamma(2, 2)$, and the treatment effect ratio as $Normal(0.2, 100)$. Label placebo as 1, low dose as 2, and high dose as 3 in the dataset. The output is a ``BJSM_dose_binary`` object with posterior samples and estimates of linkage parameters, treatment response rates, and pairwise response rate differences.
 
 ```r
 BJSM_dose_result <- BJSM_binary(
