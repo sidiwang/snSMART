@@ -74,14 +74,14 @@
 
 
 sample_size <- function(pi, beta1, beta0, coverage, power, mu, n, verbose = FALSE) {
-  beta_prior_generator <- function(info_level, prior_mean) {
-    alpha0 <- prior_mean * info_level
-    beta0 <- info_level * (1 - prior_mean)
-    alpha0_beta0 <- list(
-      alpha0 = alpha0,
-      beta0 = beta0
-    )
-  }
+  # beta_prior_generator <- function(info_level, prior_mean) {
+  #   alpha0 <- prior_mean * info_level
+  #   beta0 <- info_level * (1 - prior_mean)
+  #   alpha0_beta0 <- list(
+  #     alpha0 = alpha0,
+  #     beta0 = beta0
+  #   )
+  # }
 
   # cFunc[a_, b_, beta1_] = (beta1 a^2)/(a + b)
   #

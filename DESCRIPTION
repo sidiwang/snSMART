@@ -15,7 +15,7 @@ Description: Consolidated data simulation, sample size calculation and
     analysis of small n sequential multiple assignment randomized trials
     (snSMARTs)." (2018) Statistics in medicine, 37(26), pp.3723-3732
     <doi:10.1002/sim.7900>.
-License: GPL-2
+License: GPL (>= 2)
 URL: https://github.com/sidiwang/snSMART
 BugReports: https://github.com/sidiwang/snSMART/issues
 Depends: 
@@ -32,10 +32,12 @@ Imports:
     tidyr (>= 1.1.2),
     truncdist (>= 1.0-1)
 Suggests:
-    coda (>= 0.19-2)
+    coda (>= 0.19-2),
+    testthat (>= 3.0.0)
 Biarch: true
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 SystemRequirements: JAGS 4.x.y
+Config/testthat/edition: 3
