@@ -115,7 +115,7 @@
 #' @references
 #' Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group
 #' sequential small n sequential multiple‐assignment randomized trial. Journal of
-#' the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
+#' the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680. URL: [https://doi.org/10.1111/rssc.1246](https://doi.org/10.1111/rssc.1246)
 #'
 # #' @seealso
 # #' \code{\link{sim_group_seq}}
@@ -470,7 +470,7 @@ group_seq <- function(data, interim = TRUE, drop_threshold_pair = NULL, prior_di
 #'    \item{Treatment Effects Estimate}{a 3 x 5 matrix with columns for the estimated treatment effects, its standard error, coverage probability of its credible interval, lower bound for its credible interval and higher bound for its credible interval}
 #'    \item{Differences between Treatments}{a 3 x 5 matrix with columns for the estimated differences in treatment effects between two treatments, its standard error, coverage probability of its credible interval, lower bound and higher bound of the credible interval}
 #'    \item{Linkage Parameter Estimate}{a 2 x 5 matrix, if the two beta model is fitted, or a 6 x 5 matrix, if the six beta model is fitted, with columns for the estimated linkage parameters}
-#'    \item{Expected Response Rate of Dynamic Treatment Regimens (DTR)}{}
+#'    \item{Expected Response Rate of Dynamic Treatment Regimens (DTR)}{only when `DTR = TRUE`}
 #' }
 #'
 #'
