@@ -42,7 +42,7 @@ The design and methods of snSMARTs are applicable to any disorder or disease tha
 
 This section details one of the snSMART designs, which investigates the response rate of an experimental treatment at low and high doses compared to placebo [@fang2021bayesian]. In this design (Figure \ref{fig:snSMART-dose}), participants are equally assigned to receive either placebo, low dose, or high dose in the first stage. They continue their initial treatment for a pre-specified duration until their responses are measured at the end of stage 1. In the second stage, all participants who initially received placebo or low dose are re-randomized to either low or high dose, regardless of their first stage response. Participants who responded to the high dose are re-randomized between low and high doses, while non-responders to the high dose continue with the high dose in the second stage. The main goal of this snSMART is to estimate and compare first stage response rates for low and high doses to placebo by modeling the pooled data from both stages.
 
-![\label{fig:snSMART-dose}](dose_snSMART.png)
+![Study design of an snSMART with two dose levels and a placebo. In stage 1, participants are randomized (R) to treatment P (placebo), L (low dose), or H (high dose) with equal probability. At time t, response to stage 1 treatment is assessed. Non-responders to high dose stay on the same treatment in stage 2, while all the other participants are equally re-randomized to either low or high dose in stage 2. Interest is in the first stage response rate of placebo, low and high doses.\label{fig:snSMART-dose}](dose_snSMART.png)
 
 @fang2021bayesian adapted the Bayesian joint stage model (BJSM) from @wei2018bayesian in Equations \ref{eq:1} and \ref{eq:2}. For this design, $m = P, L, H$ and $m' = L, H$, where $P$ represents placebo, $L$ low dose, and $H$ high dose. The prior distribution for the response rate of placebo, $\pi_P$, may be informed by natural history studies or previous trials and specified as $\pi_P \sim Beta(\zeta_n, \eta_n)$. It is assumed that the drug doses have a weak tendency for higher response rates than placebo, modeled as $\log(\pi_L/\pi_P) \sim N(\mu, \sigma^2)$ and $\log(\pi_H/\pi_P) \sim N(\mu, \sigma^2)$. The prior distributions for the linkage parameters may vary, specified as $\beta_{0m}, \beta_{1m} \sim Gamma(\omega, \psi)$.
 
@@ -137,12 +137,35 @@ BJSM_dose_result <- BJSM_binary(
 )
 summary(BJSM_dose_result)
 ```
+```r
+Treatment Effects Estimate:
+       Estimate Std. Error C.I.     CI low   CI high
+trtP 0.08606853 0.04004852 0.95 0.01694565 0.1618828
+trtL 0.39969511 0.06130935 0.95 0.28185110 0.5202667
+trtH 0.73414788 0.07501235 0.95 0.58710144 0.8763916
+
+Differences between Treatments:
+         Estimate  Std.Error C.I.     CI low    CI high
+diffPL -0.3136266 0.07345504 0.95 -0.4577648 -0.1696336
+diffLH -0.3344528 0.07967433 0.95 -0.4895912 -0.1785552
+diffPH -0.6480794 0.08559511 0.95 -0.8071207 -0.4772492
+
+Linkage Parameter Estimate:
+           Estimate Std. Error C.I.     CI low   CI high
+beta[1,1] 0.9763364  0.1640819 0.95 0.65222142 1.2973089
+beta[2,1] 0.8560191  0.3257939 0.95 0.23204941 1.4280772
+beta[1,2] 1.0749284  0.1869756 0.95 0.70435649 1.4426901
+beta[2,2] 0.9872268  0.2503916 0.95 0.48669193 1.4458416
+beta[1,3] 0.3824723  0.1899827 0.95 0.05813823 0.7529239
+beta[2,3] 1.0703154  0.1657493 0.95 0.74952233 1.4055420
+```
+The response rates for placebo, low dose and high dose are estimated to be 0.09 (95\% credible interval (CI): 0.02 - 0.16), 0.40 (95\% CI: 0.28 - 0.52), and 0.73 (95\% CI: 0.59 - 0.88) respectively. Other estimated outcomes are also clearly presented in the R output above.
 
 # Discussion
 
 We introduced and demonstrated the `snSMART` package for analyzing snSMART data using Bayesian methods. BJSM is often more efficient, but frequentist methods are recommended for sensitivity analysis. The package will be updated with new designs and methods to aid in finding effective treatments for rare diseases.
 
 # Acknowledgments
-This work was supported by a Patient-Centered Outcomes Research Institute (PCORI) award (ME-1507-31108). We thank Boxian Wei, Yan-Cheng Chao, and Holly Hartman for contributing their original R code used in the creation of this package. 
+This work was supported by a Patient-Centered Outcomes Research Institute (PCORI) award (ME-1507-31108). We thank Boxian Wei, Yan-Cheng Chao, and Holly Hartman for contributing their original R code to the creation of this package. We also thank Mike Kleinsasser for assisting with the publication of the R package on CRAN.
 
 # References
