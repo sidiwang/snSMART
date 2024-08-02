@@ -46,7 +46,8 @@
 #'          \item `phi3` - if the patient stays on the same treatment, \code{phi3} is the cumulative effect of stage 1 that occurs on the treatment longer term
 #'          \item `xi_j` - the expected effect of treatment j, j = 1, 2, 3 in the first stage
 #'          \item \code{V1},\code{V2} are the variance-covariance matrix of the multivariate distribution. \code{V1} is for patients who stay on the same treatment,
-#'          and \code{V2} is for patients who switch treatments.
+#'          and \code{V2} is for patients who switch treatments. This allows those who stay on the same treatment to have a different correlation between stage one
+#'          stage two outcomes than those who switch treatments.
 #'    }}
 #' \item{ci_estimate}{x% credible interval for each parameter. By default round to
 #'     2 decimal places, if more decimals are needed, please access the results by
@@ -65,7 +66,7 @@
 #' print(BJSM_result)
 #' @references
 #' Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
-#' sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326.
+#' sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326. URL: [https://doi.org/10.1002/sim.8776](https://doi.org/10.1002/sim.8776)
 #'
 #' @rdname BJSM_c
 #' @export

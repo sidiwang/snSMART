@@ -1,7 +1,7 @@
 
 #' Group sequential data look 1
 #'
-#' sample dataset of group sequential trial design snSMART, can be used for interim analysis
+#' sample synthetic dataset of group sequential trial design snSMART, can be used for interim analysis
 #'
 #' @name groupseqDATA_look1
 #' @usage groupseqDATA_look1
@@ -31,7 +31,7 @@ NULL
 
 #' Group sequential full data
 #'
-#' sample dataset of group sequential trial design snSMART, can be used for final analysis
+#' sample synthetic dataset of group sequential trial design snSMART, can be used for final analysis
 #' @name groupseqDATA_full
 #' @usage groupseqDATA_full
 #' @format This data frame contains the following columns:
@@ -60,7 +60,7 @@ NULL
 
 #' Dataset with binary outcomes
 #'
-#' sample dataset of snSMART (3 active treatment) with binary outcomes
+#' sample synthetic dataset of snSMART (3 active treatment) with binary outcomes
 #' @name data_binary
 #' @usage data_binary
 #' @format This data frame contains the following columns:
@@ -80,7 +80,7 @@ NULL
 
 #' Dose Level dataset with binary outcomes
 #'
-#' sample dataset of snSMART (dose level treatment) with binary outcomes
+#' sample synthetic dataset of snSMART (dose level treatment) with binary outcomes
 #' @name data_dose
 #' @usage data_dose
 #' @format This data frame contains the following columns:
@@ -104,7 +104,7 @@ NULL
 
 #' Dataset with continuous outcomes
 #'
-#' sample dataset of snSMART (mapping function) with continuous outcomes
+#' sample synthetic dataset of snSMART (mapping function) with continuous outcomes
 #' @name trialDataMF
 #' @usage trialDataMF
 #' @format This data frame contains the following columns:
