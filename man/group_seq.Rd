@@ -165,5 +165,5 @@ summary(result2)
 \references{
 Chao, Y.C., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2020. A Bayesian group
 sequential small n sequential multiple‐assignment randomized trial. Journal of
-the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680.
+the Royal Statistical Society: Series C (Applied Statistics), 69(3), pp.663-680. URL: \url{https://doi.org/10.1111/rssc.1246}
 }

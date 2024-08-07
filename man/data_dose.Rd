@@ -17,7 +17,7 @@ This data frame contains the following columns:
 data_dose
 }
 \description{
-sample dataset of snSMART (dose level treatment) with binary outcomes
+sample synthetic dataset of snSMART (dose level treatment) with binary outcomes
 }
 \examples{
 mydata <- data_dose

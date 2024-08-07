@@ -86,13 +86,12 @@ sampleSize <- sample_size(
 
 }
 \references{
-Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of
-small n sequential multiple assignment randomized trials (snSMARTs).
-Statistics in medicine, 37(26), pp.3723-3732.
+Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K.M., 2018. A Bayesian analysis of small n sequential multiple assignment randomized trials (snSMARTs).
+Statistics in medicine, 37(26), pp.3723-3732. URL: \url{https://doi.org/10.1002/sim.7900}
 
 Wei, B., Braun, T.M., Tamura, R.N. and Kidwell, K., 2020. Sample size determination
 for Bayesian analysis of small n sequential, multiple assignment, randomized trials
-(snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120.
+(snSMARTs) with three agents. Journal of Biopharmaceutical Statistics, 30(6), pp.1109-1120. URL: \url{https://doi.org/10.1080/10543406.2020.1815032}
 }
 \seealso{
 \code{\link{BJSM_binary}}
