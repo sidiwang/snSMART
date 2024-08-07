@@ -21,7 +21,7 @@ This data frame contains the following columns:
 groupseqDATA_full
 }
 \description{
-sample dataset of group sequential trial design snSMART, can be used for final analysis
+sample synthetic dataset of group sequential trial design snSMART, can be used for final analysis
 }
 \examples{
 mydata <- groupseqDATA_full

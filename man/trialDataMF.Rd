@@ -19,7 +19,7 @@ This data frame contains the following columns:
 trialDataMF
 }
 \description{
-sample dataset of snSMART (mapping function) with continuous outcomes
+sample synthetic dataset of snSMART (mapping function) with continuous outcomes
 }
 \examples{
 trialData <- trialDataMF

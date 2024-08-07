@@ -17,7 +17,7 @@ This data frame contains the following columns:
 data_binary
 }
 \description{
-sample dataset of snSMART (3 active treatment) with binary outcomes
+sample synthetic dataset of snSMART (3 active treatment) with binary outcomes
 }
 \examples{
 mydata <- data_binary
