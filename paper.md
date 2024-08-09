@@ -159,7 +159,7 @@ beta[2,2] 0.9872268  0.2503916 0.95 0.48669193 1.4458416
 beta[1,3] 0.3824723  0.1899827 0.95 0.05813823 0.7529239
 beta[2,3] 1.0703154  0.1657493 0.95 0.74952233 1.4055420
 ```
-The response rates for placebo, low dose and high dose are estimated to be 0.09 (95\% credible interval (CI): 0.02 - 0.16), 0.40 (95\% CI: 0.28 - 0.52), and 0.73 (95\% CI: 0.59 - 0.88) respectively. Other estimated outcomes are also clearly presented in the R output above.
+The response rates for placebo, low dose and high dose are estimated to be `trtP` 0.09 (95\% credible interval (CI): 0.02 - 0.16), `trtL` 0.40 (95\% CI: 0.28 - 0.52), and `trtH` 0.73 (95\% CI: 0.59 - 0.88) respectively. Other estimated outcomes are also clearly presented in the R output above.
 
 # Discussion
 
