@@ -5,3 +5,4 @@ vignettes/
 ^\.github$
 ^codecov\.yml$
 ^LICENSE\.md$
+^contributing\.md$
