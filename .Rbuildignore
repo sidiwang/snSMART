@@ -6,3 +6,4 @@ vignettes/
 ^codecov\.yml$
 ^LICENSE\.md$
 ^contributing\.md$
+^CODE_OF_CONDUCT\.md$
