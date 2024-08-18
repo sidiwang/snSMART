@@ -20,7 +20,9 @@ An snSMART is a multi-stage trial design where for a two-stage design, randomiza
 
 ## Installation
 
-You can install the package from CRAN:
+Before using this package, please install the [JAGS library](https://sourceforge.net/projects/mcmc-jags/) on your device.
+
+You can install the snSMART package from CRAN:
 ```{r}
 install.packages("snSMART", repos = "http://cran.us.r-project.org")
 library(snSMART)

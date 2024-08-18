@@ -38,29 +38,10 @@ Small sample, sequential, multiple assignment, randomized trials (snSMARTs) are 
 
 The design and methods of snSMARTs are applicable to any disorder or disease that affects a small group and remains stable over the trial duration. Recent advances include methods for snSMARTs with three active treatments [@wei2018bayesian; @wei2020sample; @chao2020dynamic], group sequential designs [@chao2020bayesian], placebo with two dose levels [@fang2021bayesian], and continuous outcomes [@hartman2021design]. Despite these developments, there is a lack of software to implement these methods. The `snSMART` R package addresses this need by providing sample size calculations and trial data analysis using both Bayesian and frequentist approaches. To our knowledge, no other R packages offer similar functionalities.
 
-## snSMART comparing two dose levels with placebo
+## Functionality of the snSMART package
 
-This section details one of the snSMART designs, which investigates the response rate of an experimental treatment at low and high doses compared to placebo [@fang2021bayesian]. In this design (Figure \ref{fig:snSMART-dose}), participants are equally assigned to receive either placebo, low dose, or high dose in the first stage. They continue their initial treatment for a pre-specified duration until their responses are measured at the end of stage 1. In the second stage, all participants who initially received placebo or low dose are re-randomized to either low or high dose, regardless of their first stage response. Participants who responded to the high dose are re-randomized between low and high doses, while non-responders to the high dose continue with the high dose in the second stage. The main goal of this snSMART is to estimate and compare first stage response rates for low and high doses to placebo by modeling the pooled data from both stages.
+We have summarized the functionality of all the `snSMART` functions included in this package in Table 1. The `BJSM_binary`, `BJSM_c`, and `group_seq` functions implement the Bayesian Joint Stage Modeling (BJSM) methods to estimate treatment effects across all treatment arms in a snSMART design with binary outcomes, continuous outcomes, and in a group sequential trial design, respectively. The `LPJSM_binary` function serves as the frequentist equivalent to `BJSM_binary` and can be used for sensitivity analysis. The `sample_size` function performs Bayesian sample size calculations for a snSMART design with binary outcomes, ensuring that the trial is scientifically valid, ethically responsible, and resource-efficient.
 
-![Study design of an snSMART with two dose levels and a placebo. In stage 1, participants are randomized (R) to treatment P (placebo), L (low dose), or H (high dose) with equal probability. At time t, response to stage 1 treatment is assessed. Non-responders to high dose stay on the same treatment in stage 2, while all the other participants are equally re-randomized to either low or high dose in stage 2. Interest is in the first stage response rate of placebo, low and high doses.\label{fig:snSMART-dose}](dose_snSMART.png)
-
-@fang2021bayesian adapted the Bayesian joint stage model (BJSM) from @wei2018bayesian in Equations \ref{eq:1} and \ref{eq:2}. For this design, $m = P, L, H$ and $m' = L, H$, where $P$ represents placebo, $L$ low dose, and $H$ high dose. The prior distribution for the response rate of placebo, $\pi_P$, may be informed by natural history studies or previous trials and specified as $\pi_P \sim Beta(\zeta_n, \eta_n)$. It is assumed that the drug doses have a weak tendency for higher response rates than placebo, modeled as $\log(\pi_L/\pi_P) \sim N(\mu, \sigma^2)$ and $\log(\pi_H/\pi_P) \sim N(\mu, \sigma^2)$. The prior distributions for the linkage parameters may vary, specified as $\beta_{0m}, \beta_{1m} \sim Gamma(\omega, \psi)$.
-
-The BJSM is specified as follows:
-
-\begin{equation}
-Y_{i1m}|\pi_m \sim Bernoulli(\pi_m) \label{eq:1}
-\end{equation}
-\begin{equation}
-Y_{i2m'}|Y_{i1m}, \pi_{m'}, \beta_{1m}, \beta_{0m} \sim Bernoulli((\beta_{1m}\pi_{m})^{Y_{i1m}}(\beta_{0m}\pi_{m'})^{1-Y_{i1m}}) \label{eq:2}
-\end{equation}
-for $i = 1,...,N$; and $j = 1, 2$; where 
-$Y_{ijm}$ is the outcome for participant $i$ at stage $j$ for treatment $m$ and takes the value 1 for response to treatment and 0 for no response; 
-$N$ is the total sample size;
-$\beta_{0m}$ and $\beta_{1m}$ are the linkage parameters for non-responders and responders, respectively;
-$\pi_m$ is the first stage response rate for treatment $m$;
-$\beta_{1m}\pi_{m}$ is the second stage response rate for first stage responders; and 
-$\beta_{0m}\pi_{m'}$ is the second stage response rate for non-responders to treatment $m$ in the first stage who receive treatment $m'$ in the second stage. 
 
 Table: Summary of the functionality of the snSMART package.
 
@@ -102,32 +83,31 @@ Table: Summary of the functionality of the snSMART package.
 | for class ’sim_group_seq’                    | Summarize and print ’sim_group_seq’ object                                 |
 +==============================================+============================================================================+
 
-# The `snSMART` package
+## snSMART comparing two dose levels with placebo
 
-The `snSMART` package can be downloaded from the Comprehensive R Archive Network (CRAN) at https://cran.r-project.org/web/packages/snSMART/index.html. Please install the [JAGS library](https://sourceforge.net/projects/mcmc-jags/) [@plummer2003jags] before using this package. We summarized the functionality of all the `snSMART` functions included in this package in Table 1. 
+This section details one of the snSMART designs, which investigates the response rate of an experimental treatment at low and high doses compared to placebo [@fang2021bayesian]. In this design (Figure \ref{fig:snSMART-dose}), participants are equally assigned to receive either placebo, low dose, or high dose in the first stage. They continue their initial treatment for a pre-specified duration until their responses are measured at the end of stage 1. In the second stage, all participants who initially received placebo or low dose are re-randomized to either low or high dose, regardless of their first stage response. Participants who responded to the high dose are re-randomized between low and high doses, while non-responders to the high dose continue with the high dose in the second stage. The main goal of this snSMART is to estimate and compare first stage response rates for low and high doses to placebo by modeling the pooled data from both stages.
 
-After installing package `snSMART`, load the package:
+![Study design of an snSMART with two dose levels and a placebo. In stage 1, participants are randomized (R) to treatment P (placebo), L (low dose), or H (high dose) with equal probability. At time t, response to stage 1 treatment is assessed. Non-responders to high dose stay on the same treatment in stage 2, while all the other participants are equally re-randomized to either low or high dose in stage 2. Interest is in the first stage response rate of placebo, low and high doses.\label{fig:snSMART-dose}](dose_snSMART.png)
 
-```r
-library("snSMART")
-```
-We assume that we have data from an snSMART in a matrix with 4 columns: ``treatment_stageI, response_stageI, treatment_stageII``, and ``response_stageII``. The rows of the dataset correspond to each participant in the trial. For example, here we use a dataset of 30 total individuals. 
+@fang2021bayesian adapted the Bayesian joint stage model (BJSM) from @wei2018bayesian in Equations \ref{eq:1} and \ref{eq:2}. For this design, $m = P, L, H$ and $m' = L, H$, where $P$ represents placebo, $L$ low dose, and $H$ high dose. The prior distribution for the response rate of placebo, $\pi_P$, may be informed by natural history studies or previous trials and specified as $\pi_P \sim Beta(\zeta_n, \eta_n)$. It is assumed that the drug doses have a weak tendency for higher response rates than placebo, modeled as $\log(\pi_L/\pi_P) \sim N(\mu, \sigma^2)$ and $\log(\pi_H/\pi_P) \sim N(\mu, \sigma^2)$. The prior distributions for the linkage parameters may vary, specified as $\beta_{0m}, \beta_{1m} \sim Gamma(\omega, \psi)$.
 
-```r
-head(data_dose)
-```
-```
-  response_stageI treatment_stageI response_stageII treatment_stageII
-1               1                1                1                 3
-2               0                1                1                 2
-3               0                1                1                 2
-4               0                1                1                 2
-5               0                1                1                 2
-6               0                1                1                 2
-```
-## Bayesian joint stage model (BJSM)
+The BJSM is specified as follows:
 
-The ``BJSM_binary`` function uses the BJSM algorithm to estimate first stage response rates by borrowing information from both stages. Users specify priors, MCMC details, and BJSM model type (six beta or two beta). To analyze trial data comparing dose levels with placebo, assume the prior distribution of $\pi_P$ as $Beta(3, 17)$, $\beta_{jm}$ as $Gamma(2, 2)$, and the treatment effect ratio as $Normal(0.2, 100)$. Label placebo as 1, low dose as 2, and high dose as 3 in the dataset. The output is a ``BJSM_dose_binary`` object with posterior samples and estimates of linkage parameters, treatment response rates, and pairwise response rate differences.
+\begin{equation}
+Y_{i1m}|\pi_m \sim Bernoulli(\pi_m) \label{eq:1}
+\end{equation}
+\begin{equation}
+Y_{i2m'}|Y_{i1m}, \pi_{m'}, \beta_{1m}, \beta_{0m} \sim Bernoulli((\beta_{1m}\pi_{m})^{Y_{i1m}}(\beta_{0m}\pi_{m'})^{1-Y_{i1m}}) \label{eq:2}
+\end{equation}
+for $i = 1,...,N$; and $j = 1, 2$; where 
+$Y_{ijm}$ is the outcome for participant $i$ at stage $j$ for treatment $m$ and takes the value 1 for response to treatment and 0 for no response; 
+$N$ is the total sample size;
+$\beta_{0m}$ and $\beta_{1m}$ are the linkage parameters for non-responders and responders, respectively;
+$\pi_m$ is the first stage response rate for treatment $m$;
+$\beta_{1m}\pi_{m}$ is the second stage response rate for first stage responders; and 
+$\beta_{0m}\pi_{m'}$ is the second stage response rate for non-responders to treatment $m$ in the first stage who receive treatment $m'$ in the second stage. 
+
+To conduct the analysis in R, we can use the ``BJSM_binary`` function. Users specify priors, MCMC details, and BJSM model type (six beta or two beta). Here, we assume the prior distribution of $\pi_P$ as $Beta(3, 17)$, $\beta_{jm}$ as $Gamma(2, 2)$, and the treatment effect ratio as $Normal(0.2, 100)$. Label placebo as 1, low dose as 2, and high dose as 3 in the dataset. The output is a ``BJSM_dose_binary`` object with posterior samples and estimates of linkage parameters, treatment response rates, and pairwise response rate differences.
 
 ```r
 BJSM_dose_result <- BJSM_binary(
