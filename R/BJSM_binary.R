@@ -148,7 +148,7 @@
 #' @rdname BJSM_binary
 #' @export
 
-BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain, n.adapt, BURN.IN = 100,
+BJSM_binary <- function(data, prior_dist, pi_prior, normal.par, beta_prior, n_MCMC_chain = 1, n.adapt, BURN.IN = 100,
                         thin = 1, MCMC_SAMPLE, ci = 0.95, six = TRUE, DTR = TRUE,
                         jags.model_options = NULL, coda.samples_options = NULL, verbose = FALSE, ...) {
   quiet <- FALSE

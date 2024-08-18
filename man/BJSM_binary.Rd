@@ -14,7 +14,7 @@ BJSM_binary(
   pi_prior,
   normal.par,
   beta_prior,
-  n_MCMC_chain,
+  n_MCMC_chain = 1,
   n.adapt,
   BURN.IN = 100,
   thin = 1,
