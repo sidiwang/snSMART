@@ -36,8 +36,9 @@ across the two stages of the snSMART design to more precisely estimate
 the effect of the treatments given in the first stage.
 
 ## Installation
+Before using this package, please install the \href{https://sourceforge.net/projects/mcmc-jags/}{JAGS library} on your device.
 
-You can install the package from CRAN:
+You can install the snSMART package from CRAN:
 
 ``` r
 install.packages("snSMART", repos = "http://cran.us.r-project.org")
