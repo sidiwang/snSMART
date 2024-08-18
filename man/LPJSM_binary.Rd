@@ -26,7 +26,7 @@ beta model. Default is \code{six = TRUE}}
 \item{DTR}{if TRUE, will also return the expected response rate and its standard
 error of dynamic treatment regimens}
 
-\item{...}{further arguments. Not currently used.}
+\item{...}{optional arguments that are passed to \code{geepack::geeglm()} function.}
 
 \item{object}{object to print}
 

@@ -247,7 +247,6 @@ LPJSM_binary <- function(data, six = TRUE, DTR = TRUE, ...) {
 
 #' @rdname LPJSM_binary
 #' @param object object to summarize
-#' @param ... not currently used
 #' @export
 summary.LPJSM_binary <- function(object, ...) {
   trteff <- cbind(object$pi_hat, object$sd_pi_hat)
@@ -268,7 +267,6 @@ summary.LPJSM_binary <- function(object, ...) {
 
 #' @rdname LPJSM_binary
 #' @param object object to print
-#' @param ... not currently used
 #' @export
 #' @export print.summary.LPJSM_binary
 print.summary.LPJSM_binary <- function(x, ...) {
@@ -286,7 +284,6 @@ print.summary.LPJSM_binary <- function(x, ...) {
 
 #' @rdname LPJSM_binary
 #' @param x object to summarize.
-#' @param ... further arguments. Not currently used.
 #' @export
 #' @export print.LPJSM_binary
 print.LPJSM_binary <- function(x, ...) {
