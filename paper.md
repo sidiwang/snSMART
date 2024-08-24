@@ -40,7 +40,7 @@ The design and methods of snSMARTs are applicable to any disorder or disease tha
 
 # Functionality of the snSMART package
 
-We have summarized the functionality of all the `snSMART` functions included in this package in Table 1. The `BJSM_binary`, `BJSM_c`, and `group_seq` functions implement the Bayesian Joint Stage Modeling (BJSM) methods to estimate treatment effects across all treatment arms in a snSMART design with binary outcomes, continuous outcomes, and in a group sequential trial design, respectively. The `LPJSM_binary` function serves as the frequentist equivalent to `BJSM_binary` and can be used for sensitivity analysis. The `sample_size` function performs Bayesian sample size calculations for a snSMART design with binary outcomes, ensuring that the trial is scientifically valid, ethically responsible, and resource-efficient.
+We have summarized the functionality of all the `snSMART` functions included in the `snSMART` package in Table 1. The `BJSM_binary`, `BJSM_c`, and `group_seq` functions implement the Bayesian Joint Stage Modeling (BJSM) methods to estimate treatment effects across all treatment arms in a snSMART design with binary outcomes, continuous outcomes, and in a group sequential trial design, respectively. The `LPJSM_binary` function serves as the frequentist equivalent to `BJSM_binary` and can be used for sensitivity analysis. The `sample_size` function performs Bayesian sample size calculations for a snSMART design with binary outcomes, ensuring that the trial is scientifically valid, ethically responsible, and resource-efficient.
 
 
 
