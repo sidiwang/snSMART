@@ -38,10 +38,11 @@ Small sample, sequential, multiple assignment, randomized trials (snSMARTs) are 
 
 The design and methods of snSMARTs are applicable to any disorder or disease that affects a small group and remains stable over the trial duration. Recent advances include methods for snSMARTs with three active treatments [@wei2018bayesian; @wei2020sample; @chao2020dynamic], group sequential designs [@chao2020bayesian], placebo with two dose levels [@fang2021bayesian], and continuous outcomes [@hartman2021design]. Despite these developments, there is a lack of software to implement these methods. The `snSMART` R package addresses this need by providing sample size calculations and trial data analysis using both Bayesian and frequentist approaches. To our knowledge, no other R packages offer similar functionalities.
 
-## Functionality of the snSMART package
+# Functionality of the snSMART package
 
 We have summarized the functionality of all the `snSMART` functions included in this package in Table 1. The `BJSM_binary`, `BJSM_c`, and `group_seq` functions implement the Bayesian Joint Stage Modeling (BJSM) methods to estimate treatment effects across all treatment arms in a snSMART design with binary outcomes, continuous outcomes, and in a group sequential trial design, respectively. The `LPJSM_binary` function serves as the frequentist equivalent to `BJSM_binary` and can be used for sensitivity analysis. The `sample_size` function performs Bayesian sample size calculations for a snSMART design with binary outcomes, ensuring that the trial is scientifically valid, ethically responsible, and resource-efficient.
 
+# snSMART comparing two dose levels with placebo
 
 Table: Summary of the functionality of the snSMART package.
 
@@ -82,7 +83,6 @@ Table: Summary of the functionality of the snSMART package.
 | for class ’sim_group_seq’                    | Summarize and print ’sim_group_seq’ object                                 |
 +==============================================+============================================================================+
 
-## snSMART comparing two dose levels with placebo
 
 This section details one of the snSMART designs, which investigates the response rate of an experimental treatment at low and high doses compared to placebo [@fang2021bayesian]. In this design (Figure \ref{fig:snSMART-dose}), participants are equally assigned to receive either placebo, low dose, or high dose in the first stage. They continue their initial treatment for a pre-specified duration until their responses are measured at the end of stage 1. In the second stage, all participants who initially received placebo or low dose are re-randomized to either low or high dose, regardless of their first stage response. Participants who responded to the high dose are re-randomized between low and high doses, while non-responders to the high dose continue with the high dose in the second stage. The main goal of this snSMART is to estimate and compare first stage response rates for low and high doses to placebo by modeling the pooled data from both stages.
 
