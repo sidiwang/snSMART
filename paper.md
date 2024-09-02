@@ -46,43 +46,23 @@ We have summarized the functionality of all the `snSMART` functions included in 
 
 Table: Summary of the functionality of the snSMART package.
 
-+----------------------------------------------+----------------------------------------------------------------------------+
 | Function                                     | Description                                                                | 
-+:=============================================+:===========================================================================+
+|----------------------------------------------|----------------------------------------------------------------------------|
 | *BJSM functions*                             |                                                                            | 
-+----------------------------------------------+----------------------------------------------------------------------------+
 | BJSM_binary                                  | BJSM binary (3AT or P2D snSMART)                                           |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | BJSM_c                                       | BJSM (3AT snSMART with a mapping function and continuous outcome)          |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | group_seq                                    | BJSM (interim analysis and final analysis of group sequential 3AT snSMART) |
-+----------------------------------------------+----------------------------------------------------------------------------+
-+----------------------------------------------+----------------------------------------------------------------------------+
 | *Frequentist functions*                      |                                                                            | 
-+----------------------------------------------+----------------------------------------------------------------------------+
 | LPJSM_binary                                 | LPJSM (3AT or P2D snSMART)                                                 |
-+----------------------------------------------+----------------------------------------------------------------------------+
-+----------------------------------------------+----------------------------------------------------------------------------+
 | *Sample size calculation*                    |                                                                            | 
-+----------------------------------------------+----------------------------------------------------------------------------+
 | sample_size                                  | 3AT snSMART sample size calculation                                        |
-+----------------------------------------------+----------------------------------------------------------------------------+
-+----------------------------------------------+----------------------------------------------------------------------------+
 | *S3 summary and print methods*               |                                                                            |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | for class ’BJSM_binary’                      | Summarize and print ’BJSM_binary’ object                                   |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | for class ’BJSM_binary_dose’                 | Summarize and print ’BJSM_binary_dose’ object                              |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | for class ’BJSM_c’                           | Summarize and print ’BJSM_c’ object                                        |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | for class ’group_seq’                        | Summarize and print ’group_seq’ object                                     |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | for class ’LPJSM_binary’                     | Summarize and print ’LPJSM_binary’ object                                  |
-+----------------------------------------------+----------------------------------------------------------------------------+
 | for class ’sim_group_seq’                    | Summarize and print ’sim_group_seq’ object                                 |
-+==============================================+============================================================================+
-
 
 This section details one of the snSMART designs, which investigates the response rate of an experimental treatment at low and high doses compared to placebo [@fang2021bayesian]. In this design (Figure \ref{fig:snSMART-dose}), participants are equally assigned to receive either placebo, low dose, or high dose in the first stage. They continue their initial treatment for a pre-specified duration until their responses are measured at the end of stage 1. In the second stage, all participants who initially received placebo or low dose are re-randomized to either low or high dose, regardless of their first stage response. Participants who responded to the high dose are re-randomized between low and high doses, while non-responders to the high dose continue with the high dose in the second stage. The main goal of this snSMART is to estimate and compare first stage response rates for low and high doses to placebo by modeling the pooled data from both stages.
 
