@@ -11,6 +11,7 @@ output: github_document
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/)
 [![Codecov test coverage](https://codecov.io/gh/sidiwang/snSMART/branch/main/graph/badge.svg)](https://app.codecov.io/gh/sidiwang/snSMART?branch=main)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06971/status.svg)](https://doi.org/10.21105/joss.06971)
 <!-- badges: end -->
 
 
