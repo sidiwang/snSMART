@@ -118,5 +118,5 @@ print(BJSM_result)
 }
 \references{
 Hartman, H., Tamura, R.N., Schipper, M.J. and Kidwell, K.M., 2021. Design and analysis considerations for utilizing a mapping function in a small sample,
-sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326. URL: \url{https://doi.org/10.1002/sim.8776}
+sequential, multiple assignment, randomized trials with continuous outcomes. Statistics in Medicine, 40(2), pp.312-326. \doi{10.1002/sim.8776}
 }
